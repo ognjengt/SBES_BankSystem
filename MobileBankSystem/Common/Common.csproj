@@ -41,8 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionClasses\BankConnection.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="Interfaces\IBankConnection.cs" />
+    <Compile Include="Interfaces\IClientConnection.cs" />
+    <Compile Include="Interfaces\IGatewayConnection.cs" />
+    <Compile Include="Interfaces\IOperatorConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
   </ItemGroup>

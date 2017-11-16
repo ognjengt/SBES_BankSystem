@@ -9,7 +9,7 @@ namespace Common
 {
     public abstract class Server
     {
-        private ServiceHost serviceHost = null;
+        public ServiceHost serviceHost = null;
 
         public abstract void Start();
         public abstract void Close();

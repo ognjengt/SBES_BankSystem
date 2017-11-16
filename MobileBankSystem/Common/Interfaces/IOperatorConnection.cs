@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 namespace Common.Interfaces
 {
     [ServiceContract]
-    public interface IBankConnection
+    public interface IOperatorConnection
     {
+        /// <summary>
+        /// admin dodaje novog klijenta za operatera
+        /// </summary>
         [OperationContract]
-        void AddAccount();
-
+        void AddClient();
         [OperationContract]
-        void Transfer();
+        void UpdateStatus();
     }
 }
