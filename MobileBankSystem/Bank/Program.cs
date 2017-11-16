@@ -10,7 +10,7 @@ namespace Bank
     {
         static void Main(string[] args)
         {
-           
+           // Napraviti dictionary koji ce da cuva korisnike, kljuc racun
         }
     }
 }

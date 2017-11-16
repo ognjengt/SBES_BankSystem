@@ -11,10 +11,14 @@ namespace Common.Interfaces
     public interface IOperatorConnection
     {
         /// <summary>
-        /// admin dodaje novog klijenta za operatera
+        /// Admin dodaje novog klijenta za operatera
         /// </summary>
         [OperationContract]
         void AddClient();
+
+        /// <summary>
+        /// Primanje podataka od banke, tj kada se novac uploaduje na racun, banka javlja operatoru da poveca
+        /// </summary>
         [OperationContract]
         void UpdateStatus();
     }
