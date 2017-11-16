@@ -5,12 +5,12 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common
+namespace Common.Interfaces
 {
     [ServiceContract]
-    interface IConnection
+    public interface IBankConnection
     {
-        [OperationContract]
-        void TestConnection(string testNeki);
+        
+
     }
 }
