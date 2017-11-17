@@ -18,7 +18,7 @@ namespace Gateway
         {
             //pozovem metodu iz banke
             //kacimo se na banku, uplacujemo novac
-            throw new NotImplementedException();
+            Console.WriteLine("Client to bank...");
         }
 
         public void OperatorToClient()

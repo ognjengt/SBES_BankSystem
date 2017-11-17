@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
+using Common.Interfaces;
 
 namespace Client
 {
@@ -13,6 +15,12 @@ namespace Client
             // Prvo konekcija na server radi pristupanja bazi podataka ( gde admin postoji?)
             // Prvo autentifikacija, u zavisnosti od toga gleda se da li je admin ili ne (iz nekog txt-a)
             // ???
+            Common.Client cli = new Common.Client();
+            IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
+
+            gatewayProxy.ClientToBank();
+
+            Console.ReadKey();
         }
     }
 }

@@ -10,6 +10,9 @@ namespace Gateway
     {
         static void Main(string[] args)
         {
+            GatewayServer server = new GatewayServer();
+            server.Start();
+            Console.ReadKey();
         }
     }
 }
