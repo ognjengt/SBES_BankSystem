@@ -13,20 +13,21 @@ namespace Common
         public string Username { get; set; }
         public string Password { get; set; }
         public string Uloga { get; set; }
-        public string BrojRacuna { get; set; }
+        //public string BrojRacuna { get; set; }
 
 
-        public User(string username, string password,string uloga,string brRacuna ) {
+        public User(string username, string password,string uloga ) {
 
             this.Username = username;
             this.Password = password;
             this.Uloga = uloga;
-            this.BrojRacuna = brRacuna;
+            //this.BrojRacuna = brRacuna;
         }
         public User()
         {
 
         }
+      
     }
 
    

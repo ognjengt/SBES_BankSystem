@@ -16,7 +16,17 @@ namespace Bank
 
         public bool CheckLogin(string username, string password)
         {
-            throw new NotImplementedException();
+            if (BankDB.BazaKorisnika.ContainsKey(username))
+            {
+                if (BankDB.BazaKorisnika[username].Password == password)
+                {
+                    return true;
+                }
+            }
+            return false;
+
+
+
         }
 
         public void Transfer()

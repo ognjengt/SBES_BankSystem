@@ -12,6 +12,8 @@ namespace Gateway
         {
             GatewayServer server = new GatewayServer();
             server.Start();
+
+
             Console.ReadKey();
         }
     }

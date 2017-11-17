@@ -9,6 +9,7 @@ namespace Bank
 {
     public static class BankDB
     {
-        public static Dictionary<string, User> Baza = new Dictionary<string, User>();
+       // public static Dictionary<string, User> BazaRacuna = new Dictionary<string, User>();
+        public static Dictionary<string, User> BazaKorisnika = new Dictionary<string, User>();
     }
 }

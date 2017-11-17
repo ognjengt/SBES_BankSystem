@@ -12,8 +12,11 @@ namespace Bank
     {
         static void Main(string[] args)
         {
-            // Napraviti dictionary koji ce da cuva korisnike, kljuc racun
-            BankDB.Baza.Add("000111",new User("asd", "asd", "asd", "000111"));
+            BankServer server = new BankServer();
+            server.Start();
+
+            BankDB.BazaKorisnika.Add("marko", new User("marko", "1111", "admin"));
+            Console.ReadKey();
         }
     }
 }

@@ -17,8 +17,17 @@ namespace Client
             // ???
             Common.Client cli = new Common.Client();
             IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
+            Console.WriteLine("Username:");
+            string user = Console.ReadLine();
 
-           
+            Console.WriteLine("Password:");
+            string pass = Console.ReadLine();
+
+           bool proveraLogovanja=gatewayProxy.ClientToBankCheckLogin(user, pass);
+            if (proveraLogovanja)
+            {
+                Console.WriteLine("Uspesno logovanje");
+            }
 
             Console.ReadKey();
         }
