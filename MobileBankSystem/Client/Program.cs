@@ -28,6 +28,10 @@ namespace Client
             {
                 Console.WriteLine("Uspesno logovanje");
             }
+            else
+            {
+                Console.WriteLine("NEUSPESNo logovanje");
+            }
 
             Console.ReadKey();
         }

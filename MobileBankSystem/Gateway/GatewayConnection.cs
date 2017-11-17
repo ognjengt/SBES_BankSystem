@@ -32,8 +32,7 @@ namespace Gateway
         }
         public bool ClientToBankCheckLogin(string username, string password)
         {
-            Console.WriteLine("aaaa");
-            /*
+            
             if (bankProxy == null)
             {
                 Common.Client cli = new Common.Client();
@@ -41,11 +40,8 @@ namespace Gateway
             }
             Console.WriteLine(username);
 
-
-            return true;
-            //return bankProxy.CheckLogin(username, password);
-            */
-            return true;
+            return bankProxy.CheckLogin(username, password);
+            
 
         }
 
