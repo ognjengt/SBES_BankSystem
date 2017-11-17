@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace Common
 {
     // Potrebno je dodati polja koja su zajednicka i za pravna i za fizicka lica
+    [Serializable]
     public class User
     {
         public string Username { get; set; }

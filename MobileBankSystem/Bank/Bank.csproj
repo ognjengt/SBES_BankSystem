@@ -47,6 +47,11 @@
     <Compile Include="BankConnetion.cs" />
     <Compile Include="BankDB.cs" />
     <Compile Include="BankServer.cs" />
+    <Compile Include="Korisnici.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Korisnici.resx</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,6 +63,12 @@
       <Project>{9e0842a0-d4f0-4b63-95bb-8c721e3f20e6}</Project>
       <Name>Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Korisnici.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Korisnici.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

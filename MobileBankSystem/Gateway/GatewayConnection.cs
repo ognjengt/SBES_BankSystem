@@ -21,7 +21,13 @@ namespace Gateway
         {
             //pozovem metodu iz banke
             //kacimo se na banku, uplacujemo novac
-            Console.WriteLine("Client to bank...");
+            if (bankProxy == null)
+            {
+                Common.Client cli = new Common.Client();
+                bankProxy = cli.GetBankProxy();
+            }
+
+            bankProxy.AddAccount(u);
         }
 
         public void ClientToBankTransfer()

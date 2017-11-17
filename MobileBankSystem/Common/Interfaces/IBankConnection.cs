@@ -14,7 +14,7 @@ namespace Common.Interfaces
         /// Metoda koju poziva admin prilikom dodavanja novog racuna u banci
         /// </summary>
         [OperationContract]
-        void AddAccount();
+        void AddAccount(User u);
 
         /// <summary>
         /// Metoda kojom se sa jednog racuna prebacuje novac na drugi
