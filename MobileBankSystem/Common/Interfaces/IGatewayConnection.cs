@@ -14,14 +14,19 @@ namespace Common.Interfaces
         /// Preusmerava saobracaj od klijenta do banke, tj komunicira sa bankom i salje joj klijentske zahteve
         /// </summary>
         [OperationContract]
-        void ClientToBank();
+        void ClientToBankAddAccount(User u);
 
+
+        [OperationContract]
+        void ClientToBankTransfer();
         /// <summary>
         /// Preusmerava saobracaj od banke ka operateru
         /// </summary>
         [OperationContract]
         void BankToOperator();
 
+        [OperationContract]
+        bool ClientToBankCheckLogin(string username,string password);
         /// <summary>
         /// Preusmerava saobracaj od Operatera do klijenta
         /// </summary>

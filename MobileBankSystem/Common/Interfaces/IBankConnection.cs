@@ -21,5 +21,8 @@ namespace Common.Interfaces
         /// </summary>
         [OperationContract]
         void Transfer();
+
+        [OperationContract]
+        bool CheckLogin(string username,string password);
     }
 }

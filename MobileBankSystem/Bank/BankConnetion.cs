@@ -14,9 +14,15 @@ namespace Bank
             Console.WriteLine("AddAccount called");
         }
 
+        public bool CheckLogin(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Transfer()
         {
             Console.WriteLine("Trasfer called");
         }
+        
     }
 }

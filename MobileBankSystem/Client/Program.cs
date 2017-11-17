@@ -18,7 +18,7 @@ namespace Client
             Common.Client cli = new Common.Client();
             IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
 
-            gatewayProxy.ClientToBank();
+           
 
             Console.ReadKey();
         }

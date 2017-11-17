@@ -23,6 +23,10 @@ namespace Common
             this.Uloga = uloga;
             this.BrojRacuna = brRacuna;
         }
+        public User()
+        {
+
+        }
     }
 
    
