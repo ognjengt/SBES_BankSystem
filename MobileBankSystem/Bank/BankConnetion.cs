@@ -1,4 +1,5 @@
-﻿using Common.Interfaces;
+﻿using Common;
+using Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +15,18 @@ namespace Bank
             Console.WriteLine("AddAccount called");
         }
 
-        public bool CheckLogin(string username, string password)
+        public User CheckLogin(string username, string password)
         {
             if (BankDB.BazaKorisnika.ContainsKey(username))
             {
                 if (BankDB.BazaKorisnika[username].Password == password)
                 {
-                    return true;
+                    User u = BankDB.BazaKorisnika[username];
+                    return u;
                 }
             }
-            return false;
+
+            return null;
 
 
 

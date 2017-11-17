@@ -23,6 +23,6 @@ namespace Common.Interfaces
         void Transfer();
 
         [OperationContract]
-        bool CheckLogin(string username,string password);
+        User CheckLogin(string username,string password);
     }
 }

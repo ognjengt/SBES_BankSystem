@@ -30,7 +30,7 @@ namespace Gateway
             //kacimo se na banku, uplacujemo novac
             Console.WriteLine("Client to bank...");
         }
-        public bool ClientToBankCheckLogin(string username, string password)
+        public User ClientToBankCheckLogin(string username, string password)
         {
             
             if (bankProxy == null)
@@ -39,9 +39,9 @@ namespace Gateway
                 bankProxy = cli.GetBankProxy();
             }
             Console.WriteLine(username);
-
-            return bankProxy.CheckLogin(username, password);
-            
+           
+            User u=bankProxy.CheckLogin(username, password);
+            return u;
 
         }
 

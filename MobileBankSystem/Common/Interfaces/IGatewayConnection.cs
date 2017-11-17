@@ -26,7 +26,7 @@ namespace Common.Interfaces
         void BankToOperator();
 
         [OperationContract]
-        bool ClientToBankCheckLogin(string username,string password);
+        User ClientToBankCheckLogin(string username,string password);
         /// <summary>
         /// Preusmerava saobracaj od Operatera do klijenta
         /// </summary>
