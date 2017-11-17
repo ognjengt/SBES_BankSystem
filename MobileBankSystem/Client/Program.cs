@@ -23,7 +23,7 @@ namespace Client
             Console.WriteLine("Password:");
             string pass = Console.ReadLine();
 
-           User ulogovanUser=gatewayProxy.ClientToBankCheckLogin(user, pass);
+            User ulogovanUser = gatewayProxy.ClientToBankCheckLogin(user, pass);
             if (ulogovanUser != null)
             {
                 Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);
@@ -34,7 +34,7 @@ namespace Client
 
 
                 }
-                else if(ulogovanUser.Uloga=="korisnik") {
+                else if (ulogovanUser.Uloga == "korisnik") {
                     MeniKorisnik(gatewayProxy);
                 }
             }
@@ -49,8 +49,8 @@ namespace Client
         private static void MeniAdmin(IGatewayConnection gatewayProxy) {
 
             int izbor;
-            do{
-                
+            do {
+
                 Console.WriteLine("1.Dodavanje korisnika");
                 Console.WriteLine("0.Izlaz");
                 Console.WriteLine("Izaberi jedan od ponudjenih");
@@ -58,8 +58,17 @@ namespace Client
 
                 //switch za izbor
 
+                switch (izbor) {
 
-            } while(izbor!=0);
+                    case 1:
+                        DodajKorisnika(gatewayProxy);
+                        break;
+                    default:
+                        Console.WriteLine("Ne postoji ta opcija");
+                        break;
+                }
+
+            } while (izbor != 0);
 
         }
 
@@ -79,6 +88,30 @@ namespace Client
 
 
             } while (izbor != 0);
+
+        }
+
+        private static void DodajKorisnika(IGatewayConnection gatewayProxy) {
+
+            Console.WriteLine("Korisnicko ime:");
+            string username = Console.ReadLine();
+
+            Console.WriteLine("Lozinka:");
+            string lozinka = Console.ReadLine();
+
+            Console.WriteLine("Uloga:");
+            string uloga = Console.ReadLine();
+
+            //pravljenje korisnika
+            User noviUser = new User();
+            noviUser.Username = username;
+            noviUser.Password = lozinka;
+            noviUser.Uloga = uloga;
+            
+
+            gatewayProxy.ClientToBankAddAccount(noviUser);
+               
+
 
         }
     }

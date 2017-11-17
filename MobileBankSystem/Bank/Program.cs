@@ -19,7 +19,7 @@ namespace Bank
             // Iscitavanje iz fajla, upisivanje u BazuKorisnika
             
 
-            BankDB.BazaKorisnika.Add("marko", new User("marko", "1111", "admin"));
+            BankDB.BazaKorisnika.Add("admin", new User("admin", "admin", "admin"));
             Console.ReadKey();
         }
     }

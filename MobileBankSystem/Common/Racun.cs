@@ -8,14 +8,16 @@ namespace Common
 {
     public class Racun
     {
-        public User Korisnik { get; set; }
+        public string Username { get; set; }
         public string BrojRacuna { get; set; }
+        public int StanjeRacuna { get; set; }
 
         public Racun() { }
-        public Racun(User korisnik,string brRacuna) {
+        public Racun(string korisnickoIme,string brRacuna,int stanjeRacuna) {
 
-            this.Korisnik = korisnik;
+            this.Username = korisnickoIme;
             this.BrojRacuna = brRacuna;
+            this.StanjeRacuna = stanjeRacuna;
         }
 
     }
