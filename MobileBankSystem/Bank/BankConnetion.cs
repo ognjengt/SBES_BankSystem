@@ -2,10 +2,12 @@
 using Common.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Bank
 {
@@ -30,6 +32,8 @@ namespace Bank
             {
                 Console.WriteLine(korisnik.Key);
             }
+
+            upisiKorisnika(BankDB.BazaKorisnika);
         }
 
         public User CheckLogin(string username, string password)
@@ -79,6 +83,7 @@ namespace Bank
             BankDB.BazaRacuna[myUsername].StanjeRacuna -= value;
             BankDB.BazaRacuna[operatorUsername].StanjeRacuna += value;
 
+            upisiRacun(BankDB.BazaRacuna);
             /*  
                 Treba pozvati operatera preko wcf-a i obavestiti ga da je korisnik izvrsio uplatu na njegov racun.
                 Da bi se to uradilo potrebno je da znamo ip adresu korisnika i njegov port na kome slusa. Te podatke o 
@@ -95,6 +100,44 @@ namespace Bank
             */
 
             return retVal;
+        }
+
+        public void upisiKorisnika(Dictionary<string,User> recnikKorisnika)
+        {
+            List<User> listaKorisnika = new List<User>();
+            //prepisati iz recnika u ovu listu
+            foreach(User u in recnikKorisnika.Values)
+            {
+                listaKorisnika.Add(u);
+            }
+
+            XmlSerializer ser = new XmlSerializer(typeof(List<User>));
+
+            StreamWriter sw = new StreamWriter(@".\korisnici.xml");
+            ser.Serialize(sw, listaKorisnika);
+
+            sw.Close();
+        }
+
+        public void upisiRacun(Dictionary<string,Racun> recnikRacuna)
+        {
+            List<Racun> listaRacuna = new List<Racun>();
+            //prepisati iz recnika u ovu listu
+            foreach (Racun r in recnikRacuna.Values)
+            {
+                listaRacuna.Add(r);
+            }
+
+            XmlSerializer ser = new XmlSerializer(typeof(List<User>));
+
+            StreamWriter sw = new StreamWriter(@".\racuni.xml");
+            ser.Serialize(sw, listaRacuna);
+
+            sw.Close();
+
+
+
+
         }
     }
 }
