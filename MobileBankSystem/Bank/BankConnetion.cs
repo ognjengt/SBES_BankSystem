@@ -49,10 +49,52 @@ namespace Bank
 
         }
 
-        public void Transfer()
+        public bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value)
         {
-            Console.WriteLine("Trasfer called");
+            bool retVal = true;
+            if (BankDB.BazaKorisnika.ContainsKey(myUsername))
+            {
+                Console.WriteLine("Predstavili ste se kao nepostojeci korisnik");
+                retVal = false;
+            }
+
+            if (BankDB.BazaKorisnika.ContainsKey(operatorUsername))
+            {
+                Console.WriteLine("Nepostojeci operator");
+                retVal = false;
+            }
+
+            if (value <= 0)
+            {
+                Console.WriteLine("Novcana suma mora biti pozitivan broj");
+                retVal = false;
+            }
+
+            if (BankDB.BazaRacuna[myUsername].StanjeRacuna < value)
+            {
+                Console.WriteLine("Nemate dovoljno novcanih sredstava na racunu");
+                retVal = false;
+            }
+
+            BankDB.BazaRacuna[myUsername].StanjeRacuna -= value;
+            BankDB.BazaRacuna[operatorUsername].StanjeRacuna += value;
+
+            /*  
+                Treba pozvati operatera preko wcf-a i obavestiti ga da je korisnik izvrsio uplatu na njegov racun.
+                Da bi se to uradilo potrebno je da znamo ip adresu korisnika i njegov port na kome slusa. Te podatke o 
+                korisniku treba dodati prikom njegovog dodavanja u banku. 
+
+                Dodavanje u banku treba razdvojiti na dva slucaja:
+                    * dodavanje korisnika -> dodavanje korisnika je ovo sto trenutno imamo
+                    * dodavanje operatera -> za dodavanje operatera treba dodati informafije o ipAdresi i portu
+                
+                Kada se ovo odrati poziva se sledece: 
+
+                IOperatorConnection proxy = Client.GetOperatorProxy(ip, port);
+                proxy.UpdateStatus(myUsernameOnOperator, value);
+            */
+
+            return retVal;
         }
-        
     }
 }

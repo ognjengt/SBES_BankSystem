@@ -20,7 +20,7 @@ namespace Common.Interfaces
         /// Metoda kojom se sa jednog racuna prebacuje novac na drugi
         /// </summary>
         [OperationContract]
-        void Transfer();
+        bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value);
 
         [OperationContract]
         User CheckLogin(string username,string password);

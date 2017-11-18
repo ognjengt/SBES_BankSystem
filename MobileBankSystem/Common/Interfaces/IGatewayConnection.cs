@@ -18,7 +18,7 @@ namespace Common.Interfaces
 
 
         [OperationContract]
-        void ClientToBankTransfer();
+        bool ClientToBankTransfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value);
         /// <summary>
         /// Preusmerava saobracaj od banke ka operateru
         /// </summary>

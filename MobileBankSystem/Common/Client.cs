@@ -20,7 +20,8 @@ namespace Common
             binding.TransactionFlow = true;
             ChannelFactory<IBankConnection> factory = new ChannelFactory<IBankConnection>(binding,
             new EndpointAddress("net.tcp://localhost:65000/BankConnection"));
-            IBankConnection proxy = factory.CreateChannel();
+            IBankConnection proxy = factory.CreateChannel();
+
             return proxy;
         }
 
@@ -35,7 +36,8 @@ namespace Common
             binding.TransactionFlow = true;
             ChannelFactory<IClientConnection> factory = new ChannelFactory<IClientConnection>(binding,
             new EndpointAddress("net.tcp://localhost:62000/ClientConnection"));
-            IClientConnection proxy = factory.CreateChannel();
+            IClientConnection proxy = factory.CreateChannel();
+
             return proxy;
         }
 
@@ -49,7 +51,8 @@ namespace Common
             binding.TransactionFlow = true;
             ChannelFactory<IGatewayConnection> factory = new ChannelFactory<IGatewayConnection>(binding,
             new EndpointAddress("net.tcp://localhost:63000/GatewayConnection"));
-            IGatewayConnection proxy = factory.CreateChannel();
+            IGatewayConnection proxy = factory.CreateChannel();
+
             return proxy;
         }
 
@@ -57,14 +60,15 @@ namespace Common
         /// Vraca proxy za komuniciranje sa Operatorom
         /// </summary>
         /// <returns></returns>
-        public IOperatorConnection GetOperatorProxy()
+        public IOperatorConnection GetOperatorProxy(string ip, int port)
         {
             // Skontati kako da uzmemo port bas od tog operatora koji je poslao zahtev, posto ne mozemo slati fiksno na 64000
             var binding = new NetTcpBinding();
             binding.TransactionFlow = true;
             ChannelFactory<IOperatorConnection> factory = new ChannelFactory<IOperatorConnection>(binding,
-            new EndpointAddress("net.tcp://localhost:64000/OperaterConnection"));
-            IOperatorConnection proxy = factory.CreateChannel();
+            new EndpointAddress(String.Format("net.tcp://{0}:{1}/OperaterConnection", ip, port)));
+            IOperatorConnection proxy = factory.CreateChannel();
+
             return proxy;
         }
     }
