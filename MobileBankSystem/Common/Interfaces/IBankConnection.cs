@@ -17,12 +17,40 @@ namespace Common.Interfaces
         void AddAccount(User u);
 
         /// <summary>
+        /// Kreira racun za fizicka ili pravna lica
+        /// </summary>
+        /// <param name="r"></param>
+        [OperationContract]
+        Racun KreirajRacun(Racun r);
+
+        /// <summary>
+        /// Brise racun iz baze
+        /// </summary>
+        /// <param name="brRacuna"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool ObrisiRacun(string brRacuna);
+
+        /// <summary>
         /// Metoda kojom se sa jednog racuna prebacuje novac na drugi
         /// </summary>
         [OperationContract]
         bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value);
 
+        /// <summary>
+        /// Vraca usera ili null u zavisnosti da li postoji u sistemu ili ne
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [OperationContract]
-        User CheckLogin(string username,string password);
+        User CheckLogin(string username,string password, string nacinLogovanja);
+
+        /// <summary>
+        /// Postavlja ip i port podignutog klijenta ili operatera u bazu
+        /// </summary>
+        /// <param name="u"></param>
+        [OperationContract]
+        bool SetIpAndPort(string username, string ip, int port);
     }
 }

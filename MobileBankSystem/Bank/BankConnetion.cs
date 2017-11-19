@@ -13,12 +13,11 @@ namespace Bank
 {
     public class BankConnetion : IBankConnection
     {
-      
 
+        object locker = new object();
         public void AddAccount(User u)
         {
-            // using (ResXResourceWriter rw)
-            //ovaj koristiti: "" ResourceWriter rw=
+            // TODO izmeniti da vraca poruku o postojanju na klijenta a ne na serveru da ispisuje
 
 
             if (BankDB.BazaRacuna.ContainsKey(u.Username)) {
@@ -28,29 +27,105 @@ namespace Bank
 
             }
             BankDB.BazaKorisnika.Add(u.Username,u);
-            foreach (var korisnik in BankDB.BazaKorisnika)
-            {
-                Console.WriteLine(korisnik.Key);
-            }
 
-            upisiKorisnika(BankDB.BazaKorisnika);
+            //upisiKorisnika(BankDB.BazaKorisnika); //Puca (file being used by another process)
         }
 
-        public User CheckLogin(string username, string password)
+        public User CheckLogin(string username, string password, string nacinLogovanja)
         {
-            if (BankDB.BazaKorisnika.ContainsKey(username))
+            if (nacinLogovanja == "client")
             {
-                if (BankDB.BazaKorisnika[username].Password == password)
+                if (BankDB.BazaKorisnika.ContainsKey(username))
                 {
-                    User u = BankDB.BazaKorisnika[username];
-                    return u;
+                    if (BankDB.BazaKorisnika[username].Password == password)
+                    {
+                        if (BankDB.BazaKorisnika[username].Uloga == "admin" || BankDB.BazaKorisnika[username].Uloga == "korisnik")
+                        {
+                            User u = BankDB.BazaKorisnika[username];
+                            return u;
+                        }
+                        
+                    }
                 }
             }
+            else if (nacinLogovanja == "operater")
+            {
+                if (BankDB.BazaKorisnika.ContainsKey(username))
+                {
+                    if (BankDB.BazaKorisnika[username].Password == password)
+                    {
+                        if (BankDB.BazaKorisnika[username].Uloga == "operater")
+                        {
+                            User u = BankDB.BazaKorisnika[username];
+                            return u;
+                        }
 
+                    }
+                }
+            }
             return null;
+        }
 
+        public Racun KreirajRacun(Racun r)
+        {
+            if (BankDB.BazaRacuna.ContainsKey(r.BrojRacuna))
+            {
+                return null; // vec postoji
+            }
+            if (!BankDB.BazaKorisnika.ContainsKey(r.Username))
+            {
+                return null; // ne postoji korisnik koji se stavlja kao vlasnik racuna
+            }
+            if (r.TipRacuna == "fizicki" && !BankDB.BazaKorisnika.ContainsKey(r.Operater))
+            {
+                return null; // ne postoji operater na kog zeli da se doda
+            }
+            if (r.TipRacuna == "pravni") // Ako je ovo zapravo racun od operatera
+            {
+                // Provera da li jedan operater ima vise racuna, ako vec postoji jedan racun za tog operatera vrati false
+                foreach (var racun in BankDB.BazaRacuna)
+                {
+                    if (racun.Value.TipRacuna == "pravni" && racun.Value.Username == r.Username)
+                    {
+                        // Prodji kroz sve operaterske racuna i proveri da li vec postoji racun koji je napravljen za tipa telenor
+                        return null;
+                    }
+                }
+            }
+            BankDB.BazaRacuna.Add(r.BrojRacuna, r);
+            //upisiRacun(BankDB.BazaRacuna); //Puca (file being used by another process)
 
+            // Obavesti odgovarajuceg operatera kako bi dodao novi klijentski racun
+            Client cli = new Client();
+            IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
+            gatewayProxy.BankToOperatorNotifyRacunAdded(r, BankDB.BazaKorisnika[r.Username].IpAddress, BankDB.BazaKorisnika[r.Username].Port);
+            
 
+            return r;
+
+        }
+
+        public bool ObrisiRacun(string brRacuna)
+        {
+            if (!BankDB.BazaRacuna.ContainsKey(brRacuna))
+            {
+                return false;
+            }
+            BankDB.BazaRacuna.Remove(brRacuna);
+            return true;
+        }
+
+        public bool SetIpAndPort(string username, string ip, int port)
+        {
+            // Nadji korisnika sa ovim usernameom i postavi mu port
+            if (BankDB.BazaKorisnika[username].IpAddress!= null && BankDB.BazaKorisnika[username].Port != 0)
+            {
+                //Console.WriteLine("Instanca ovog operatera ili korisnika je vec pokrenuta");
+                return false;
+            }
+            BankDB.BazaKorisnika[username].IpAddress = ip;
+            BankDB.BazaKorisnika[username].Port = port;
+            return true;
         }
 
         public bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value)
@@ -92,6 +167,8 @@ namespace Bank
                 Dodavanje u banku treba razdvojiti na dva slucaja:
                     * dodavanje korisnika -> dodavanje korisnika je ovo sto trenutno imamo
                     * dodavanje operatera -> za dodavanje operatera treba dodati informafije o ipAdresi i portu
+
+                    Ognjen: I za klijente tj korisnike treba ip adresa i port, nema potrebe praviti 2 metode, zato sto i klijenti i operateri imaju username i password, samo im je uloga drugacija
                 
                 Kada se ovo odrati poziva se sledece: 
 
@@ -104,40 +181,44 @@ namespace Bank
 
         public void upisiKorisnika(Dictionary<string,User> recnikKorisnika)
         {
-            List<User> listaKorisnika = new List<User>();
-            //prepisati iz recnika u ovu listu
-            foreach(User u in recnikKorisnika.Values)
+            lock(locker)
             {
-                listaKorisnika.Add(u);
+                List<User> listaKorisnika = new List<User>();
+                //prepisati iz recnika u ovu listu
+                foreach (User u in recnikKorisnika.Values)
+                {
+                    listaKorisnika.Add(u);
+                }
+
+                XmlSerializer ser = new XmlSerializer(typeof(List<User>));
+
+                StreamWriter sw = new StreamWriter(@".\korisnici.xml");
+                ser.Serialize(sw, listaKorisnika);
+
+                sw.Close();
             }
-
-            XmlSerializer ser = new XmlSerializer(typeof(List<User>));
-
-            StreamWriter sw = new StreamWriter(@".\korisnici.xml");
-            ser.Serialize(sw, listaKorisnika);
-
-            sw.Close();
+            
         }
 
         public void upisiRacun(Dictionary<string,Racun> recnikRacuna)
         {
-            List<Racun> listaRacuna = new List<Racun>();
-            //prepisati iz recnika u ovu listu
-            foreach (Racun r in recnikRacuna.Values)
+            lock(locker)
             {
-                listaRacuna.Add(r);
+                List<Racun> listaRacuna = new List<Racun>();
+                //prepisati iz recnika u ovu listu
+                foreach (Racun r in recnikRacuna.Values)
+                {
+                    listaRacuna.Add(r);
+                }
+
+                XmlSerializer ser = new XmlSerializer(typeof(List<User>));
+
+                StreamWriter sw = new StreamWriter(@".\racuni.xml");
+                ser.Serialize(sw, listaRacuna);
+
+                sw.Close();
             }
-
-            XmlSerializer ser = new XmlSerializer(typeof(List<User>));
-
-            StreamWriter sw = new StreamWriter(@".\racuni.xml");
-            ser.Serialize(sw, listaRacuna);
-
-            sw.Close();
-
-
-
-
+            
         }
     }
 }

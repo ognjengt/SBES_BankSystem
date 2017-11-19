@@ -21,5 +21,13 @@ namespace Common.Interfaces
         /// </summary>
         [OperationContract]
         void UpdateStatus();
+
+        /// <summary>
+        /// Metoda koju banka poziva kako bi javila odgovarajucem operateru da je neki klijent otvorio racun na tom operateru
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool NotifyRacunAdded(Racun r);
     }
 }

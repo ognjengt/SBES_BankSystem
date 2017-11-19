@@ -44,7 +44,7 @@ namespace Gateway
             return retVal;
         }
 
-        public User ClientToBankCheckLogin(string username, string password)
+        public User ClientToBankCheckLogin(string username, string password, string nacinLogovanja)
         {
             
             if (bankProxy == null)
@@ -52,9 +52,8 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
-            Console.WriteLine(username);
            
-            User u=bankProxy.CheckLogin(username, password);
+            User u=bankProxy.CheckLogin(username, password, nacinLogovanja);
             return u;
 
         }
@@ -64,6 +63,42 @@ namespace Gateway
             throw new NotImplementedException();
         }
 
-      
+        public Racun ClientToBankKreirajRacun(Racun r)
+        {
+            if (bankProxy == null)
+            {
+                Common.Client cli = new Common.Client();
+                bankProxy = cli.GetBankProxy();
+            }
+            return bankProxy.KreirajRacun(r);
+        }
+
+        public bool ClientToBankObrisiRacun(string brojRacuna)
+        {
+            if (bankProxy == null)
+            {
+                Common.Client cli = new Common.Client();
+                bankProxy = cli.GetBankProxy();
+            }
+            return bankProxy.ObrisiRacun(brojRacuna);
+        }
+
+        public bool ClientAndOperatorToBankSetIpAndPort(string username, string ip, int port)
+        {
+            if (bankProxy == null)
+            {
+                Common.Client cli = new Common.Client();
+                bankProxy = cli.GetBankProxy();
+            }
+            return bankProxy.SetIpAndPort(username, ip, port);
+        }
+
+        public bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, int operatorPort)
+        {
+            Common.Client cli = new Common.Client();
+            IOperatorConnection operatorProxy = cli.GetOperatorProxy(operatorIp, operatorPort);
+            operatorProxy.NotifyRacunAdded(r);
+            return true;
+        }
     }
 }

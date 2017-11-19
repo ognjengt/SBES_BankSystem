@@ -23,10 +23,6 @@ namespace Bank
             BankServer server = new BankServer();
             server.Start();
 
-            
-            
-
-           
             Console.ReadKey();
         }
 

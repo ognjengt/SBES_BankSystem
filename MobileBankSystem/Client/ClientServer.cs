@@ -19,13 +19,28 @@ namespace Client
 
         public override void Start()
         {
-            NetTcpBinding binding = new NetTcpBinding();
-            string address = "net.tcp://localhost:"+ listeningPort +"/ClientConnection";
+            bool uspesnoStartovanje = false;
+            do
+            {
+                NetTcpBinding binding = new NetTcpBinding();
+                string address = "net.tcp://localhost:" + listeningPort + "/ClientConnection";
 
-            serviceHost = new ServiceHost(typeof(ClientConnection));
-            serviceHost.AddServiceEndpoint(typeof(IClientConnection), binding, address);
-
-            serviceHost.Open();
+                serviceHost = new ServiceHost(typeof(ClientConnection));
+                serviceHost.AddServiceEndpoint(typeof(IClientConnection), binding, address);
+                try
+                {
+                    serviceHost.Open();
+                    uspesnoStartovanje = true;
+                }
+                catch (Exception)
+                {
+                    uspesnoStartovanje = false;
+                    listeningPort += 1;
+                }
+            } while (!uspesnoStartovanje);
+            Console.WriteLine("Client listening on port: " + listeningPort);
+            this.ipAddress = "localhost"; // kasnije izmeniti
+            this.port = listeningPort;
         }
     }
 }

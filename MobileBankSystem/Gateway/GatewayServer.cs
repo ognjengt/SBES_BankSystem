@@ -25,6 +25,8 @@ namespace Gateway
             serviceHost.AddServiceEndpoint(typeof(IGatewayConnection), binding, address);
 
             serviceHost.Open();
+            this.ipAddress = "localhost"; // kasnije izmeniti
+            this.port = 63000;
         }
     }
 }

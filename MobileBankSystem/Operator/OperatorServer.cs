@@ -19,13 +19,28 @@ namespace Operator
 
         public override void Start()
         {
-            NetTcpBinding binding = new NetTcpBinding();
-            string address = "net.tcp://localhost:"+ listeningPort + "/OperaterConnection";
+            bool uspesnoStartovanje = false;
+            do
+            {
+                NetTcpBinding binding = new NetTcpBinding();
+                string address = "net.tcp://localhost:" + listeningPort + "/OperaterConnection";
 
-            serviceHost = new ServiceHost(typeof(OperaterConnection));
-            serviceHost.AddServiceEndpoint(typeof(IOperatorConnection), binding, address);
-
-            serviceHost.Open();
+                serviceHost = new ServiceHost(typeof(OperaterConnection));
+                serviceHost.AddServiceEndpoint(typeof(IOperatorConnection), binding, address);
+                try
+                {
+                    serviceHost.Open();
+                    uspesnoStartovanje = true;
+                }
+                catch (Exception)
+                {
+                    uspesnoStartovanje = false;
+                    listeningPort += 1;
+                }
+            } while (!uspesnoStartovanje);
+            Console.WriteLine("Operater listening on port: "+listeningPort);
+            this.ipAddress = "localhost"; // kasnije izmeniti
+            this.port = listeningPort;
         }
     }
 }
