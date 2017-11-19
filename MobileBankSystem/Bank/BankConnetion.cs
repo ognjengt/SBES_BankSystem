@@ -98,7 +98,12 @@ namespace Bank
             // Obavesti odgovarajuceg operatera kako bi dodao novi klijentski racun
             Client cli = new Client();
             IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
-            gatewayProxy.BankToOperatorNotifyRacunAdded(r, BankDB.BazaKorisnika[r.Username].IpAddress, BankDB.BazaKorisnika[r.Username].Port);
+            if (r.TipRacuna == "fizicki" && r.Operater != "null")
+            {
+                gatewayProxy.BankToOperatorNotifyRacunAdded(r, BankDB.BazaKorisnika[r.Operater].IpAddress, BankDB.BazaKorisnika[r.Operater].Port);
+            }
+            
+            
             
 
             return r;
