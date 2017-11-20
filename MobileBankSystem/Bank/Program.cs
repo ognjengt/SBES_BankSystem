@@ -26,24 +26,25 @@ namespace Bank
             Console.ReadKey();
         }
 
-        private static void ucitajKorisnike(Dictionary<string,User> recnikKorisnika)
+        private static void ucitajKorisnike(Dictionary<string, User> recnikKorisnika)
         {
             try
             {
+                string putanja = Environment.CurrentDirectory + "\\korisnici.xml";
+
                 List<User> listaKorisnika = new List<User>();
                 XmlSerializer xs = new XmlSerializer(typeof(List<User>));
-                StreamReader sr = new StreamReader(@".\korisnici.xml");
+                StreamReader sr = new StreamReader(putanja);
                 listaKorisnika = (List<User>)xs.Deserialize(sr);
                 sr.Close();
-                foreach(User u in listaKorisnika)
+                foreach (User u in listaKorisnika)
                 {
                     recnikKorisnika.Add(u.Username, u);
                 }
-                
             }
             catch
             {
-                
+
             }
 
         }
@@ -52,9 +53,11 @@ namespace Bank
         {
             try
             {
+                string putanja = Environment.CurrentDirectory + "\\racuni.xml";
+
                 List<Racun> listaRacuna = new List<Racun>();
                 XmlSerializer xs = new XmlSerializer(typeof(List<User>));
-                StreamReader sr = new StreamReader(@".\racuni.xml");
+                StreamReader sr = new StreamReader(putanja);
                 listaRacuna = (List<Racun>)xs.Deserialize(sr);
                 sr.Close();
                 foreach (Racun r in listaRacuna)

@@ -28,7 +28,7 @@ namespace Bank
             }
             BankDB.BazaKorisnika.Add(u.Username,u);
 
-            //upisiKorisnika(BankDB.BazaKorisnika); //Puca (file being used by another process)
+            upisiKorisnika(BankDB.BazaKorisnika); //Puca (file being used by another process)
         }
 
         public User CheckLogin(string username, string password, string nacinLogovanja)
@@ -193,10 +193,11 @@ namespace Bank
             return retVal;
         }
 
-        public void upisiKorisnika(Dictionary<string,User> recnikKorisnika)
+        public void upisiKorisnika(Dictionary<string, User> recnikKorisnika)
         {
-            lock(locker)
+            lock (locker)
             {
+                string putanja = Environment.CurrentDirectory + "\\korisnici.xml";
                 List<User> listaKorisnika = new List<User>();
                 //prepisati iz recnika u ovu listu
                 foreach (User u in recnikKorisnika.Values)
@@ -206,18 +207,20 @@ namespace Bank
 
                 XmlSerializer ser = new XmlSerializer(typeof(List<User>));
 
-                StreamWriter sw = new StreamWriter(@".\korisnici.xml");
+                StreamWriter sw = new StreamWriter(putanja);
                 ser.Serialize(sw, listaKorisnika);
 
                 sw.Close();
             }
-            
+
         }
 
-        public void upisiRacun(Dictionary<string,Racun> recnikRacuna)
+        public void upisiRacun(Dictionary<string, Racun> recnikRacuna)
         {
-            lock(locker)
+            lock (locker)
             {
+                string putanja = Environment.CurrentDirectory + "\\racuni.xml";
+
                 List<Racun> listaRacuna = new List<Racun>();
                 //prepisati iz recnika u ovu listu
                 foreach (Racun r in recnikRacuna.Values)
@@ -227,12 +230,12 @@ namespace Bank
 
                 XmlSerializer ser = new XmlSerializer(typeof(List<User>));
 
-                StreamWriter sw = new StreamWriter(@".\racuni.xml");
+                StreamWriter sw = new StreamWriter(putanja);
                 ser.Serialize(sw, listaRacuna);
 
                 sw.Close();
             }
-            
+
         }
     }
 }
