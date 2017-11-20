@@ -95,9 +95,10 @@ namespace Gateway
             return bankProxy.SetIpAndPort(username, ip, port);
         }
 
-        public bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, int operatorPort)
+        public bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort)
         {
             Common.Client cli = new Common.Client();
+            
             IOperatorConnection operatorProxy = cli.GetOperatorProxy(operatorIp, operatorPort);
             operatorProxy.NotifyRacunAdded(r);
             return true;

@@ -14,5 +14,7 @@ namespace Bank
        public static Dictionary<string, User> BazaAktivnihKorisnika = new Dictionary<string, User>();
        public static Dictionary<string, User> BazaAktivnihOperatera= new Dictionary<string, User>();
 
+        
+
     }
 }

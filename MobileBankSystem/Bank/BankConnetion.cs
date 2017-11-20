@@ -18,6 +18,13 @@ namespace Bank
         public void AddAccount(User u)
         {
             // TODO izmeniti da vraca poruku o postojanju na klijenta a ne na serveru da ispisuje
+            User desifrovanKorisnik = new User();
+            
+
+
+            desifrovanKorisnik.Username = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Username), "kljuc");
+            desifrovanKorisnik.Password = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Password), "kljuc");
+            desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Uloga), "kljuc");
 
 
             if (BankDB.BazaRacuna.ContainsKey(u.Username)) {
@@ -26,9 +33,9 @@ namespace Bank
                 return;
 
             }
-            BankDB.BazaKorisnika.Add(u.Username,u);
+            BankDB.BazaKorisnika.Add(desifrovanKorisnik.Username,desifrovanKorisnik);
 
-            upisiKorisnika(BankDB.BazaKorisnika); //Puca (file being used by another process)
+            upisiKorisnika(BankDB.BazaKorisnika); //moras ih sifrovati pre upisa
         }
 
         public User CheckLogin(string username, string password, string nacinLogovanja)
@@ -36,6 +43,10 @@ namespace Bank
             List<Object> userIRacun = new List<Object>();
             if (nacinLogovanja == "client")
             {
+
+                string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
+                string passwordDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(password), "kljuc");
+
                 if (BankDB.BazaKorisnika.ContainsKey(username))
                 {
                     if (BankDB.BazaKorisnika[username].Password == password)
@@ -55,6 +66,8 @@ namespace Bank
             }
             else if (nacinLogovanja == "operater")
             {
+                string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
+                string passwordDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(password), "kljuc");
                 if (BankDB.BazaKorisnika.ContainsKey(username))
                 {
                     if (BankDB.BazaKorisnika[username].Password == password)
@@ -76,48 +89,72 @@ namespace Bank
 
         public Racun KreirajRacun(Racun r)
         {
-            if (BankDB.BazaRacuna.ContainsKey(r.BrojRacuna))
+
+            string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.Username), "kljuc");
+            string brojRacunaDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.BrojRacuna), "kljuc");
+            string operatorDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.Operater), "kljuc");
+            string tipRacunaDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.TipRacuna), "kljuc");
+
+
+
+
+
+
+
+            if (BankDB.BazaRacuna.ContainsKey(brojRacunaDesifrovan))
             {
                 return null; // vec postoji
             }
-            if (!BankDB.BazaKorisnika.ContainsKey(r.Username))
+            if (!BankDB.BazaKorisnika.ContainsKey(usernameDesifrovan))
             {
                 return null; // ne postoji korisnik koji se stavlja kao vlasnik racuna
             }
-            if (r.TipRacuna == "fizicki" && !BankDB.BazaKorisnika.ContainsKey(r.Operater))
+            if (tipRacunaDesifrovan == "fizicki" && !BankDB.BazaKorisnika.ContainsKey(operatorDesifrovan))
             {
                 return null; // ne postoji operater na kog zeli da se doda
             }
-            if (r.TipRacuna == "pravni") // Ako je ovo zapravo racun od operatera
+            if (tipRacunaDesifrovan == "pravni") // Ako je ovo zapravo racun od operatera
             {
                 // Provera da li jedan operater ima vise racuna, ako vec postoji jedan racun za tog operatera vrati false
                 foreach (var racun in BankDB.BazaRacuna)
                 {
-                    if (racun.Value.TipRacuna == "pravni" && racun.Value.Username == r.Username)
+                    if (racun.Value.TipRacuna == "pravni" && racun.Value.Username == usernameDesifrovan)
                     {
                         // Prodji kroz sve operaterske racuna i proveri da li vec postoji racun koji je napravljen za tipa telenor
                         return null;
                     }
                 }
             }
-            BankDB.BazaRacuna.Add(r.BrojRacuna, r);
+            Racun desifrovan = new Racun();
+            desifrovan.BrojRacuna = brojRacunaDesifrovan;
+            desifrovan.Operater = operatorDesifrovan;
+            desifrovan.StanjeRacuna= Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.StanjeRacuna), "kljuc");
+            desifrovan.TipRacuna = tipRacunaDesifrovan;
+            desifrovan.Username = usernameDesifrovan;
+
+
+            BankDB.BazaRacuna.Add(desifrovan.Username, desifrovan);
             upisiRacun(BankDB.BazaRacuna);
 
             // Obavesti odgovarajuceg operatera kako bi dodao novi klijentski racun
             Client cli = new Client();
             IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
-            if (r.TipRacuna == "fizicki" && r.Operater != "null")
+            if (desifrovan.TipRacuna == "fizicki" && desifrovan.Operater != "null")
             {
-                gatewayProxy.BankToOperatorNotifyRacunAdded(r, BankDB.BazaKorisnika[r.Operater].IpAddress, BankDB.BazaKorisnika[r.Operater].Port);
+
+                string sifrovanaIp = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].IpAddress, "kljuc"));
+                string sifrovanPort = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].Port, "kljuc"));
+
+                gatewayProxy.BankToOperatorNotifyRacunAdded(r,sifrovanaIp ,sifrovanPort);
             }
             
             
             
 
-            return r;
+            return desifrovan;
 
         }
-
+        //kod klijenta sam stigao do Obrisi Racun...
         public bool ObrisiRacun(string brRacuna)
         {
             if (!BankDB.BazaRacuna.ContainsKey(brRacuna))
@@ -207,7 +244,14 @@ namespace Bank
                 //prepisati iz recnika u ovu listu
                 foreach (User u in recnikKorisnika.Values)
                 {
-                    listaKorisnika.Add(u);
+                    User sifrovan = new User();
+                    sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Username, "kljuc"));
+                    sifrovan.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Password, "kljuc"));
+                    sifrovan.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Uloga, "kljuc"));
+
+
+
+                    listaKorisnika.Add(sifrovan);
                 }
 
                 XmlSerializer ser = new XmlSerializer(typeof(List<User>));
@@ -230,7 +274,16 @@ namespace Bank
                 //prepisati iz recnika u ovu listu
                 foreach (Racun r in recnikRacuna.Values)
                 {
-                    listaRacuna.Add(r);
+                    Racun sifrovan = new Racun();
+                    sifrovan.BrojRacuna= BitConverter.ToString(Sifrovanje.sifrujCBC(r.BrojRacuna, "kljuc"));
+                    sifrovan.Operater = BitConverter.ToString(Sifrovanje.sifrujCBC(r.Operater, "kljuc"));
+                    sifrovan.StanjeRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(r.StanjeRacuna, "kljuc"));
+                    sifrovan.TipRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(r.TipRacuna, "kljuc"));
+                    sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(r.Username, "kljuc"));
+
+
+
+                    listaRacuna.Add(sifrovan);
                 }
 
                 XmlSerializer ser = new XmlSerializer(typeof(List<Racun>));
@@ -245,7 +298,9 @@ namespace Bank
 
         public Racun UzmiKlijentskiRacun(string username)
         {
-            return BankDB.BazaRacuna[username];
+            string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
+
+            return BankDB.BazaRacuna[usernameDesifrovan];
         }
     }
 }

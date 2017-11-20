@@ -87,6 +87,6 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="r"></param>
         [OperationContract]
-        bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, int operatorPort);
+        bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort);
     }
 }

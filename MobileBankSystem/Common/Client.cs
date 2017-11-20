@@ -60,14 +60,17 @@ namespace Common
         /// Vraca proxy za komuniciranje sa Operatorom
         /// </summary>
         /// <returns></returns>
-        public IOperatorConnection GetOperatorProxy(string ip, int port)
+        public IOperatorConnection GetOperatorProxy(string ip, string port)
         {
 
             // Skontati kako da uzmemo port bas od tog operatora koji je poslao zahtev, posto ne mozemo slati fiksno na 64000
+            string ipDes = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(ip), "kljuc");
+            string portDes = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(port), "kljuc");
+
             var binding = new NetTcpBinding();
             binding.TransactionFlow = true;
             ChannelFactory<IOperatorConnection> factory = new ChannelFactory<IOperatorConnection>(binding,
-            new EndpointAddress(String.Format("net.tcp://{0}:{1}/OperaterConnection", ip, port)));
+            new EndpointAddress(String.Format("net.tcp://{0}:{1}/OperaterConnection", ipDes, portDes)));
             IOperatorConnection proxy = factory.CreateChannel();
 
             return proxy;

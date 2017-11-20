@@ -12,12 +12,12 @@ namespace Common
     {
         public string Username { get; set; }
         public string BrojRacuna { get; set; }
-        public int StanjeRacuna { get; set; }
+        public string StanjeRacuna { get; set; }
         public string TipRacuna { get; set; }
         public string Operater { get; set; }
 
         public Racun() { }
-        public Racun(string korisnickoIme,string brRacuna,int stanjeRacuna, string tipRacuna, string operater) {
+        public Racun(string korisnickoIme,string brRacuna,string stanjeRacuna, string tipRacuna, string operater) {
 
             this.Username = korisnickoIme;
             this.BrojRacuna = brRacuna;

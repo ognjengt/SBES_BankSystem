@@ -13,8 +13,22 @@ namespace Operator
 
         public bool NotifyRacunAdded(Racun r)
         {
-            OperatorDB.BazaRacuna.Add(r.BrojRacuna, r);
-            Console.WriteLine("Dodat novi racun: " + r.BrojRacuna + " " + r.Username);
+            string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.Username), "kljuc");
+            string brojRacunaDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.BrojRacuna), "kljuc");
+            string operatorDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.Operater), "kljuc");
+            string tipRacunaDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.TipRacuna), "kljuc");
+
+            Racun desifrovan = new Racun();
+            desifrovan.BrojRacuna = brojRacunaDesifrovan;
+            desifrovan.Operater = operatorDesifrovan;
+            desifrovan.StanjeRacuna = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.StanjeRacuna), "kljuc");
+            desifrovan.TipRacuna = tipRacunaDesifrovan;
+            desifrovan.Username = usernameDesifrovan;
+
+
+
+            OperatorDB.BazaRacuna.Add(desifrovan.BrojRacuna, desifrovan);
+            Console.WriteLine("Dodat novi racun: " + desifrovan.BrojRacuna + " " + desifrovan.Username);
             return true;
         }
 

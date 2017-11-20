@@ -14,10 +14,10 @@ namespace Common
         public string Password { get; set; }
         public string Uloga { get; set; } // admin, korisnik ili operater
         public string IpAddress { get; set; }
-        public int Port { get; set; }
+        public string Port { get; set; }
 
 
-        public User(string username, string password,string uloga, string ipAddress, int port) {
+        public User(string username, string password,string uloga, string ipAddress, string port) {
 
             this.Username = username;
             this.Password = password;

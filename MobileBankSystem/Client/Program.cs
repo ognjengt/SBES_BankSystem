@@ -15,20 +15,26 @@ namespace Client
             // Prvo konekcija na server radi pristupanja bazi podataka ( gde admin postoji?)
             // Prvo autentifikacija, u zavisnosti od toga gleda se da li je admin ili ne (iz nekog txt-a)
             // ???
-
+            string kljuc = "kljuc";
             Common.Client cli = new Common.Client();
             IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
             Console.WriteLine("Username:");
             string user = Console.ReadLine();
+            string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, kljuc));
+            
 
             Console.WriteLine("Password:");
             string pass = Console.ReadLine();
-            
-            User ulogovanUser = gatewayProxy.ClientToBankCheckLogin(user, pass, "client");
+            string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, kljuc));
+
+
+            User ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "client");
             if (ulogovanUser != null)
             {
+                string userSifrovanoZaRacun = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, kljuc));
+
                 Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);
-               KlientskiRacun.racun = gatewayProxy.ClientToBankUzmiKlijentskiRacun(ulogovanUser.Username);
+               KlientskiRacun.racun = gatewayProxy.ClientToBankUzmiKlijentskiRacun(userSifrovanoZaRacun);
                 if (KlientskiRacun.racun == null) {
 
                     Console.WriteLine("Ne postoji klijentski racun ");
@@ -130,10 +136,13 @@ namespace Client
 
             //pravljenje korisnika
             User noviUser = new User();
-            noviUser.Username = username;
-            noviUser.Password = lozinka;
-            noviUser.Uloga = uloga;
-            
+            noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(username,"kljuc"));
+            noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(lozinka, "kljuc"));
+            noviUser.Uloga =    BitConverter.ToString(Sifrovanje.sifrujCBC(uloga, "kljuc"));
+
+
+
+
 
             gatewayProxy.ClientToBankAddAccount(noviUser);
         }
@@ -142,24 +151,39 @@ namespace Client
         {
             Console.WriteLine("Korisnicko ime vlasnika racuna (fizicko ili pravno lice): ");
             string username = Console.ReadLine();
+            string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(username, "kljuc"));
+
+
 
             Console.WriteLine("Broj racuna: ");
             string brojRacuna = Console.ReadLine();
+            string brojRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, "kljuc"));
+
+
 
             Console.WriteLine("Tip racuna (fizicki ili pravni): ");
             string tipRacuna = Console.ReadLine();
+            string tipRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(tipRacuna, "kljuc"));
+
+
 
             string operater = "null";
+            string operaterSifrovano = "null";
             if (tipRacuna == "fizicki")
             {
                 Console.WriteLine("Korisnicko ime naloga operatera: ");
                 operater = Console.ReadLine();
+                operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, "kljuc"));
+
             }
 
             Console.WriteLine("Inicijalno stanje ");
-            int stanje = Int32.Parse(Console.ReadLine());
+            string stanje = Console.ReadLine();
+            string stanjeSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(stanje, "kljuc"));
 
-            Racun noviRacun = new Racun(username, brojRacuna, stanje,tipRacuna,operater);
+
+
+            Racun noviRacun = new Racun(userSifrovano, brojRacunaSifrovano, stanjeSifrovano,tipRacunaSifrovano,operaterSifrovano);
 
            var uspesnoKreiran = gatewayProxy.ClientToBankKreirajRacun(noviRacun);
             if (uspesnoKreiran == null)
