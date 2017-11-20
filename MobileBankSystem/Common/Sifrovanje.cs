@@ -50,21 +50,21 @@ namespace Common
             tDES.Mode = CipherMode.CBC; //valjda moze ovako
             tDES.Padding = PaddingMode.Zeros;
 
-            byte[] niz = new byte[tDES.BlockSize / 8];
-            byte[] message = new byte[sifrovana.Length - niz.Length];
+            byte[] vektor = new byte[tDES.BlockSize / 8];
+            byte[] message = new byte[sifrovana.Length - vektor.Length];
             for (int i = 0; i < sifrovana.Length; i++)
             {
                 if (i < tDES.BlockSize / 8)
                 {
-                    niz[i] = sifrovana[i];
+                    vektor[i] = sifrovana[i];
                 }
                 else
                 {
-                    message[i - niz.Length] = sifrovana[i];
+                    message[i - vektor.Length] = sifrovana[i];
                 }
             }
 
-            tDES.IV = niz;
+            tDES.IV = vektor;
             ICryptoTransform trans = tDES.CreateDecryptor();
             string desifrovano = utf8.GetString(trans.TransformFinalBlock(message, 0, message.Length));
             return desifrovano;
@@ -80,7 +80,7 @@ namespace Common
             TripleDESCryptoServiceProvider tDES = new TripleDESCryptoServiceProvider();
             tDES.Key = md.ComputeHash(utf8.GetBytes(kljuc));
             tDES.Mode = CipherMode.ECB; //valjda moze ovako
-            tDES.Padding = PaddingMode.PKCS7; //ovo nznm sta je
+            tDES.Padding = PaddingMode.Zeros; //ovo nznm sta je
             ICryptoTransform trans = tDES.CreateEncryptor();
             byte[] sifrovano = trans.TransformFinalBlock(utf8.GetBytes(ulaznaRec), 0, utf8.GetBytes(ulaznaRec).Length);
             string ispis = BitConverter.ToString(sifrovano);
@@ -96,7 +96,7 @@ namespace Common
             TripleDESCryptoServiceProvider tDES = new TripleDESCryptoServiceProvider();
             tDES.Key = md.ComputeHash(utf8.GetBytes(kljuc));
             tDES.Mode = CipherMode.ECB; //valjda moze ovako
-            tDES.Padding = PaddingMode.PKCS7; //ovo nznm sta je
+            tDES.Padding = PaddingMode.Zeros; //ovo nznm sta je
             ICryptoTransform trans = tDES.CreateDecryptor();
             string desifrovano = utf8.GetString(trans.TransformFinalBlock(sifrovana, 0, sifrovana.Length));
             return desifrovano;
