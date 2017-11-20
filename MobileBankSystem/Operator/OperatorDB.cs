@@ -10,5 +10,6 @@ namespace Operator
     public static class OperatorDB
     {
         public static Dictionary<string, Racun> BazaRacuna = new Dictionary<string, Racun>();
+        public static Dictionary<string, User> BazaKorisnika = new Dictionary<string, User>();
     }
 }

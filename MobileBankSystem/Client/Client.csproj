@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ClientConnection.cs" />
     <Compile Include="ClientServer.cs" />
+    <Compile Include="KlientskiRacun.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Operator
@@ -48,7 +49,27 @@ namespace Operator
                 Environment.Exit(0);
             }
 
+
+
             Console.ReadKey();
+        }
+
+        private static void SendBill(IGatewayConnection proxy)
+        {
+
+            while (true) {
+
+                foreach (var korisnik in OperatorDB.BazaKorisnika) // TREBA NAPUNITI BAZU KORISNIKA
+                {
+                    Random r = new Random();
+                    int randomSuma = r.Next(100,1000);
+                    proxy.OperatorToClientSendBill(randomSuma,korisnik.Value.IpAddress,korisnik.Value.Port);
+
+
+                }
+
+                Thread.Sleep(20000);// 2 minuta ustvari
+            }
         }
     }
 }

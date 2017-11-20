@@ -131,14 +131,15 @@ namespace Bank
         public bool SetIpAndPort(string username, string ip, int port)
         {
             // Nadji korisnika sa ovim usernameom i postavi mu port
-            //if (BankDB.BazaKorisnika[username].IpAddress!= null && BankDB.BazaKorisnika[username].Port != 0)
-            //{
-            //    //Console.WriteLine("Instanca ovog operatera ili korisnika je vec pokrenuta");
-            //    return false;
-            //}
+            if (BankDB.BazaAktivnihOperatera[username].IpAddress != null && BankDB.BazaAktivnihOperatera[username].Port != 0)
+            {
+                //Console.WriteLine("Instanca ovog operatera ili korisnika je vec pokrenuta");
+                return false;
+            }
             // Potrebno je napraviti 2 dictionaryja ko je aktivan
             BankDB.BazaKorisnika[username].IpAddress = ip;
             BankDB.BazaKorisnika[username].Port = port;
+            BankDB.BazaAktivnihOperatera.Add(BankDB.BazaKorisnika[username].Username, BankDB.BazaKorisnika[username]);
             return true;
         }
 

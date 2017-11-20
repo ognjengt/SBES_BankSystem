@@ -58,9 +58,11 @@ namespace Gateway
 
         }
 
-        public void OperatorToClient()
+        public void OperatorToClientSendBill(int suma,string klijentIP,int klijentPort)
         {
-            throw new NotImplementedException();
+            Common.Client cli = new Common.Client();
+            IClientConnection klijentProxy = cli.GetClientProxy();//ova metoda treba da prima klijentIP i klijentPort
+            klijentProxy.SendBill(suma);
         }
 
         public Racun ClientToBankKreirajRacun(Racun r)

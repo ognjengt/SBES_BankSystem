@@ -5,17 +5,17 @@ using System.Text;
 using Common.Interfaces;
 using System.Threading;
 
+
 namespace Client
 {
     public class ClientConnection : IClientConnection
     {
-        public void SendBill()
+        public void SendBill(int suma)
         {
-            while (true)
-            {
-                Thread.Sleep(2000);
-                Console.WriteLine("Bill sent");
-            }
+
+            KlientskiRacun.racun.StanjeRacuna +=suma ;
+
+            //ovde pozivamo transfer
         }
     }
 }

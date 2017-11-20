@@ -73,7 +73,7 @@ namespace Common.Interfaces
         /// Preusmerava saobracaj od Operatera do klijenta
         /// </summary>
         [OperationContract]
-        void OperatorToClient();
+        void OperatorToClientSendBill(int suma, string klijentIP, int klijentPort);
 
         /// <summary>
         /// Poziva UpdateStatus na operateru

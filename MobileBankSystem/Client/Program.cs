@@ -16,7 +16,6 @@ namespace Client
             // Prvo autentifikacija, u zavisnosti od toga gleda se da li je admin ili ne (iz nekog txt-a)
             // ???
 
-            Racun klijentskiRacun = new Racun();
             Common.Client cli = new Common.Client();
             IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
             Console.WriteLine("Username:");
@@ -29,14 +28,14 @@ namespace Client
             if (ulogovanUser != null)
             {
                 Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);
-                klijentskiRacun = gatewayProxy.ClientToBankUzmiKlijentskiRacun(ulogovanUser.Username);
-                if (klijentskiRacun== null) {
+               KlientskiRacun.racun = gatewayProxy.ClientToBankUzmiKlijentskiRacun(ulogovanUser.Username);
+                if (KlientskiRacun.racun == null) {
 
                     Console.WriteLine("Ne postoji klijentski racun ");
 
                 } else {
 
-                    Console.WriteLine("Klijentski racun:" + klijentskiRacun.BrojRacuna);
+                    Console.WriteLine("Klijentski racun:" + KlientskiRacun.racun.BrojRacuna);
 
                 }
 
@@ -65,7 +64,7 @@ namespace Client
             int izbor;
             do {
 
-                Console.WriteLine("1. Dodavanje korisnika");
+                Console.WriteLine("1. Dodavanje korisnika/operatera");
                 Console.WriteLine("2. Kreiranje novog racuna");
                 Console.WriteLine("3. Brisanje racuna");
                 Console.WriteLine("4. Izmena racuna");
