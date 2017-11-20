@@ -1,7 +1,8 @@
 # SBES_BankSystem
 
 Projekat na 4. godini studija Fakulteta Tehničkih nauka u Novom Sadu.<br>
-Predmet: Sigurnost i bezbednost elektroenergetskih sistema.
+Predmet: Sigurnost i bezbednost elektroenergetskih sistema.<br>
+Rešenje implementirali: Sofija Ilić, Ognjen Gatalo, Predrag Sando, Marko Gajić.
 
 Cilj projekta je implementirati integrisani sistem plaćanja usluga mobilnih operatera koristeći SOA Gateway mehanizam i WCF framework.<br>
 Infrastruktura sistema se sastoji od Bankarskog servisa, N broja operatera, i N broja klijenata.
