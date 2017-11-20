@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-   public class Sifrovanje
+   public static class Sifrovanje
     {
 
         
-        public byte[] sifrujCBC(string ulaznaRec, string kljuc)
+        public static byte[] sifrujCBC(string ulaznaRec, string kljuc)
         {
             MD5CryptoServiceProvider md = new MD5CryptoServiceProvider();
             UTF8Encoding utf8 = new UTF8Encoding();
@@ -41,7 +41,7 @@ namespace Common
         }
 
         //dekripcija
-        public string desifrujCBC(byte[] sifrovana, string kljuc)
+        public static string desifrujCBC(byte[] sifrovana, string kljuc)
         {
             MD5CryptoServiceProvider md = new MD5CryptoServiceProvider();
             UTF8Encoding utf8 = new UTF8Encoding();
@@ -73,7 +73,7 @@ namespace Common
 
 
 
-        public byte[] sifrujECB(string ulaznaRec, string kljuc)
+        public static byte[] sifrujECB(string ulaznaRec, string kljuc)
         {
             MD5CryptoServiceProvider md = new MD5CryptoServiceProvider();
             UTF8Encoding utf8 = new UTF8Encoding();
@@ -89,7 +89,7 @@ namespace Common
         }
 
         //dekripcija
-        public string desifrujECB(byte[] sifrovana, string kljuc)
+        public static string desifrujECB(byte[] sifrovana, string kljuc)
         {
             MD5CryptoServiceProvider md = new MD5CryptoServiceProvider();
             UTF8Encoding utf8 = new UTF8Encoding();
