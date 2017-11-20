@@ -101,7 +101,7 @@ namespace Bank
                 }
             }
             BankDB.BazaRacuna.Add(r.BrojRacuna, r);
-            //upisiRacun(BankDB.BazaRacuna); //Puca (file being used by another process)
+            upisiRacun(BankDB.BazaRacuna);
 
             // Obavesti odgovarajuceg operatera kako bi dodao novi klijentski racun
             Client cli = new Client();
@@ -131,11 +131,12 @@ namespace Bank
         public bool SetIpAndPort(string username, string ip, int port)
         {
             // Nadji korisnika sa ovim usernameom i postavi mu port
-            if (BankDB.BazaKorisnika[username].IpAddress!= null && BankDB.BazaKorisnika[username].Port != 0)
-            {
-                //Console.WriteLine("Instanca ovog operatera ili korisnika je vec pokrenuta");
-                return false;
-            }
+            //if (BankDB.BazaKorisnika[username].IpAddress!= null && BankDB.BazaKorisnika[username].Port != 0)
+            //{
+            //    //Console.WriteLine("Instanca ovog operatera ili korisnika je vec pokrenuta");
+            //    return false;
+            //}
+            // Potrebno je napraviti 2 dictionaryja ko je aktivan
             BankDB.BazaKorisnika[username].IpAddress = ip;
             BankDB.BazaKorisnika[username].Port = port;
             return true;
@@ -228,7 +229,7 @@ namespace Bank
                     listaRacuna.Add(r);
                 }
 
-                XmlSerializer ser = new XmlSerializer(typeof(List<User>));
+                XmlSerializer ser = new XmlSerializer(typeof(List<Racun>));
 
                 StreamWriter sw = new StreamWriter(putanja);
                 ser.Serialize(sw, listaRacuna);
@@ -236,6 +237,11 @@ namespace Bank
                 sw.Close();
             }
 
+        }
+
+        public Racun UzmiKlijentskiRacun(string username)
+        {
+            return BankDB.BazaRacuna[username];
         }
     }
 }

@@ -46,11 +46,17 @@ namespace Common.Interfaces
         [OperationContract]
         User CheckLogin(string username,string password, string nacinLogovanja);
 
+
+        [OperationContract]
+        Racun UzmiKlijentskiRacun(string username);
+
         /// <summary>
         /// Postavlja ip i port podignutog klijenta ili operatera u bazu
         /// </summary>
         /// <param name="u"></param>
         [OperationContract]
         bool SetIpAndPort(string username, string ip, int port);
+
+
     }
 }

@@ -16,7 +16,7 @@ namespace Bank
         {
             //ovde ucitati informacije o korisnicima i racunima
 
-            BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000",20000));
+            //BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000",20000));
             ucitajKorisnike(BankDB.BazaKorisnika);
             ucitajRacune(BankDB.BazaRacuna);
 
@@ -56,7 +56,7 @@ namespace Bank
                 string putanja = Environment.CurrentDirectory + "\\racuni.xml";
 
                 List<Racun> listaRacuna = new List<Racun>();
-                XmlSerializer xs = new XmlSerializer(typeof(List<User>));
+                XmlSerializer xs = new XmlSerializer(typeof(List<Racun>));
                 StreamReader sr = new StreamReader(putanja);
                 listaRacuna = (List<Racun>)xs.Deserialize(sr);
                 sr.Close();

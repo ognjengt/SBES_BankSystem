@@ -62,6 +62,7 @@ namespace Common
         /// <returns></returns>
         public IOperatorConnection GetOperatorProxy(string ip, int port)
         {
+
             // Skontati kako da uzmemo port bas od tog operatora koji je poslao zahtev, posto ne mozemo slati fiksno na 64000
             var binding = new NetTcpBinding();
             binding.TransactionFlow = true;
@@ -70,6 +71,7 @@ namespace Common
             IOperatorConnection proxy = factory.CreateChannel();
 
             return proxy;
+            
         }
     }
 }

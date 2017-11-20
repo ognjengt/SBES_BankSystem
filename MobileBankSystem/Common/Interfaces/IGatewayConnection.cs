@@ -60,6 +60,9 @@ namespace Common.Interfaces
         [OperationContract]
         bool ClientAndOperatorToBankSetIpAndPort(string username, string ip, int port);
 
+        [OperationContract]
+        Racun ClientToBankUzmiKlijentskiRacun(string username);
+
         /// <summary>
         /// Preusmerava saobracaj od banke ka operateru
         /// </summary>

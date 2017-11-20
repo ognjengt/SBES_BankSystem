@@ -17,9 +17,6 @@ namespace Client
             // ???
 
             Racun klijentskiRacun = new Racun();
-
-
-
             Common.Client cli = new Common.Client();
             IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
             Console.WriteLine("Username:");
@@ -32,6 +29,16 @@ namespace Client
             if (ulogovanUser != null)
             {
                 Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);
+                klijentskiRacun = gatewayProxy.ClientToBankUzmiKlijentskiRacun(ulogovanUser.Username);
+                if (klijentskiRacun== null) {
+
+                    Console.WriteLine("Ne postoji klijentski racun ");
+
+                } else {
+
+                    Console.WriteLine("Klijentski racun:" + klijentskiRacun.BrojRacuna);
+
+                }
 
                 // podici server za klijenta i javiti banci sa metodomSetIpAndPort na kom portu i ip adresi slusa
 

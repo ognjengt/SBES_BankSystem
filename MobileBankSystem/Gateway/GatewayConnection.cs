@@ -100,5 +100,15 @@ namespace Gateway
             operatorProxy.NotifyRacunAdded(r);
             return true;
         }
+
+        public Racun ClientToBankUzmiKlijentskiRacun(string username)
+        {
+            if (bankProxy == null)
+            {
+                Common.Client cli = new Common.Client();
+                bankProxy = cli.GetBankProxy();
+            }
+            return bankProxy.UzmiKlijentskiRacun(username);
+        }
     }
 }
