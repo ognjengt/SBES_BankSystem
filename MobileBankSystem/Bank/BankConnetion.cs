@@ -31,7 +31,7 @@ namespace Bank
             //upisiKorisnika(BankDB.BazaKorisnika); //Puca (file being used by another process)
         }
 
-        public User CheckLogin(string username, string password, string nacinLogovanja)
+        public object[] CheckLogin(string username, string password, string nacinLogovanja)
         {
             if (nacinLogovanja == "client")
             {
@@ -42,7 +42,12 @@ namespace Bank
                         if (BankDB.BazaKorisnika[username].Uloga == "admin" || BankDB.BazaKorisnika[username].Uloga == "korisnik")
                         {
                             User u = BankDB.BazaKorisnika[username];
-                            return u;
+                            Racun r = !BankDB.BazaRacuna.ContainsKey(username) ? null : BankDB.BazaRacuna[username];
+                            object[] userIRacun = new object[2];
+                            userIRacun[0] = u;
+                            userIRacun[1] = r;
+
+                            return userIRacun;
                         }
                         
                     }
@@ -57,7 +62,11 @@ namespace Bank
                         if (BankDB.BazaKorisnika[username].Uloga == "operater")
                         {
                             User u = BankDB.BazaKorisnika[username];
-                            return u;
+                            Racun r = !BankDB.BazaRacuna.ContainsKey(username) ? null : BankDB.BazaRacuna[username];
+                            object[] userIRacun = new object[2];
+                            userIRacun[0] = u;
+                            userIRacun[1] = r;
+                            return userIRacun;
                         }
 
                     }
@@ -133,6 +142,7 @@ namespace Bank
             return true;
         }
 
+        //public bool Transfer(string mojRacun, string racunOperatera, string pozivNaBroj, int value)
         public bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value)
         {
             bool retVal = true;

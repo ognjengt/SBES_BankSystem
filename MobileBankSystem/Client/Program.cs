@@ -15,6 +15,11 @@ namespace Client
             // Prvo konekcija na server radi pristupanja bazi podataka ( gde admin postoji?)
             // Prvo autentifikacija, u zavisnosti od toga gleda se da li je admin ili ne (iz nekog txt-a)
             // ???
+
+            Racun klijentskiRacun = new Racun();
+
+
+
             Common.Client cli = new Common.Client();
             IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
             Console.WriteLine("Username:");
@@ -22,8 +27,10 @@ namespace Client
 
             Console.WriteLine("Password:");
             string pass = Console.ReadLine();
-
-            User ulogovanUser = gatewayProxy.ClientToBankCheckLogin(user, pass, "client");
+            
+            object[] userIRacun = gatewayProxy.ClientToBankCheckLogin(user, pass, "client");
+            User ulogovanUser = userIRacun[0] as User;
+            klijentskiRacun = userIRacun[1] as Racun;
             if (ulogovanUser != null)
             {
                 Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);
