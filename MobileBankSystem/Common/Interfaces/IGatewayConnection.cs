@@ -50,7 +50,7 @@ namespace Common.Interfaces
         /// <param name="password"></param>
         /// <returns></returns>
         [OperationContract]
-        object[] ClientToBankCheckLogin(string username, string password, string nacinLogovanja);
+        User ClientToBankCheckLogin(string username, string password, string nacinLogovanja);
 
         /// <summary>
         /// Poziva metodu SetIpAndPort na banci

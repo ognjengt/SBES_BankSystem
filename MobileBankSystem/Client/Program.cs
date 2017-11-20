@@ -28,9 +28,7 @@ namespace Client
             Console.WriteLine("Password:");
             string pass = Console.ReadLine();
             
-            object[] userIRacun = gatewayProxy.ClientToBankCheckLogin(user, pass, "client");
-            User ulogovanUser = userIRacun[0] as User;
-            klijentskiRacun = userIRacun[1] as Racun;
+            User ulogovanUser = gatewayProxy.ClientToBankCheckLogin(user, pass, "client");
             if (ulogovanUser != null)
             {
                 Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);

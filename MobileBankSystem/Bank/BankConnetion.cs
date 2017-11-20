@@ -31,8 +31,9 @@ namespace Bank
             //upisiKorisnika(BankDB.BazaKorisnika); //Puca (file being used by another process)
         }
 
-        public object[] CheckLogin(string username, string password, string nacinLogovanja)
+        public User CheckLogin(string username, string password, string nacinLogovanja)
         {
+            List<Object> userIRacun = new List<Object>();
             if (nacinLogovanja == "client")
             {
                 if (BankDB.BazaKorisnika.ContainsKey(username))
@@ -42,12 +43,11 @@ namespace Bank
                         if (BankDB.BazaKorisnika[username].Uloga == "admin" || BankDB.BazaKorisnika[username].Uloga == "korisnik")
                         {
                             User u = BankDB.BazaKorisnika[username];
-                            Racun r = !BankDB.BazaRacuna.ContainsKey(username) ? null : BankDB.BazaRacuna[username];
-                            object[] userIRacun = new object[2];
-                            userIRacun[0] = u;
-                            userIRacun[1] = r;
+                            //Racun r = !BankDB.BazaRacuna.ContainsKey(username) ? null : BankDB.BazaRacuna[username];
+                            //userIRacun.Add(u);
+                            //userIRacun.Add(r);
 
-                            return userIRacun;
+                            return u;
                         }
                         
                     }
@@ -62,11 +62,10 @@ namespace Bank
                         if (BankDB.BazaKorisnika[username].Uloga == "operater")
                         {
                             User u = BankDB.BazaKorisnika[username];
-                            Racun r = !BankDB.BazaRacuna.ContainsKey(username) ? null : BankDB.BazaRacuna[username];
-                            object[] userIRacun = new object[2];
-                            userIRacun[0] = u;
-                            userIRacun[1] = r;
-                            return userIRacun;
+                            //Racun r = !BankDB.BazaRacuna.ContainsKey(username) ? null : BankDB.BazaRacuna[username];
+                            //userIRacun.Add(u);
+                            //userIRacun.Add(r);
+                            return u;
                         }
 
                     }

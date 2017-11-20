@@ -44,7 +44,7 @@ namespace Common.Interfaces
         /// <param name="password"></param>
         /// <returns></returns>
         [OperationContract]
-        object[] CheckLogin(string username,string password, string nacinLogovanja);
+        User CheckLogin(string username,string password, string nacinLogovanja);
 
         /// <summary>
         /// Postavlja ip i port podignutog klijenta ili operatera u bazu

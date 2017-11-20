@@ -44,7 +44,7 @@ namespace Gateway
             return retVal;
         }
 
-        public object[] ClientToBankCheckLogin(string username, string password, string nacinLogovanja)
+        public User ClientToBankCheckLogin(string username, string password, string nacinLogovanja)
         {
             
             if (bankProxy == null)
@@ -52,9 +52,9 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
-           
-            object[] obj=bankProxy.CheckLogin(username, password, nacinLogovanja);
-            return obj;
+
+            User u =bankProxy.CheckLogin(username, password, nacinLogovanja);
+            return u;
 
         }
 
