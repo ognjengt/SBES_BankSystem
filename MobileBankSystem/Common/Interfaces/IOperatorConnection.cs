@@ -10,17 +10,12 @@ namespace Common.Interfaces
     [ServiceContract]
     public interface IOperatorConnection
     {
-        /// <summary>
-        /// Admin dodaje novog klijenta za operatera
-        /// </summary>
-        [OperationContract]
-        void AddClient();
 
         /// <summary>
         /// Primanje podataka od banke, tj kada se novac uploaduje na racun, banka javlja operatoru da poveca
         /// </summary>
         [OperationContract]
-        void UpdateStatus();
+        bool UpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, int suma);
 
         /// <summary>
         /// Metoda koju banka poziva kako bi javila odgovarajucem operateru da je neki klijent otvorio racun na tom operateru

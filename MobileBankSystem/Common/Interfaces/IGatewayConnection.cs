@@ -76,6 +76,13 @@ namespace Common.Interfaces
         void OperatorToClient();
 
         /// <summary>
+        /// Poziva UpdateStatus na operateru
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, int suma, string operatorIp, int operatorPort);
+
+        /// <summary>
         /// Poziva NotifyRacunAdded na operateru
         /// </summary>
         /// <param name="r"></param>

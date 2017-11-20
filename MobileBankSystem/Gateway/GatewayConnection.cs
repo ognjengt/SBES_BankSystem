@@ -110,5 +110,13 @@ namespace Gateway
             }
             return bankProxy.UzmiKlijentskiRacun(username);
         }
+
+        public bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, int suma, string operatorIp, int operatorPort)
+        {
+            Common.Client cli = new Common.Client();
+            IOperatorConnection operatorProxy = cli.GetOperatorProxy(operatorIp, operatorPort);
+            operatorProxy.UpdateStatus(korisnikKojiJeUplatio, operaterKomeJeUplaceno, suma);
+            return true;
+        }
     }
 }

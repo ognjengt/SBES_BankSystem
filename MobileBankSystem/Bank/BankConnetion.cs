@@ -190,6 +190,9 @@ namespace Bank
                 IOperatorConnection proxy = Client.GetOperatorProxy(ip, port);
                 proxy.UpdateStatus(myUsernameOnOperator, value);
             */
+            Client cli = new Client();
+            IGatewayConnection gatewayToOperator = cli.GetGatewayProxy();
+            gatewayToOperator.BankToOperatorUpdateStatus(myUsername,operatorUsername,value, BankDB.BazaKorisnika[operatorUsername].IpAddress, BankDB.BazaKorisnika[operatorUsername].Port);
 
             return retVal;
         }

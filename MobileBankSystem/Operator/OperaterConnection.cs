@@ -10,10 +10,6 @@ namespace Operator
 {
     public class OperaterConnection : IOperatorConnection
     {
-        public void AddClient()
-        {
-            Console.WriteLine("Client added");
-        }
 
         public bool NotifyRacunAdded(Racun r)
         {
@@ -22,9 +18,17 @@ namespace Operator
             return true;
         }
 
-        public void UpdateStatus()
+        public bool UpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, int suma)
         {
-            Console.WriteLine("StatusUpdated");
+            foreach (var racun in OperatorDB.BazaRacuna)
+            {
+                if (racun.Value.Username == korisnikKojiJeUplatio)
+                {
+                    OperatorDB.BazaRacuna[racun.Value.BrojRacuna].StanjeRacuna -= suma;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
