@@ -16,7 +16,8 @@ namespace Bank
         {
             //ovde ucitati informacije o korisnicima i racunima
 
-            //BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000",20000));
+            BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000","20000"));
+
             ucitajKorisnike(BankDB.BazaKorisnika);
             ucitajRacune(BankDB.BazaRacuna);
 
@@ -39,7 +40,9 @@ namespace Bank
                 sr.Close();
                 foreach (User u in listaKorisnika)
                 {
-                    recnikKorisnika.Add(u.Username, u);
+
+                    User clean = Sifrovanje.desifrujUsera(u);
+                    recnikKorisnika.Add(clean.Username, clean);
                 }
             }
             catch
@@ -62,7 +65,8 @@ namespace Bank
                 sr.Close();
                 foreach (Racun r in listaRacuna)
                 {
-                    recnikRacuna.Add(r.Username, r);
+                    Racun clean = Sifrovanje.desifrujRacun(r);
+                    recnikRacuna.Add(clean.BrojRacuna, clean);
                 }
 
             }

@@ -94,6 +94,9 @@ namespace Client
                     case 4:
                         IzmeniRacun(gatewayProxy);
                         break;
+                    case 0:
+                        Environment.Exit(0);
+                        break;
                     default:
                         Console.WriteLine("Ne postoji ta opcija");
                         break;
@@ -116,7 +119,17 @@ namespace Client
                 izbor = Int32.Parse(Console.ReadLine());
 
                 //switch za izbor
-
+                switch (izbor)
+                {
+                    case 1:
+                        Transferuj(gatewayProxy);
+                        break;
+                    case 0:
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        break;
+                }
 
             } while (izbor != 0);
 
@@ -216,6 +229,24 @@ namespace Client
         private static void IzmeniRacun(IGatewayConnection gatewayProxy)
         {
             Console.WriteLine("Izmena .... todo");
+        }
+
+        private static void Transferuj(IGatewayConnection gatewayProxy)
+        {
+            Console.WriteLine("Unesite broj operatorskog racuna na koji zelite da uplatite: ");
+            string brojRacuna = Console.ReadLine();
+            string sifrovanBrojOperatorskogRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, "kljuc"));
+
+            Console.WriteLine("Unesite sumu: ");
+            string suma = Console.ReadLine();
+            string sifrovanaSuma = BitConverter.ToString(Sifrovanje.sifrujCBC(suma, "kljuc"));
+
+
+            string brojKlijentskogRacunaSifrovan = BitConverter.ToString(Sifrovanje.sifrujCBC(KlientskiRacun.racun.BrojRacuna, "kljuc"));
+            string JASIFROVAN = BitConverter.ToString(Sifrovanje.sifrujCBC(KlientskiRacun.racun.Username, "kljuc"));
+
+            gatewayProxy.ClientToBankTransfer(brojKlijentskogRacunaSifrovan, sifrovanBrojOperatorskogRacuna, JASIFROVAN, sifrovanaSuma);
+
         }
     }
 }

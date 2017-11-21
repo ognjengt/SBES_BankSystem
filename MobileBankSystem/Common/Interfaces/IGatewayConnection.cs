@@ -41,7 +41,7 @@ namespace Common.Interfaces
         /// <param name="value"></param>
         /// <returns></returns>
         [OperationContract]
-        bool ClientToBankTransfer(string myUsername, string myUsernameOnOperator, string operatorUsername, string value);
+        bool ClientToBankTransfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value);
 
         /// <summary>
         /// Poziva metodu CheckLogin na banci

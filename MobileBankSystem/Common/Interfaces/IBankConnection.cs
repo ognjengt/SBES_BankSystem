@@ -35,7 +35,7 @@ namespace Common.Interfaces
         /// Metoda kojom se sa jednog racuna prebacuje novac na drugi
         /// </summary>
         [OperationContract]
-        bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, string value);
+        bool Transfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value);
 
         /// <summary>
         /// Vraca usera ili null u zavisnosti da li postoji u sistemu ili ne

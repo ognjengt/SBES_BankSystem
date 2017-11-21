@@ -30,7 +30,7 @@ namespace Gateway
             bankProxy.AddAccount(u);
         }
 
-        public bool ClientToBankTransfer(string myUsername, string myUsernameOnOperator, string operatorUsername, string value)
+        public bool ClientToBankTransfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value)
         {
             bool retVal;
 
@@ -39,8 +39,7 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
-            retVal = bankProxy.Transfer(myUsername, myUsernameOnOperator, operatorUsername, value);
-            Console.WriteLine("Client to bank...");
+            retVal = bankProxy.Transfer(brojKlijentskogRacuna, brojOperatorskogRacuna, korisnikKojiVrsiTransfer, value);
             return retVal;
         }
 
