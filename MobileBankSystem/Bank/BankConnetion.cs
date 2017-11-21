@@ -22,9 +22,9 @@ namespace Bank
             
 
 
-            desifrovanKorisnik.Username = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Username), "kljuc");
-            desifrovanKorisnik.Password = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Password), "kljuc");
-            desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Uloga), "kljuc");
+            desifrovanKorisnik.Username = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Username), "kljuc");
+            desifrovanKorisnik.Password = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Password), "kljuc");
+            desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Uloga), "kljuc");
 
 
             if (BankDB.BazaKorisnika.ContainsKey(u.Username)) {
@@ -44,16 +44,16 @@ namespace Bank
             if (nacinLogovanja == "client")
             {
 
-                string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
-                string passwordDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(password), "kljuc");
+                string usernameDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
+                string passwordDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(password), "kljuc");
 
-                if (BankDB.BazaKorisnika.ContainsKey(username))
+                if (BankDB.BazaKorisnika.ContainsKey(usernameDesifrovan))
                 {
-                    if (BankDB.BazaKorisnika[username].Password == password)
+                    if (BankDB.BazaKorisnika[usernameDesifrovan].Password == passwordDesifrovan)
                     {
-                        if (BankDB.BazaKorisnika[username].Uloga == "admin" || BankDB.BazaKorisnika[username].Uloga == "korisnik")
+                        if (BankDB.BazaKorisnika[usernameDesifrovan].Uloga == "admin" || BankDB.BazaKorisnika[usernameDesifrovan].Uloga == "korisnik")
                         {
-                            User u = BankDB.BazaKorisnika[username];
+                            User u = BankDB.BazaKorisnika[usernameDesifrovan];
                             //Racun r = !BankDB.BazaRacuna.ContainsKey(username) ? null : BankDB.BazaRacuna[username];
                             //userIRacun.Add(u);
                             //userIRacun.Add(r);
@@ -66,15 +66,15 @@ namespace Bank
             }
             else if (nacinLogovanja == "operater")
             {
-                string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
-                string passwordDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(password), "kljuc");
+                string usernameDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
+                string passwordDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(password), "kljuc");
                 if (BankDB.BazaKorisnika.ContainsKey(username))
                 {
-                    if (BankDB.BazaKorisnika[username].Password == password)
+                    if (BankDB.BazaKorisnika[usernameDesifrovan].Password == passwordDesifrovan)
                     {
-                        if (BankDB.BazaKorisnika[username].Uloga == "operater")
+                        if (BankDB.BazaKorisnika[usernameDesifrovan].Uloga == "operater")
                         {
-                            User u = BankDB.BazaKorisnika[username];
+                            User u = BankDB.BazaKorisnika[usernameDesifrovan];
                             //Racun r = !BankDB.BazaRacuna.ContainsKey(username) ? null : BankDB.BazaRacuna[username];
                             //userIRacun.Add(u);
                             //userIRacun.Add(r);
@@ -90,10 +90,10 @@ namespace Bank
         public Racun KreirajRacun(Racun r)
         {
 
-            string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.Username), "kljuc");
-            string brojRacunaDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.BrojRacuna), "kljuc");
-            string operatorDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.Operater), "kljuc");
-            string tipRacunaDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.TipRacuna), "kljuc");
+            string usernameDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Username), "kljuc");
+            string brojRacunaDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.BrojRacuna), "kljuc");
+            string operatorDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Operater), "kljuc");
+            string tipRacunaDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.TipRacuna), "kljuc");
 
 
 
@@ -128,7 +128,7 @@ namespace Bank
             Racun desifrovan = new Racun();
             desifrovan.BrojRacuna = brojRacunaDesifrovan;
             desifrovan.Operater = operatorDesifrovan;
-            desifrovan.StanjeRacuna= Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.StanjeRacuna), "kljuc");
+            desifrovan.StanjeRacuna= Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.StanjeRacuna), "kljuc");
             desifrovan.TipRacuna = tipRacunaDesifrovan;
             desifrovan.Username = usernameDesifrovan;
 
@@ -157,7 +157,7 @@ namespace Bank
         //kod klijenta sam stigao do Obrisi Racun...
         public bool ObrisiRacun(string brRacuna)
         {
-            string desifrovanRacun = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(brRacuna), "kljuc");
+            string desifrovanRacun = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(brRacuna), "kljuc");
             if (!BankDB.BazaRacuna.ContainsKey(desifrovanRacun))
             {
                 return false;
@@ -168,7 +168,7 @@ namespace Bank
 
         public bool SetIpAndPort(string username, string ip, string port)
         {
-            string desifrovanUsername = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
+            string desifrovanUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
             // Nadji korisnika sa ovim usernameom i postavi mu port
             if (BankDB.BazaAktivnihOperatera[desifrovanUsername].IpAddress != null && BankDB.BazaAktivnihOperatera[desifrovanUsername].Port != null)
             {
@@ -185,10 +185,10 @@ namespace Bank
         //public bool Transfer(string mojRacun, string racunOperatera, string pozivNaBroj, int value)
         public bool Transfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value)
         {
-            string desifrovanBrojKlijentskogRacuna = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(brojKlijentskogRacuna), "kljuc");
-            string desifrovanBrojOperatorskogRacuna = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(brojOperatorskogRacuna), "kljuc");
-            string desifrovanKorisnikKojiVrsiTransfer = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(korisnikKojiVrsiTransfer), "kljuc");
-            string desifrovanValue = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(value), "kljuc");
+            string desifrovanBrojKlijentskogRacuna = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(brojKlijentskogRacuna), "kljuc");
+            string desifrovanBrojOperatorskogRacuna = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(brojOperatorskogRacuna), "kljuc");
+            string desifrovanKorisnikKojiVrsiTransfer = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(korisnikKojiVrsiTransfer), "kljuc");
+            string desifrovanValue = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(value), "kljuc");
 
             if (!BankDB.BazaKorisnika.ContainsKey(desifrovanKorisnikKojiVrsiTransfer))
             {
@@ -312,7 +312,7 @@ namespace Bank
 
         public Racun UzmiKlijentskiRacun(string username)
         {
-            string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
+            string usernameDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
 
             foreach (var racun in BankDB.BazaRacuna.Values)
             {

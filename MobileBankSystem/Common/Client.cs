@@ -64,8 +64,8 @@ namespace Common
         {
 
             // Skontati kako da uzmemo port bas od tog operatora koji je poslao zahtev, posto ne mozemo slati fiksno na 64000
-            string ipDes = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(ip), "kljuc");
-            string portDes = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(port), "kljuc");
+            string ipDes = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(ip), "kljuc");
+            string portDes = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(port), "kljuc");
 
             var binding = new NetTcpBinding();
             binding.TransactionFlow = true;
