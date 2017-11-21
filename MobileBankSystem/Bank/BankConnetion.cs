@@ -27,7 +27,7 @@ namespace Bank
             desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Uloga), "kljuc");
 
 
-            if (BankDB.BazaRacuna.ContainsKey(u.Username)) {
+            if (BankDB.BazaKorisnika.ContainsKey(u.Username)) {
 
                 Console.WriteLine("Ovaj korisnik vec postoji");
                 return;
@@ -133,7 +133,7 @@ namespace Bank
             desifrovan.Username = usernameDesifrovan;
 
 
-            BankDB.BazaRacuna.Add(desifrovan.Username, desifrovan);
+            BankDB.BazaRacuna.Add(desifrovan.BrojRacuna, desifrovan);
             upisiRacun(BankDB.BazaRacuna);
 
             // Obavesti odgovarajuceg operatera kako bi dodao novi klijentski racun
@@ -157,59 +157,68 @@ namespace Bank
         //kod klijenta sam stigao do Obrisi Racun...
         public bool ObrisiRacun(string brRacuna)
         {
-            if (!BankDB.BazaRacuna.ContainsKey(brRacuna))
+            string desifrovanRacun = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(brRacuna), "kljuc");
+            if (!BankDB.BazaRacuna.ContainsKey(desifrovanRacun))
             {
                 return false;
             }
-            BankDB.BazaRacuna.Remove(brRacuna);
+            BankDB.BazaRacuna.Remove(desifrovanRacun);
             return true;
         }
 
-        public bool SetIpAndPort(string username, string ip, int port)
+        public bool SetIpAndPort(string username, string ip, string port)
         {
+            string desifrovanUsername = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
             // Nadji korisnika sa ovim usernameom i postavi mu port
-            if (BankDB.BazaAktivnihOperatera[username].IpAddress != null && BankDB.BazaAktivnihOperatera[username].Port != 0)
+            if (BankDB.BazaAktivnihOperatera[desifrovanUsername].IpAddress != null && BankDB.BazaAktivnihOperatera[desifrovanUsername].Port != null)
             {
                 //Console.WriteLine("Instanca ovog operatera ili korisnika je vec pokrenuta");
                 return false;
             }
             // Potrebno je napraviti 2 dictionaryja ko je aktivan
-            BankDB.BazaKorisnika[username].IpAddress = ip;
-            BankDB.BazaKorisnika[username].Port = port;
-            BankDB.BazaAktivnihOperatera.Add(BankDB.BazaKorisnika[username].Username, BankDB.BazaKorisnika[username]);
+            BankDB.BazaKorisnika[desifrovanUsername].IpAddress = ip;
+            BankDB.BazaKorisnika[desifrovanUsername].Port = port;
+            BankDB.BazaAktivnihOperatera.Add(BankDB.BazaKorisnika[desifrovanUsername].Username, BankDB.BazaKorisnika[desifrovanUsername]);
             return true;
         }
 
         //public bool Transfer(string mojRacun, string racunOperatera, string pozivNaBroj, int value)
-        public bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value)
+        public bool Transfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value)
         {
-            bool retVal = true;
-            if (BankDB.BazaKorisnika.ContainsKey(myUsername))
+            string desifrovanBrojKlijentskogRacuna = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(brojKlijentskogRacuna), "kljuc");
+            string desifrovanBrojOperatorskogRacuna = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(brojOperatorskogRacuna), "kljuc");
+            string desifrovanKorisnikKojiVrsiTransfer = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(korisnikKojiVrsiTransfer), "kljuc");
+            string desifrovanValue = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(value), "kljuc");
+
+            if (!BankDB.BazaKorisnika.ContainsKey(desifrovanKorisnikKojiVrsiTransfer))
             {
                 Console.WriteLine("Predstavili ste se kao nepostojeci korisnik");
-                retVal = false;
+                return false;
             }
 
-            if (BankDB.BazaKorisnika.ContainsKey(operatorUsername))
+            if (BankDB.BazaRacuna.ContainsKey(desifrovanBrojOperatorskogRacuna))
             {
-                Console.WriteLine("Nepostojeci operator");
-                retVal = false;
+                Console.WriteLine("Nepostojeci racun!");
+                return false;
             }
 
-            if (value <= 0)
+            if (Int32.Parse(desifrovanValue) <= 0)
             {
                 Console.WriteLine("Novcana suma mora biti pozitivan broj");
-                retVal = false;
+                return false;
             }
 
-            if (BankDB.BazaRacuna[myUsername].StanjeRacuna < value)
+            if (Int32.Parse(BankDB.BazaRacuna[desifrovanBrojKlijentskogRacuna].StanjeRacuna) < Int32.Parse(desifrovanValue))
             {
                 Console.WriteLine("Nemate dovoljno novcanih sredstava na racunu");
-                retVal = false;
+                return false;
             }
 
-            BankDB.BazaRacuna[myUsername].StanjeRacuna -= value;
-            BankDB.BazaRacuna[operatorUsername].StanjeRacuna += value;
+            int stanjeKlijenta = Int32.Parse(BankDB.BazaRacuna[desifrovanBrojKlijentskogRacuna].StanjeRacuna) - Int32.Parse(desifrovanValue);
+            int stanjeOperatora = Int32.Parse(BankDB.BazaRacuna[desifrovanBrojOperatorskogRacuna].StanjeRacuna) + Int32.Parse(desifrovanValue);
+
+            BankDB.BazaRacuna[desifrovanBrojKlijentskogRacuna].StanjeRacuna = stanjeKlijenta.ToString();
+            BankDB.BazaRacuna[desifrovanBrojOperatorskogRacuna].StanjeRacuna = stanjeOperatora.ToString();
 
             upisiRacun(BankDB.BazaRacuna);
             /*  
@@ -228,11 +237,16 @@ namespace Bank
                 IOperatorConnection proxy = Client.GetOperatorProxy(ip, port);
                 proxy.UpdateStatus(myUsernameOnOperator, value);
             */
+
+            string operatorKomeJeUplaceno = BankDB.BazaRacuna[desifrovanBrojOperatorskogRacuna].Username;
+            string sifrovanOperatorKomeJeUplaceno = BitConverter.ToString(Sifrovanje.sifrujCBC(operatorKomeJeUplaceno, "kljuc"));
+
             Client cli = new Client();
             IGatewayConnection gatewayToOperator = cli.GetGatewayProxy();
-            gatewayToOperator.BankToOperatorUpdateStatus(myUsername,operatorUsername,value, BankDB.BazaKorisnika[operatorUsername].IpAddress, BankDB.BazaKorisnika[operatorUsername].Port);
+            // opet se prosledjuje ovaj koji je bio sifrovan
+            gatewayToOperator.BankToOperatorUpdateStatus(korisnikKojiVrsiTransfer,sifrovanOperatorKomeJeUplaceno,value, BankDB.BazaKorisnika[operatorKomeJeUplaceno].IpAddress, BankDB.BazaKorisnika[operatorKomeJeUplaceno].Port);
 
-            return retVal;
+            return true;
         }
 
         public void upisiKorisnika(Dictionary<string, User> recnikKorisnika)
@@ -300,7 +314,14 @@ namespace Bank
         {
             string usernameDesifrovan = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(username), "kljuc");
 
-            return BankDB.BazaRacuna[usernameDesifrovan];
+            foreach (var racun in BankDB.BazaRacuna.Values)
+            {
+                if (racun.Username == usernameDesifrovan)
+                {
+                    return racun;
+                }
+            }
+            return null;
         }
     }
 }

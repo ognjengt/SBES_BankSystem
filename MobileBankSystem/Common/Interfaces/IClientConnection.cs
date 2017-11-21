@@ -14,7 +14,7 @@ namespace Common.Interfaces
         /// Metoda koja na svaka 2 minuta salje klijentu njegov "mesecni" racun
         /// </summary>
         [OperationContract]
-        void SendBill(int suma);
+        void SendBill(string suma);
 
     }
 }

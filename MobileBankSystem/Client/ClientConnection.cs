@@ -10,7 +10,7 @@ namespace Client
 {
     public class ClientConnection : IClientConnection
     {
-        public void SendBill(int suma)
+        public void SendBill(string suma)
         {
 
             KlientskiRacun.racun.StanjeRacuna +=suma ;

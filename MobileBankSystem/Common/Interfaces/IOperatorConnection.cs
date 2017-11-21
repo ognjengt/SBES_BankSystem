@@ -15,7 +15,7 @@ namespace Common.Interfaces
         /// Primanje podataka od banke, tj kada se novac uploaduje na racun, banka javlja operatoru da poveca
         /// </summary>
         [OperationContract]
-        bool UpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, int suma);
+        bool UpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma);
 
         /// <summary>
         /// Metoda koju banka poziva kako bi javila odgovarajucem operateru da je neki klijent otvorio racun na tom operateru

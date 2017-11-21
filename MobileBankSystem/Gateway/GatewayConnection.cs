@@ -30,7 +30,7 @@ namespace Gateway
             bankProxy.AddAccount(u);
         }
 
-        public bool ClientToBankTransfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value)
+        public bool ClientToBankTransfer(string myUsername, string myUsernameOnOperator, string operatorUsername, string value)
         {
             bool retVal;
 
@@ -58,7 +58,7 @@ namespace Gateway
 
         }
 
-        public void OperatorToClientSendBill(int suma,string klijentIP,int klijentPort)
+        public void OperatorToClientSendBill(string suma,string klijentIP,string klijentPort)
         {
             Common.Client cli = new Common.Client();
             IClientConnection klijentProxy = cli.GetClientProxy();//ova metoda treba da prima klijentIP i klijentPort
@@ -85,7 +85,7 @@ namespace Gateway
             return bankProxy.ObrisiRacun(brojRacuna);
         }
 
-        public bool ClientAndOperatorToBankSetIpAndPort(string username, string ip, int port)
+        public bool ClientAndOperatorToBankSetIpAndPort(string username, string ip, string port)
         {
             if (bankProxy == null)
             {
@@ -114,7 +114,7 @@ namespace Gateway
             return bankProxy.UzmiKlijentskiRacun(username);
         }
 
-        public bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, int suma, string operatorIp, int operatorPort)
+        public bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma, string operatorIp, string operatorPort)
         {
             Common.Client cli = new Common.Client();
             IOperatorConnection operatorProxy = cli.GetOperatorProxy(operatorIp, operatorPort);

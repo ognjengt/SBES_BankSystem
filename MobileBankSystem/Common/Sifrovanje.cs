@@ -104,10 +104,92 @@ namespace Common
 
 
 
+        public static User sifrujUsera(User u)
+        {
+            User sifrovan = new User();
+            if (String.IsNullOrEmpty(u.Username))
+            {
+                sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Username, "kljuc"));
+            }
+            if (String.IsNullOrEmpty(u.Password))
+            {
+                sifrovan.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Password, "kljuc"));
+            }
+            if (String.IsNullOrEmpty(u.Uloga))
+            {
+                sifrovan.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Uloga, "kljuc"));
+            }
+            return sifrovan;
+        }
 
+        public static Racun sifrujRacun(Racun r)
+        {
+            Racun sifrovan = new Racun();
+            if (String.IsNullOrEmpty(r.BrojRacuna))
+            {
+                sifrovan.BrojRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(r.BrojRacuna, "kljuc"));
+            }
+            if (String.IsNullOrEmpty(r.Username))
+            {
+                sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(r.Username, "kljuc"));
+            }
+            if (String.IsNullOrEmpty(r.StanjeRacuna))
+            {
+                sifrovan.StanjeRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(r.StanjeRacuna, "kljuc"));
+            }
+            if (String.IsNullOrEmpty(r.Operater))
+            {
+                sifrovan.Operater = BitConverter.ToString(Sifrovanje.sifrujCBC(r.Operater, "kljuc"));
+            }
+            if (String.IsNullOrEmpty(r.TipRacuna))
+            {
+                sifrovan.TipRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(r.TipRacuna, "kljuc"));
+            }
+            return sifrovan;
+        }
 
+        public static User desifrujUsera(User u)
+        {
+            User desifrovanKorisnik = new User();
+            if (String.IsNullOrEmpty(u.Username))
+            {
+                desifrovanKorisnik.Username = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Username), "kljuc");
+            }
+            if (String.IsNullOrEmpty(u.Password))
+            {
+                desifrovanKorisnik.Password = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Password), "kljuc");
+            }
+            if (String.IsNullOrEmpty(u.Uloga))
+            {
+                desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(u.Uloga), "kljuc");
+            }
+            return desifrovanKorisnik;
+        }
 
-
-
+        public static Racun desifrujRacun(Racun r)
+        {
+            Racun desifrovanRacun = new Racun();
+            if (String.IsNullOrEmpty(r.BrojRacuna))
+            {
+                desifrovanRacun.BrojRacuna = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.BrojRacuna), "kljuc");
+            }
+            if (String.IsNullOrEmpty(r.Username))
+            {
+                desifrovanRacun.Username = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.Username), "kljuc");
+            }
+            if (String.IsNullOrEmpty(r.StanjeRacuna))
+            {
+                desifrovanRacun.StanjeRacuna = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.StanjeRacuna), "kljuc");
+            }
+            if (String.IsNullOrEmpty(r.TipRacuna))
+            {
+                desifrovanRacun.TipRacuna = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.TipRacuna), "kljuc");
+            }
+            if (String.IsNullOrEmpty(r.Operater))
+            {
+                desifrovanRacun.Operater = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(r.Operater), "kljuc");
+            }
+            return desifrovanRacun;
+        }
     }
 }

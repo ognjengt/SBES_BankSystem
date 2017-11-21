@@ -41,7 +41,7 @@ namespace Common.Interfaces
         /// <param name="value"></param>
         /// <returns></returns>
         [OperationContract]
-        bool ClientToBankTransfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value);
+        bool ClientToBankTransfer(string myUsername, string myUsernameOnOperator, string operatorUsername, string value);
 
         /// <summary>
         /// Poziva metodu CheckLogin na banci
@@ -58,7 +58,7 @@ namespace Common.Interfaces
         /// <param name=""></param>
         /// <param name="BankToOperator"></param>
         [OperationContract]
-        bool ClientAndOperatorToBankSetIpAndPort(string username, string ip, int port);
+        bool ClientAndOperatorToBankSetIpAndPort(string username, string ip, string port);
 
         [OperationContract]
         Racun ClientToBankUzmiKlijentskiRacun(string username);
@@ -73,14 +73,14 @@ namespace Common.Interfaces
         /// Preusmerava saobracaj od Operatera do klijenta
         /// </summary>
         [OperationContract]
-        void OperatorToClientSendBill(int suma, string klijentIP, int klijentPort);
+        void OperatorToClientSendBill(string suma, string klijentIP, string klijentPort);
 
         /// <summary>
         /// Poziva UpdateStatus na operateru
         /// </summary>
         /// <returns></returns>
         [OperationContract]
-        bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, int suma, string operatorIp, int operatorPort);
+        bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma, string operatorIp, string operatorPort);
 
         /// <summary>
         /// Poziva NotifyRacunAdded na operateru

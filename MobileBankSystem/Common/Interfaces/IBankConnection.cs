@@ -35,7 +35,7 @@ namespace Common.Interfaces
         /// Metoda kojom se sa jednog racuna prebacuje novac na drugi
         /// </summary>
         [OperationContract]
-        bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, int value);
+        bool Transfer(string myUsername, string myUsernameOnOperator, string operatorUsername, string value);
 
         /// <summary>
         /// Vraca usera ili null u zavisnosti da li postoji u sistemu ili ne
@@ -55,7 +55,7 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="u"></param>
         [OperationContract]
-        bool SetIpAndPort(string username, string ip, int port);
+        bool SetIpAndPort(string username, string ip, string port);
 
 
     }

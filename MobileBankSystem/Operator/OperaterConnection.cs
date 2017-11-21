@@ -32,13 +32,18 @@ namespace Operator
             return true;
         }
 
-        public bool UpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, int suma)
+        public bool UpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma)
         {
+            string desifrovanKorisnikKojiJeUplatio = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(korisnikKojiJeUplatio), "kljuc");
+            string desifrovanOperatorKomeJeUplaceno = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(operaterKomeJeUplaceno), "kljuc");
+            string desifrovanaSuma = Sifrovanje.desifrujCBC(Encoding.ASCII.GetBytes(suma), "kljuc");
+
             foreach (var racun in OperatorDB.BazaRacuna)
             {
-                if (racun.Value.Username == korisnikKojiJeUplatio)
+                if (racun.Value.Username == desifrovanKorisnikKojiJeUplatio)
                 {
-                    OperatorDB.BazaRacuna[racun.Value.BrojRacuna].StanjeRacuna -= suma;
+                    int trenutnoStanjeRacuna = Int32.Parse(OperatorDB.BazaRacuna[racun.Value.BrojRacuna].StanjeRacuna) - Int32.Parse(desifrovanaSuma);
+                    OperatorDB.BazaRacuna[racun.Value.BrojRacuna].StanjeRacuna = trenutnoStanjeRacuna.ToString();
                     return true;
                 }
             }

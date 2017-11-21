@@ -34,7 +34,7 @@ namespace Client
                 string userSifrovanoZaRacun = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, kljuc));
 
                 Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);
-               KlientskiRacun.racun = gatewayProxy.ClientToBankUzmiKlijentskiRacun(userSifrovanoZaRacun);
+                KlientskiRacun.racun = gatewayProxy.ClientToBankUzmiKlijentskiRacun(userSifrovanoZaRacun);
                 if (KlientskiRacun.racun == null) {
 
                     Console.WriteLine("Ne postoji klijentski racun ");
@@ -201,7 +201,9 @@ namespace Client
             Console.WriteLine("Broj racuna koji zelite da obrisete: ");
             string brRacuna = Console.ReadLine();
 
-            if (gatewayProxy.ClientToBankObrisiRacun(brRacuna))
+            string sifrovanRacun = BitConverter.ToString(Sifrovanje.sifrujCBC(brRacuna, "kljuc"));
+
+            if (gatewayProxy.ClientToBankObrisiRacun(sifrovanRacun))
             {
                 Console.WriteLine("Racun uspesno obrisan!");
             }

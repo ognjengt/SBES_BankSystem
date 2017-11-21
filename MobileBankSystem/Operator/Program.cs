@@ -43,7 +43,8 @@ namespace Operator
             server.Start();
 
             // Javi banci na kom ip-u i portu slusas
-            if(!gatewayProxy.ClientAndOperatorToBankSetIpAndPort(ulogovanUser.Username, server.ipAddress, server.port))
+            string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
+            if (!gatewayProxy.ClientAndOperatorToBankSetIpAndPort(sifrovanUsername, server.ipAddress, server.port.ToString()))
             {
                 // Ukoliko vec postoji instanca tipa telenora, ugasi aplikaciju ili ponovo loguj itd...
                 Environment.Exit(0);
@@ -63,7 +64,7 @@ namespace Operator
                 {
                     Random r = new Random();
                     int randomSuma = r.Next(100,1000);
-                    proxy.OperatorToClientSendBill(randomSuma,korisnik.Value.IpAddress,korisnik.Value.Port);
+                    proxy.OperatorToClientSendBill(randomSuma.ToString(),korisnik.Value.IpAddress,korisnik.Value.Port);
 
 
                 }
