@@ -43,10 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="GatewayLogger.cs" />
+    <Compile Include="Inicijator.cs" />
     <Compile Include="Interfaces\IBankConnection.cs" />
     <Compile Include="Interfaces\IClientConnection.cs" />
     <Compile Include="Interfaces\IGatewayConnection.cs" />
     <Compile Include="Interfaces\IOperatorConnection.cs" />
+    <Compile Include="Metoda.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Racun.cs" />
     <Compile Include="Server.cs" />

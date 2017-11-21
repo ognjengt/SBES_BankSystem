@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    [Serializable]
     public class Inicijator
     {
         public string Username { get; set; }
@@ -20,5 +21,6 @@ namespace Common
             IpAddress = ip;
             Port = port;
         }
+        public Inicijator() { }
     }
 }

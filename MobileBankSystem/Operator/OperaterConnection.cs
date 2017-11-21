@@ -25,8 +25,6 @@ namespace Operator
             desifrovan.TipRacuna = tipRacunaDesifrovan;
             desifrovan.Username = usernameDesifrovan;
 
-
-
             OperatorDB.BazaRacuna.Add(desifrovan.BrojRacuna, desifrovan);
             Console.WriteLine("Dodat novi racun: " + desifrovan.BrojRacuna + " " + desifrovan.Username);
             return true;

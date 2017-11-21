@@ -33,7 +33,7 @@ namespace Common
 
                 sw.Close();
             }
-            
+
         }
         public static void SacuvajStatistikuInicijatora()
         {
@@ -89,7 +89,7 @@ namespace Common
                 sr.Close();
                 foreach (Inicijator ini in listaInicijatora)
                 {
-                    BazaStatistikeInicijatora.Add(ini.Username,ini);
+                    BazaStatistikeInicijatora.Add(ini.Username, ini);
                 }
             }
             catch
@@ -99,11 +99,26 @@ namespace Common
         }
         public static void NajcesceKoriscenaUslugaBanke()
         {
-            // TODO Ognjen
+            //var max = BazaStatistikeMetoda.Where(s => s.Value.NazivServisa =="Bank").Aggregate((l, r) => l.Value.BrojPoziva > r.Value.BrojPoziva ? l : r).Key;
+            //Console.WriteLine("Najcesce koriscena usluga banke: " + BazaStatistikeMetoda[max].NazivMetode + " , Broj poziva: " + BazaStatistikeMetoda[max].BrojPoziva);
+
+            Metoda max = new Metoda();
+            max.BrojPoziva = -1;
+            foreach (var metoda in BazaStatistikeMetoda.Values)
+            {
+                if (metoda.NazivServisa == "Bank")
+                {
+                    if (metoda.BrojPoziva > max.BrojPoziva) max = metoda;
+                }
+            }
+            Console.WriteLine("Najcesce koriscena usluga banke: " + max.NazivMetode + " , Broj poziva: " + max.BrojPoziva);
         }
         public static void NajcesceKoriscenaUslugaOperatera()
         {
             // TODO Ognjen
+            // Nadji svakog ko nije "Bank" i dodaj ga u neku listu ( uzmem sve postojece operatere tj usernameove)
+            // Za svakog postojeceg operatera, prodjem kroz xml i pokupim njegove metode
+            // Na kraju ispisem najjacu metodu od svakog
         }
         public static void NajcesciInicijator()
         {
@@ -112,6 +127,12 @@ namespace Common
         public static void NajcesceAdrese()
         {
             // TODO Ognjen
+        }
+        public static void GenerisiIzvestaj()
+        {
+            Console.WriteLine("===STATISTIKA===");
+            NajcesceKoriscenaUslugaBanke();
+            Console.WriteLine("----------------------------");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace Gateway
             GatewayServer server = new GatewayServer();
             server.Start();
 
+            GatewayLogger.UcitajStatistikuMetoda();
+            GatewayLogger.UcitajStatistikuInicijatora();
 
             Console.ReadKey();
         }

@@ -50,8 +50,6 @@ namespace Operator
                 Environment.Exit(0);
             }
 
-
-
             Console.ReadKey();
         }
 
@@ -65,8 +63,6 @@ namespace Operator
                     Random r = new Random();
                     int randomSuma = r.Next(100,1000);
                     proxy.OperatorToClientSendBill(randomSuma.ToString(),korisnik.Value.IpAddress,korisnik.Value.Port);
-
-
                 }
 
                 Thread.Sleep(20000);// 2 minuta ustvari

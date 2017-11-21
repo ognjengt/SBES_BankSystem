@@ -49,7 +49,6 @@ namespace Bank
             {
 
             }
-
         }
 
         private static void ucitajRacune(Dictionary<string, Racun> recnikRacuna)
@@ -68,16 +67,11 @@ namespace Bank
                     Racun clean = Sifrovanje.desifrujRacun(r);
                     recnikRacuna.Add(clean.BrojRacuna, clean);
                 }
-
             }
             catch
             {
 
             }
-
         }
-
-
-      
     }
 }

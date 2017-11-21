@@ -76,6 +76,7 @@ namespace Client
                 Console.WriteLine("3. Brisanje racuna");
                 Console.WriteLine("4. Izmena racuna");
                 Console.WriteLine("5. Dodaj korisnika(performance test)");
+                Console.WriteLine("6. Ispis statistike sistema");
                 Console.WriteLine("0.Izlaz");
                 Console.WriteLine("Izaberi jedan od ponudjenih");
                 izbor = Int32.Parse(Console.ReadLine());
@@ -98,6 +99,9 @@ namespace Client
                         break;
                     case 5:
                         DodajKorisnikaTest(gatewayProxy);
+                        break;
+                    case 6:
+                        GatewayLogger.GenerisiIzvestaj();
                         break;
                     case 0:
                         Environment.Exit(0);
@@ -144,8 +148,6 @@ namespace Client
         {
             if (mode == 1)
             {
-
-
                 Console.WriteLine("Korisnicko ime:");
                 string username = Console.ReadLine();
 
@@ -182,24 +184,13 @@ namespace Client
                 noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujECB(uloga, "kljuc"));
 
                 gatewayProxy.ClientToBankAddAccount(noviUser,mode);
-
-
-
-
-
-
             }
-
-
-
-
 
         }
 
         private static void KreirajRacun(IGatewayConnection gatewayProxy)
         {
-            
-            
+          
                 Console.WriteLine("Korisnicko ime vlasnika racuna (fizicko ili pravno lice): ");
                 string username = Console.ReadLine();
                 string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(username, "kljuc"));
@@ -245,22 +236,12 @@ namespace Client
                 {
                     Console.WriteLine("Uspesno kreiran racun!");
                 }
-
-            
-           
-
-
-
         }
 
 
         private static void DodajKorisnikaTest(IGatewayConnection gatewayProxy)
         {
             Console.WriteLine("Performance testing...");
-
-
-
-
             Console.WriteLine("3DES CBC: ");
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -274,18 +255,7 @@ namespace Client
             DodajKorisnika(gatewayProxy,2);
             sw1.Stop();
             Console.WriteLine("Elapsed={0} ", sw1.Elapsed);
-
-
-
-
         }
-
-
-
-
-
-
-
 
         private static void ObrisiRacun(IGatewayConnection gatewayProxy)
         {

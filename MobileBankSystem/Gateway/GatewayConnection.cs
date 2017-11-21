@@ -76,6 +76,7 @@ namespace Gateway
             }
             GatewayLogger.BazaStatistikeMetoda["CheckLogin"].BrojPoziva++;
             GatewayLogger.SacuvajStatistikuMetoda();
+
             User u =bankProxy.CheckLogin(username, password, nacinLogovanja);
             return u;
 
@@ -102,6 +103,7 @@ namespace Gateway
             }
             GatewayLogger.BazaStatistikeMetoda["KreirajRacun"].BrojPoziva++;
             GatewayLogger.SacuvajStatistikuMetoda();
+
             return bankProxy.KreirajRacun(r);
         }
 
@@ -119,6 +121,7 @@ namespace Gateway
             }
             GatewayLogger.BazaStatistikeMetoda["ObrisiRacun"].BrojPoziva++;
             GatewayLogger.SacuvajStatistikuMetoda();
+
             return bankProxy.ObrisiRacun(brojRacuna);
         }
 
@@ -136,6 +139,7 @@ namespace Gateway
             }
             GatewayLogger.BazaStatistikeMetoda["SetIpAndPort"].BrojPoziva++;
             GatewayLogger.SacuvajStatistikuMetoda();
+
             return bankProxy.SetIpAndPort(username, ip, port);
         }
 
@@ -162,6 +166,7 @@ namespace Gateway
             }
             GatewayLogger.BazaStatistikeMetoda["UzmiKlijentskiRacun"].BrojPoziva++;
             GatewayLogger.SacuvajStatistikuMetoda();
+
             return bankProxy.UzmiKlijentskiRacun(username);
         }
 

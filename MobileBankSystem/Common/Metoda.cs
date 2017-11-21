@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    [Serializable]
     public class Metoda
     {
         public string NazivMetode { get; set; }
@@ -18,5 +19,6 @@ namespace Common
             BrojPoziva = brPoziva;
             NazivServisa = NazivServisa;
         }
+        public Metoda() { }
     }
 }
