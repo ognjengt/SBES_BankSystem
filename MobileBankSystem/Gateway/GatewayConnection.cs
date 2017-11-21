@@ -17,7 +17,7 @@ namespace Gateway
             throw new NotImplementedException();
         }
 
-        public void ClientToBankAddAccount(User u)
+        public void ClientToBankAddAccount(User u,int mode)
         {
             //pozovem metodu iz banke
             //kacimo se na banku, uplacujemo novac
@@ -27,7 +27,7 @@ namespace Gateway
                 bankProxy = cli.GetBankProxy();
             }
 
-            bankProxy.AddAccount(u);
+            bankProxy.AddAccount(u,mode);
         }
 
         public bool ClientToBankTransfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value)

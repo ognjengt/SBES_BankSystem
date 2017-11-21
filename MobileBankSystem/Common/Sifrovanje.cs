@@ -96,8 +96,8 @@ namespace Common
             tDES.Padding = PaddingMode.Zeros; //ovo nznm sta je
             ICryptoTransform trans = tDES.CreateEncryptor();
             byte[] sifrovano = trans.TransformFinalBlock(utf8.GetBytes(ulaznaRec), 0, utf8.GetBytes(ulaznaRec).Length);
-            string ispis = BitConverter.ToString(sifrovano);
-            Console.WriteLine("Sifrovan tekst: " + ispis);
+            
+            
             return sifrovano;
         }
 

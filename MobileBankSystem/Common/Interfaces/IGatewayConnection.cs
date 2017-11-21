@@ -14,7 +14,7 @@ namespace Common.Interfaces
         /// Poziva metodu AddAccount na banci
         /// </summary>
         [OperationContract]
-        void ClientToBankAddAccount(User u);
+        void ClientToBankAddAccount(User u,int mode);
 
         /// <summary>
         /// Poziva metodu KreirajRacun na banci

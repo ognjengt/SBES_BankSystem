@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using Common.Interfaces;
+using System.Diagnostics;
 
 namespace Client
 {
@@ -74,6 +75,7 @@ namespace Client
                 Console.WriteLine("2. Kreiranje novog racuna");
                 Console.WriteLine("3. Brisanje racuna");
                 Console.WriteLine("4. Izmena racuna");
+                Console.WriteLine("5. Dodaj korisnika(performance test)");
                 Console.WriteLine("0.Izlaz");
                 Console.WriteLine("Izaberi jedan od ponudjenih");
                 izbor = Int32.Parse(Console.ReadLine());
@@ -83,7 +85,7 @@ namespace Client
                 switch (izbor) {
 
                     case 1:
-                        DodajKorisnika(gatewayProxy);
+                        DodajKorisnika(gatewayProxy,1);
                         break;
                     case 2:
                         KreirajRacun(gatewayProxy);
@@ -93,6 +95,9 @@ namespace Client
                         break;
                     case 4:
                         IzmeniRacun(gatewayProxy);
+                        break;
+                    case 5:
+                        DodajKorisnikaTest(gatewayProxy);
                         break;
                     case 0:
                         Environment.Exit(0);
@@ -135,79 +140,152 @@ namespace Client
 
         }
 
-        private static void DodajKorisnika(IGatewayConnection gatewayProxy)
+        private static void DodajKorisnika(IGatewayConnection gatewayProxy,int mode)
         {
-
-            Console.WriteLine("Korisnicko ime:");
-            string username = Console.ReadLine();
-
-            Console.WriteLine("Lozinka:");
-            string lozinka = Console.ReadLine();
-
-            Console.WriteLine("Uloga:");
-            string uloga = Console.ReadLine();
-
-            //pravljenje korisnika
-            User noviUser = new User();
-            noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(username,"kljuc"));
-            noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(lozinka, "kljuc"));
-            noviUser.Uloga =    BitConverter.ToString(Sifrovanje.sifrujCBC(uloga, "kljuc"));
+            if (mode == 1)
+            {
 
 
+                Console.WriteLine("Korisnicko ime:");
+                string username = Console.ReadLine();
+
+                Console.WriteLine("Lozinka:");
+                string lozinka = Console.ReadLine();
+
+                Console.WriteLine("Uloga:");
+                string uloga = Console.ReadLine();
+
+                //pravljenje korisnika
+                User noviUser = new User();
+                noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(username, "kljuc"));
+                noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(lozinka, "kljuc"));
+                noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(uloga, "kljuc"));
+
+                gatewayProxy.ClientToBankAddAccount(noviUser,mode);
+            }
+
+            else
+            {
+                Console.WriteLine("Korisnicko ime:");
+                string username = Console.ReadLine();
+
+                Console.WriteLine("Lozinka:");
+                string lozinka = Console.ReadLine();
+
+                Console.WriteLine("Uloga:");
+                string uloga = Console.ReadLine();
+
+                //pravljenje korisnika
+                User noviUser = new User();
+                noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujECB(username, "kljuc"));
+                noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujECB(lozinka, "kljuc"));
+                noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujECB(uloga, "kljuc"));
+
+                gatewayProxy.ClientToBankAddAccount(noviUser,mode);
 
 
 
-            gatewayProxy.ClientToBankAddAccount(noviUser);
+
+
+
+            }
+
+
+
+
+
         }
 
         private static void KreirajRacun(IGatewayConnection gatewayProxy)
         {
-            Console.WriteLine("Korisnicko ime vlasnika racuna (fizicko ili pravno lice): ");
-            string username = Console.ReadLine();
-            string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(username, "kljuc"));
+            
+            
+                Console.WriteLine("Korisnicko ime vlasnika racuna (fizicko ili pravno lice): ");
+                string username = Console.ReadLine();
+                string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(username, "kljuc"));
 
 
 
-            Console.WriteLine("Broj racuna: ");
-            string brojRacuna = Console.ReadLine();
-            string brojRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, "kljuc"));
+                Console.WriteLine("Broj racuna: ");
+                string brojRacuna = Console.ReadLine();
+                string brojRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, "kljuc"));
 
 
 
-            Console.WriteLine("Tip racuna (fizicki ili pravni): ");
-            string tipRacuna = Console.ReadLine();
-            string tipRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(tipRacuna, "kljuc"));
+                Console.WriteLine("Tip racuna (fizicki ili pravni): ");
+                string tipRacuna = Console.ReadLine();
+                string tipRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(tipRacuna, "kljuc"));
 
 
 
-            string operater = "null";
-            string operaterSifrovano = "null";
-            if (tipRacuna == "fizicki")
-            {
-                Console.WriteLine("Korisnicko ime naloga operatera: ");
-                operater = Console.ReadLine();
-                operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, "kljuc"));
+                string operater = "null";
+                string operaterSifrovano = "null";
+                if (tipRacuna == "fizicki")
+                {
+                    Console.WriteLine("Korisnicko ime naloga operatera: ");
+                    operater = Console.ReadLine();
+                    operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, "kljuc"));
 
-            }
+                }
 
-            Console.WriteLine("Inicijalno stanje ");
-            string stanje = Console.ReadLine();
-            string stanjeSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(stanje, "kljuc"));
+                Console.WriteLine("Inicijalno stanje ");
+                string stanje = Console.ReadLine();
+                string stanjeSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(stanje, "kljuc"));
 
 
 
-            Racun noviRacun = new Racun(userSifrovano, brojRacunaSifrovano, stanjeSifrovano,tipRacunaSifrovano,operaterSifrovano);
+                Racun noviRacun = new Racun(userSifrovano, brojRacunaSifrovano, stanjeSifrovano, tipRacunaSifrovano, operaterSifrovano);
 
-           var uspesnoKreiran = gatewayProxy.ClientToBankKreirajRacun(noviRacun);
-            if (uspesnoKreiran == null)
-            {
-                Console.WriteLine("Neuspesno kreiran racun, proverite da li ovaj broj racuna vec postoji, ili da korisnik na koga se dodaje ne postoji");
-            }
-            else
-            {
-                Console.WriteLine("Uspesno kreiran racun!");
-            }
+                var uspesnoKreiran = gatewayProxy.ClientToBankKreirajRacun(noviRacun);
+                if (uspesnoKreiran == null)
+                {
+                    Console.WriteLine("Neuspesno kreiran racun, proverite da li ovaj broj racuna vec postoji, ili da korisnik na koga se dodaje ne postoji");
+                }
+                else
+                {
+                    Console.WriteLine("Uspesno kreiran racun!");
+                }
+
+            
+           
+
+
+
         }
+
+
+        private static void DodajKorisnikaTest(IGatewayConnection gatewayProxy)
+        {
+            Console.WriteLine("Performance testing...");
+
+
+
+
+            Console.WriteLine("3DES CBC: ");
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            DodajKorisnika(gatewayProxy,1);
+            sw.Stop();
+            Console.WriteLine("Elapsed={0} ", sw.Elapsed);
+            Console.WriteLine("=================================================");
+            Console.WriteLine("3DES ECB: ");
+            Stopwatch sw1 = new Stopwatch();
+            sw1.Start();
+            DodajKorisnika(gatewayProxy,2);
+            sw1.Stop();
+            Console.WriteLine("Elapsed={0} ", sw1.Elapsed);
+
+
+
+
+        }
+
+
+
+
+
+
+
 
         private static void ObrisiRacun(IGatewayConnection gatewayProxy)
         {

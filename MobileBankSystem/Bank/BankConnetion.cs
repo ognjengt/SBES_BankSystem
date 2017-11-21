@@ -15,27 +15,57 @@ namespace Bank
     {
 
         object locker = new object();
-        public void AddAccount(User u)
+        public void AddAccount(User u,int mode)
         {
             // TODO izmeniti da vraca poruku o postojanju na klijenta a ne na serveru da ispisuje
-            User desifrovanKorisnik = new User();
-            
 
 
-            desifrovanKorisnik.Username = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Username), "kljuc");
-            desifrovanKorisnik.Password = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Password), "kljuc");
-            desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Uloga), "kljuc");
+            if (mode == 1)
+            {
+
+                User desifrovanKorisnik = new User();
 
 
-            if (BankDB.BazaKorisnika.ContainsKey(u.Username)) {
 
-                Console.WriteLine("Ovaj korisnik vec postoji");
-                return;
+                desifrovanKorisnik.Username = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Username), "kljuc");
+                desifrovanKorisnik.Password = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Password), "kljuc");
+                desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Uloga), "kljuc");
 
+
+                if (BankDB.BazaKorisnika.ContainsKey(u.Username))
+                {
+
+                    Console.WriteLine("Ovaj korisnik vec postoji");
+                    return;
+
+                }
+                BankDB.BazaKorisnika.Add(desifrovanKorisnik.Username, desifrovanKorisnik);
+
+                upisiKorisnika(BankDB.BazaKorisnika,mode);
             }
-            BankDB.BazaKorisnika.Add(desifrovanKorisnik.Username,desifrovanKorisnik);
+            else
+            {
+                User desifrovanKorisnik = new User();
 
-            upisiKorisnika(BankDB.BazaKorisnika); //moras ih sifrovati pre upisa
+
+
+                desifrovanKorisnik.Username = Sifrovanje.desifrujECB(Sifrovanje.spremiZaDesifrovanje(u.Username), "kljuc");
+                desifrovanKorisnik.Password = Sifrovanje.desifrujECB(Sifrovanje.spremiZaDesifrovanje(u.Password), "kljuc");
+                desifrovanKorisnik.Uloga = Sifrovanje.desifrujECB(Sifrovanje.spremiZaDesifrovanje(u.Uloga), "kljuc");
+
+
+                if (BankDB.BazaKorisnika.ContainsKey(u.Username))
+                {
+
+                    Console.WriteLine("Ovaj korisnik vec postoji");
+                    return;
+
+                }
+                BankDB.BazaKorisnika.Add(desifrovanKorisnik.Username, desifrovanKorisnik);
+
+                upisiKorisnika(BankDB.BazaKorisnika,mode);
+            }
+
         }
 
         public User CheckLogin(string username, string password, string nacinLogovanja)
@@ -249,32 +279,81 @@ namespace Bank
             return true;
         }
 
-        public void upisiKorisnika(Dictionary<string, User> recnikKorisnika)
+        public void upisiKorisnika(Dictionary<string, User> recnikKorisnika,int mode)
         {
-            lock (locker)
+
+
+            if (mode == 1)
             {
-                string putanja = Environment.CurrentDirectory + "\\korisnici.xml";
-                List<User> listaKorisnika = new List<User>();
-                //prepisati iz recnika u ovu listu
-                foreach (User u in recnikKorisnika.Values)
+                lock (locker)
                 {
-                    User sifrovan = new User();
-                    sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Username, "kljuc"));
-                    sifrovan.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Password, "kljuc"));
-                    sifrovan.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Uloga, "kljuc"));
+                    string putanja = Environment.CurrentDirectory + "\\korisnici.xml";
+                    List<User> listaKorisnika = new List<User>();
+                    //prepisati iz recnika u ovu listu
+                    foreach (User u in recnikKorisnika.Values)
+                    {
+                        User sifrovan = new User();
+                        sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Username, "kljuc"));
+                        sifrovan.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Password, "kljuc"));
+                        sifrovan.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Uloga, "kljuc"));
 
 
 
-                    listaKorisnika.Add(sifrovan);
+                        listaKorisnika.Add(sifrovan);
+                    }
+
+                    XmlSerializer ser = new XmlSerializer(typeof(List<User>));
+
+                    StreamWriter sw = new StreamWriter(putanja);
+                    ser.Serialize(sw, listaKorisnika);
+
+                    sw.Close();
                 }
 
-                XmlSerializer ser = new XmlSerializer(typeof(List<User>));
-
-                StreamWriter sw = new StreamWriter(putanja);
-                ser.Serialize(sw, listaKorisnika);
-
-                sw.Close();
             }
+
+            else
+            {
+
+                lock (locker)
+                {
+                    string putanja = Environment.CurrentDirectory + "\\korisnici.xml";
+                    List<User> listaKorisnika = new List<User>();
+                    //prepisati iz recnika u ovu listu
+                    foreach (User u in recnikKorisnika.Values)
+                    {
+                        User sifrovan = new User();
+                        sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujECB(u.Username, "kljuc"));
+                        sifrovan.Password = BitConverter.ToString(Sifrovanje.sifrujECB(u.Password, "kljuc"));
+                        sifrovan.Uloga = BitConverter.ToString(Sifrovanje.sifrujECB(u.Uloga, "kljuc"));
+
+
+
+                        listaKorisnika.Add(sifrovan);
+                    }
+
+                    XmlSerializer ser = new XmlSerializer(typeof(List<User>));
+
+                    StreamWriter sw = new StreamWriter(putanja);
+                    ser.Serialize(sw, listaKorisnika);
+
+                    sw.Close();
+                }
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
 
         }
 
