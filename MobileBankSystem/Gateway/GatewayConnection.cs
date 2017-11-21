@@ -26,6 +26,15 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("AddAccount"))
+            {
+                Metoda m = new Metoda("AddAccount", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["AddAccount"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
+
+            // Isto i za Inicijatore, ali to kasnije kad dodju sertifikati
 
             bankProxy.AddAccount(u,mode);
         }
@@ -39,6 +48,15 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
+
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("Transfer"))
+            {
+                Metoda m = new Metoda("Transfer", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["Transfer"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
+
             retVal = bankProxy.Transfer(brojKlijentskogRacuna, brojOperatorskogRacuna, korisnikKojiVrsiTransfer, value);
             return retVal;
         }
@@ -51,7 +69,13 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
-
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("CheckLogin"))
+            {
+                Metoda m = new Metoda("CheckLogin", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["CheckLogin"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
             User u =bankProxy.CheckLogin(username, password, nacinLogovanja);
             return u;
 
@@ -71,6 +95,13 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("KreirajRacun"))
+            {
+                Metoda m = new Metoda("KreirajRacun", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["KreirajRacun"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
             return bankProxy.KreirajRacun(r);
         }
 
@@ -81,6 +112,13 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ObrisiRacun"))
+            {
+                Metoda m = new Metoda("ObrisiRacun", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["ObrisiRacun"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
             return bankProxy.ObrisiRacun(brojRacuna);
         }
 
@@ -91,6 +129,13 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("SetIpAndPort"))
+            {
+                Metoda m = new Metoda("SetIpAndPort", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["SetIpAndPort"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
             return bankProxy.SetIpAndPort(username, ip, port);
         }
 
@@ -110,6 +155,13 @@ namespace Gateway
                 Common.Client cli = new Common.Client();
                 bankProxy = cli.GetBankProxy();
             }
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("UzmiKlijentskiRacun"))
+            {
+                Metoda m = new Metoda("UzmiKlijentskiRacun", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["UzmiKlijentskiRacun"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
             return bankProxy.UzmiKlijentskiRacun(username);
         }
 
