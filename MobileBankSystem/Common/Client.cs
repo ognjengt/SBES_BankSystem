@@ -29,13 +29,16 @@ namespace Common
         /// Vraca proxy za komuniciranje sa klijentom
         /// </summary>
         /// <returns></returns>
-        public IClientConnection GetClientProxy()
+        public IClientConnection GetClientProxy(string ip, string port)
         {
+            string ipDes = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(ip), "kljuc");
+            string portDes = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(port), "kljuc");
+
             // Skontati kako da uzmemo port bas od tog klijenta koji je poslao zahtev, posto ne mozemo slati fiksno na 62000
             var binding = new NetTcpBinding();
             binding.TransactionFlow = true;
             ChannelFactory<IClientConnection> factory = new ChannelFactory<IClientConnection>(binding,
-            new EndpointAddress("net.tcp://localhost:62000/ClientConnection"));
+            new EndpointAddress(String.Format("net.tcp://{0}:{1}/ClientConnection", ipDes, portDes)));
             IClientConnection proxy = factory.CreateChannel();
 
             return proxy;

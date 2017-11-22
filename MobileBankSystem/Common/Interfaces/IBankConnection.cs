@@ -51,11 +51,38 @@ namespace Common.Interfaces
         Racun UzmiKlijentskiRacun(string username);
 
         /// <summary>
-        /// Postavlja ip i port podignutog klijenta ili operatera u bazu
+        /// Postavlja ip i port podignutog operatera u bazu
         /// </summary>
         /// <param name="u"></param>
         [OperationContract]
         bool SetIpAndPort(string username, string ip, string port);
+
+        /// <summary>
+        /// Postavlja ip i port podignutog klijenta u bazu
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool SetIpAndPortClient(string username, string ip, string port);
+
+        /// <summary>
+        /// Brise operatora sa ovim usernameom iz liste aktivnih operatora
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool ShutdownOperator(string username);
+
+        /// <summary>
+        /// Brise klijenta sa ovim usernameom iz liste aktivnih klijenata
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool ShutdownClient(string username);
+
 
 
     }

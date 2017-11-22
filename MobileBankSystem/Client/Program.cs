@@ -64,6 +64,7 @@ namespace Client
             }
 
             Console.ReadKey();
+            gatewayProxy.ClientToBankShutdownClient(ulogovanUser.Username);
         }
 
         private static void MeniAdmin(IGatewayConnection gatewayProxy) {

@@ -51,6 +51,7 @@ namespace Operator
             }
 
             Console.ReadKey();
+            gatewayProxy.OperatorToBankShutdownOperator(ulogovanUser.Username);
         }
 
         private static void SendBill(IGatewayConnection proxy)

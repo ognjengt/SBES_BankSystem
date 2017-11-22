@@ -53,13 +53,44 @@ namespace Common.Interfaces
         User ClientToBankCheckLogin(string username, string password, string nacinLogovanja);
 
         /// <summary>
-        /// Poziva metodu SetIpAndPort na banci
+        /// Operator poziva metodu SetIpAndPort na banci 
         /// </summary>
         /// <param name=""></param>
         /// <param name="BankToOperator"></param>
         [OperationContract]
         bool ClientAndOperatorToBankSetIpAndPort(string username, string ip, string port);
 
+        /// <summary>
+        /// Poziva SetIpAndPortClient na banci
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool ClientToBankSetIpAndPortClient(string username, string ip, string port);
+
+        /// <summary>
+        /// Poziva ShutdownOperator na banci
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool OperatorToBankShutdownOperator(string username);
+
+        /// <summary>
+        /// Poziva ShutdownClient na banci
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool ClientToBankShutdownClient(string username);
+
+        /// <summary>
+        /// Poziva UzmiKlijentskiRacun na banci
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [OperationContract]
         Racun ClientToBankUzmiKlijentskiRacun(string username);
 

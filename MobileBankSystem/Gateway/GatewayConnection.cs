@@ -85,7 +85,7 @@ namespace Gateway
         public void OperatorToClientSendBill(string suma,string klijentIP,string klijentPort)
         {
             Common.Client cli = new Common.Client();
-            IClientConnection klijentProxy = cli.GetClientProxy();//ova metoda treba da prima klijentIP i klijentPort
+            IClientConnection klijentProxy = cli.GetClientProxy(klijentIP,klijentPort);//ova metoda treba da prima klijentIP i klijentPort
             klijentProxy.SendBill(suma);
         }
 
@@ -176,6 +176,58 @@ namespace Gateway
             IOperatorConnection operatorProxy = cli.GetOperatorProxy(operatorIp, operatorPort);
             operatorProxy.UpdateStatus(korisnikKojiJeUplatio, operaterKomeJeUplaceno, suma);
             return true;
+        }
+
+        public bool ClientToBankSetIpAndPortClient(string username, string ip, string port)
+        {
+            if (bankProxy == null)
+            {
+                Common.Client cli = new Common.Client();
+                bankProxy = cli.GetBankProxy();
+            }
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("SetIpAndPortClient"))
+            {
+                Metoda m = new Metoda("SetIpAndPortClient", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["SetIpAndPortClient"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
+
+            return bankProxy.SetIpAndPort(username, ip, port);
+        }
+
+        public bool OperatorToBankShutdownOperator(string username)
+        {
+            if (bankProxy == null)
+            {
+                Common.Client cli = new Common.Client();
+                bankProxy = cli.GetBankProxy();
+            }
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ShutdownOperator"))
+            {
+                Metoda m = new Metoda("ShutdownOperator", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["ShutdownOperator"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
+            return bankProxy.ShutdownOperator(username);
+        }
+
+        public bool ClientToBankShutdownClient(string username)
+        {
+            if (bankProxy == null)
+            {
+                Common.Client cli = new Common.Client();
+                bankProxy = cli.GetBankProxy();
+            }
+            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ShutdownClient"))
+            {
+                Metoda m = new Metoda("ShutdownClient", 0, "Bank");
+                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            GatewayLogger.BazaStatistikeMetoda["ShutdownClient"].BrojPoziva++;
+            GatewayLogger.SacuvajStatistikuMetoda();
+            return bankProxy.ShutdownClient(username);
         }
     }
 }

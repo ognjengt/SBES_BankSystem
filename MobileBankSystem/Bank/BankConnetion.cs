@@ -178,17 +178,52 @@ namespace Bank
 
         public bool SetIpAndPort(string username, string ip, string port)
         {
+            // Postavlja IP i PORT OPERATORA!
             string desifrovanUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
             // Nadji korisnika sa ovim usernameom i postavi mu port
             if (BankDB.BazaAktivnihOperatera[desifrovanUsername].IpAddress != null && BankDB.BazaAktivnihOperatera[desifrovanUsername].Port != null)
             {
-                //Console.WriteLine("Instanca ovog operatera ili korisnika je vec pokrenuta");
                 return false;
             }
-            // Potrebno je napraviti 2 dictionaryja ko je aktivan
             BankDB.BazaKorisnika[desifrovanUsername].IpAddress = ip;
             BankDB.BazaKorisnika[desifrovanUsername].Port = port;
             BankDB.BazaAktivnihOperatera.Add(BankDB.BazaKorisnika[desifrovanUsername].Username, BankDB.BazaKorisnika[desifrovanUsername]);
+            return true;
+        }
+
+        public bool SetIpAndPortClient(string username, string ip, string port)
+        {
+            // Postavlja IP i PORT CLIENTA!
+            string desifrovanUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
+            if (BankDB.BazaAktivnihKorisnika[desifrovanUsername].IpAddress != null && BankDB.BazaAktivnihKorisnika[desifrovanUsername].Port != null)
+            {
+                return false;
+            }
+            BankDB.BazaKorisnika[desifrovanUsername].IpAddress = ip;
+            BankDB.BazaKorisnika[desifrovanUsername].Port = port;
+            BankDB.BazaAktivnihKorisnika.Add(BankDB.BazaKorisnika[desifrovanUsername].Username, BankDB.BazaKorisnika[desifrovanUsername]);
+            return true;
+        }
+
+        public bool ShutdownClient(string username)
+        {
+            string desifrovanUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
+            if (!BankDB.BazaAktivnihKorisnika.ContainsKey(desifrovanUsername))
+            {
+                return false;
+            }
+            BankDB.BazaAktivnihKorisnika.Remove(desifrovanUsername);
+            return true;
+        }
+
+        public bool ShutdownOperator(string username)
+        {
+            string desifrovanUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
+            if (!BankDB.BazaAktivnihOperatera.ContainsKey(desifrovanUsername))
+            {
+                return false;
+            }
+            BankDB.BazaAktivnihOperatera.Remove(desifrovanUsername);
             return true;
         }
 
