@@ -56,25 +56,30 @@ namespace Operator
             }
 
             // Ako je sve proslo ok, uzmi bazu svih racuna i klijenata ciji je operater npr telenor
-            string serializedList = gatewayProxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
-            List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
+            //string serializedList = gatewayProxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
+            //List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
 
             // U novom threadu prodji kroz sve aktivne korisnike i pozovi im sendBill
+            Thread sendBillThread = new Thread(() => SendBill(gatewayProxy, sifrovanUsername));
+            sendBillThread.Start();
 
             Console.ReadKey();
             gatewayProxy.OperatorToBankShutdownOperator(ulogovanUser.Username);
         }
 
-        private static void SendBill(IGatewayConnection proxy)
+        private static void SendBill(IGatewayConnection proxy, string sifrovanUsername)
         {
 
             while (true) {
+                // Svaka 2 minuta uzmi aktivne klijente i njima salji
+                string serializedList = proxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
+                List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
 
-                foreach (var korisnik in OperatorDB.BazaKorisnika) // TREBA NAPUNITI BAZU KORISNIKA
+                foreach (var userIRacun in aktivniKorisnici)
                 {
                     Random r = new Random();
                     int randomSuma = r.Next(100,1000);
-                    proxy.OperatorToClientSendBill(randomSuma.ToString(),korisnik.Value.IpAddress,korisnik.Value.Port);
+                    proxy.OperatorToClientSendBill(randomSuma.ToString(), userIRacun.Korisnik.IpAddress, userIRacun.Korisnik.Port);
                 }
 
                 Thread.Sleep(20000);// 2 minuta ustvari
