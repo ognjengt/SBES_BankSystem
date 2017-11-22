@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operator", "Operator\Operat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway", "Gateway\Gateway.csproj", "{3EC35150-1D1C-44DE-A164-3D9F5FA59008}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertManager", "CertManager\CertManager.csproj", "{526CFBE3-8A5F-4FBF-A6C3-308040C76254}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3EC35150-1D1C-44DE-A164-3D9F5FA59008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EC35150-1D1C-44DE-A164-3D9F5FA59008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EC35150-1D1C-44DE-A164-3D9F5FA59008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{526CFBE3-8A5F-4FBF-A6C3-308040C76254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{526CFBE3-8A5F-4FBF-A6C3-308040C76254}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{526CFBE3-8A5F-4FBF-A6C3-308040C76254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{526CFBE3-8A5F-4FBF-A6C3-308040C76254}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

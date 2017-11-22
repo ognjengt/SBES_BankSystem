@@ -23,8 +23,8 @@ namespace Gateway
             //kacimo se na banku, uplacujemo novac
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("AddAccount"))
             {
@@ -45,8 +45,8 @@ namespace Gateway
 
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localHost", "65000");
+                bankProxy = cli.GetProxy();
             }
 
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("Transfer"))
@@ -66,8 +66,8 @@ namespace Gateway
             
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("CheckLogin"))
             {
@@ -84,8 +84,8 @@ namespace Gateway
 
         public void OperatorToClientSendBill(string suma,string klijentIP,string klijentPort)
         {
-            Common.Client cli = new Common.Client();
-            IClientConnection klijentProxy = cli.GetClientProxy(klijentIP,klijentPort);//ova metoda treba da prima klijentIP i klijentPort
+            Client<IClientConnection> cli = new Client<IClientConnection>("mbclient", klijentIP, klijentPort);
+            IClientConnection klijentProxy = cli.GetProxy();//ova metoda treba da prima klijentIP i klijentPort
             klijentProxy.SendBill(suma);
         }
 
@@ -93,8 +93,8 @@ namespace Gateway
         {
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("KreirajRacun"))
             {
@@ -111,8 +111,8 @@ namespace Gateway
         {
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ObrisiRacun"))
             {
@@ -129,8 +129,8 @@ namespace Gateway
         {
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("SetIpAndPort"))
             {
@@ -145,9 +145,9 @@ namespace Gateway
 
         public bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort)
         {
-            Common.Client cli = new Common.Client();
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator", operatorIp, operatorPort);
             
-            IOperatorConnection operatorProxy = cli.GetOperatorProxy(operatorIp, operatorPort);
+            IOperatorConnection operatorProxy = cli.GetProxy();
             operatorProxy.NotifyRacunAdded(r);
             return true;
         }
@@ -156,8 +156,8 @@ namespace Gateway
         {
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("UzmiKlijentskiRacun"))
             {
@@ -172,8 +172,8 @@ namespace Gateway
 
         public bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma, string operatorIp, string operatorPort)
         {
-            Common.Client cli = new Common.Client();
-            IOperatorConnection operatorProxy = cli.GetOperatorProxy(operatorIp, operatorPort);
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator", operatorIp, operatorPort);
+            IOperatorConnection operatorProxy = cli.GetProxy();
             operatorProxy.UpdateStatus(korisnikKojiJeUplatio, operaterKomeJeUplaceno, suma);
             return true;
         }
@@ -182,8 +182,8 @@ namespace Gateway
         {
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("SetIpAndPortClient"))
             {
@@ -200,8 +200,8 @@ namespace Gateway
         {
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ShutdownOperator"))
             {
@@ -217,8 +217,8 @@ namespace Gateway
         {
             if (bankProxy == null)
             {
-                Common.Client cli = new Common.Client();
-                bankProxy = cli.GetBankProxy();
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", "localhost", "65000");
+                bankProxy = cli.GetProxy();
             }
             if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ShutdownClient"))
             {
@@ -228,6 +228,11 @@ namespace Gateway
             GatewayLogger.BazaStatistikeMetoda["ShutdownClient"].BrojPoziva++;
             GatewayLogger.SacuvajStatistikuMetoda();
             return bankProxy.ShutdownClient(username);
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

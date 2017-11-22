@@ -13,7 +13,11 @@ namespace Bank
 {
     public class BankConnetion : IBankConnection
     {
+        /*
+         kr rac
+         transf
 
+             */
         object locker = new object();
         public void AddAccount(User u,int mode)
         {
@@ -106,6 +110,11 @@ namespace Bank
             return null;
         }
 
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         public Racun KreirajRacun(Racun r)
         {
 
@@ -150,15 +159,15 @@ namespace Bank
             upisiRacun(BankDB.BazaRacuna);
 
             // Obavesti odgovarajuceg operatera kako bi dodao novi klijentski racun
-            Client cli = new Client();
-            IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000");
+            IGatewayConnection factory = cli.GetProxy();
             if (desifrovan.TipRacuna == "fizicki" && desifrovan.Operater != "null")
             {
 
                 string sifrovanaIp = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].IpAddress, "kljuc"));
                 string sifrovanPort = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].Port, "kljuc"));
 
-                gatewayProxy.BankToOperatorNotifyRacunAdded(r,sifrovanaIp ,sifrovanPort);
+                factory.BankToOperatorNotifyRacunAdded(r,sifrovanaIp ,sifrovanPort);
             }
             
             return desifrovan;
@@ -286,10 +295,10 @@ namespace Bank
             string operatorKomeJeUplaceno = BankDB.BazaRacuna[desifrovanBrojOperatorskogRacuna].Username;
             string sifrovanOperatorKomeJeUplaceno = BitConverter.ToString(Sifrovanje.sifrujCBC(operatorKomeJeUplaceno, "kljuc"));
 
-            Client cli = new Client();
-            IGatewayConnection gatewayToOperator = cli.GetGatewayProxy();
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000");
+            IGatewayConnection factory = cli.GetProxy();
             // opet se prosledjuje ovaj koji je bio sifrovan
-            gatewayToOperator.BankToOperatorUpdateStatus(korisnikKojiVrsiTransfer,sifrovanOperatorKomeJeUplaceno,value, BankDB.BazaKorisnika[operatorKomeJeUplaceno].IpAddress, BankDB.BazaKorisnika[operatorKomeJeUplaceno].Port);
+            factory.BankToOperatorUpdateStatus(korisnikKojiVrsiTransfer,sifrovanOperatorKomeJeUplaceno,value, BankDB.BazaKorisnika[operatorKomeJeUplaceno].IpAddress, BankDB.BazaKorisnika[operatorKomeJeUplaceno].Port);
 
             return true;
         }

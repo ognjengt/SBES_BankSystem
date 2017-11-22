@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Common.Interfaces
 {
     [ServiceContract]
-    public interface IBankConnection
+    public interface IBankConnection : IDisposable
     {
         /// <summary>
         /// Metoda koju poziva admin prilikom dodavanja novog racuna u banci

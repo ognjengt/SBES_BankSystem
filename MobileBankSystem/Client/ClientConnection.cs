@@ -10,6 +10,11 @@ namespace Client
 {
     public class ClientConnection : IClientConnection
     {
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SendBill(string suma)
         {
 

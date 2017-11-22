@@ -17,8 +17,8 @@ namespace Client
             // Prvo autentifikacija, u zavisnosti od toga gleda se da li je admin ili ne (iz nekog txt-a)
             // ???
             string kljuc = "kljuc";
-            Common.Client cli = new Common.Client();
-            IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000");
+            IGatewayConnection gatewayProxy = cli.GetProxy();
             Console.WriteLine("Username:");
             string user = Console.ReadLine();
             string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, kljuc));

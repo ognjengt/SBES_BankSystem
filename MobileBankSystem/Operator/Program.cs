@@ -14,8 +14,8 @@ namespace Operator
         static void Main(string[] args)
         {
 
-            Common.Client cli = new Common.Client();
-            IGatewayConnection gatewayProxy = cli.GetGatewayProxy();
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000");
+            IGatewayConnection gatewayProxy = cli.GetProxy();
             bool uspesnoUlogovan = false;
             User ulogovanUser = new User();
             while (!uspesnoUlogovan)

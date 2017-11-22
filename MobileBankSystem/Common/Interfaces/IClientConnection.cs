@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Common.Interfaces
 {
     [ServiceContract]
-    public interface IClientConnection
+    public interface IClientConnection : IDisposable
     {
         /// <summary>
         /// Metoda koja na svaka 2 minuta salje klijentu njegov "mesecni" racun

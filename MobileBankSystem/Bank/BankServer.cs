@@ -27,7 +27,6 @@ namespace Bank
             serviceHost.Open();
             this.ipAddress = "localhost"; // kasnije izmeniti
             this.port = 65000;
-
         }
     }
 }

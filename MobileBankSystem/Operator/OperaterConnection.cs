@@ -10,6 +10,10 @@ namespace Operator
 {
     public class OperaterConnection : IOperatorConnection
     {
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
 
         public bool NotifyRacunAdded(Racun r)
         {
