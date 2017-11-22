@@ -115,18 +115,18 @@ namespace Common
         }
         public static void NajcesceKoriscenaUslugaOperatera()
         {
-            // TODO Ognjen
+            // TODO Ognjen i Sofija
             // Nadji svakog ko nije "Bank" i dodaj ga u neku listu ( uzmem sve postojece operatere tj usernameove)
             // Za svakog postojeceg operatera, prodjem kroz xml i pokupim njegove metode
             // Na kraju ispisem najjacu metodu od svakog
         }
         public static void NajcesciInicijator()
         {
-            // TODO Ognjen
+            // TODO Ognjen i Sofija
         }
         public static void NajcesceAdrese()
         {
-            // TODO Ognjen
+            // TODO Ognjen i Sofija
         }
         public static void GenerisiIzvestaj()
         {

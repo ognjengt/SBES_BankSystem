@@ -17,7 +17,7 @@ namespace Client
             // Prvo autentifikacija, u zavisnosti od toga gleda se da li je admin ili ne (iz nekog txt-a)
             // ???
             string kljuc = "kljuc";
-            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000");
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = cli.GetProxy();
             Console.WriteLine("Username:");
             string user = Console.ReadLine();
@@ -51,6 +51,10 @@ namespace Client
                 //server.Start();
                 //string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
                 //gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.port.ToString());
+
+                //Server2<IClientConnection> server = new Server2<IClientConnection>(IPFinder.GetIPAddress(), Konstante.INITIAL_CLIENT_PORT.ToString(), "ClientConnection", typeof(ClientConnection));
+                //string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
+                //gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.connectedPort.ToString());
 
                 if (ulogovanUser.Uloga == "admin")
                 {

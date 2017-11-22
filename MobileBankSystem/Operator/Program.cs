@@ -14,7 +14,7 @@ namespace Operator
         static void Main(string[] args)
         {
 
-            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000");
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = cli.GetProxy();
             bool uspesnoUlogovan = false;
             User ulogovanUser = new User();
@@ -24,15 +24,9 @@ namespace Operator
                 string user = Console.ReadLine();
                 string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, "kljuc"));
 
-
-
-
                 Console.WriteLine("Password:");
                 string pass = Console.ReadLine();
                 string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, "kljuc"));
-
-
-
 
                 ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "operater");
                 if (ulogovanUser != null)
@@ -47,16 +41,25 @@ namespace Operator
                 }
             }
 
-            OperatorServer server = new OperatorServer();
-            server.Start();
+            //OperatorServer server = new OperatorServer();
+            //server.Start();
+
+            Server2<IOperatorConnection> server = new Server2<IOperatorConnection>(IPFinder.GetIPAddress(), Konstante.INITIAL_OPERATER_PORT.ToString(), "OperaterConnection", typeof(OperaterConnection));
+
 
             // Javi banci na kom ip-u i portu slusas
             string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
-            if (!gatewayProxy.ClientAndOperatorToBankSetIpAndPort(sifrovanUsername, server.ipAddress, server.port.ToString()))
+            if (!gatewayProxy.ClientAndOperatorToBankSetIpAndPort(sifrovanUsername, server.ipAddress, server.connectedPort.ToString()))
             {
                 // Ukoliko vec postoji instanca tipa telenora, ugasi aplikaciju ili ponovo loguj itd...
                 Environment.Exit(0);
             }
+
+            // Ako je sve proslo ok, uzmi bazu svih racuna i klijenata ciji je operater npr telenor
+            string serializedList = gatewayProxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
+            List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
+
+            // U novom threadu prodji kroz sve aktivne korisnike i pozovi im sendBill
 
             Console.ReadKey();
             gatewayProxy.OperatorToBankShutdownOperator(ulogovanUser.Username);

@@ -119,5 +119,13 @@ namespace Common.Interfaces
         /// <param name="r"></param>
         [OperationContract]
         bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort);
+
+        /// <summary>
+        /// Poziva metodu GetOperatorsClients na banci
+        /// </summary>
+        /// <param name="operatorUsername"></param>
+        /// <returns></returns>
+        [OperationContract]
+        string OperatorToBankGetOperatorsClients(string operatorUsername);
     }
 }

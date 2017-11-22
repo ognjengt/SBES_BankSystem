@@ -115,6 +115,33 @@ namespace Bank
             throw new NotImplementedException();
         }
 
+        public string GetOperatorsClients(string operatorUsername)
+        {
+            string desifrovanOperatorUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(operatorUsername), "kljuc");
+            // TODO treba uzeti sve usere i njihove racune koji pripadaju operatoru ciji je username operatorUsername dodati ih u listu UserIRacun klase, to serijalizovati i vratiti
+            List<UserIRacun> operatorskiKlijenti = new List<UserIRacun>();
+            List<Racun> racuniRegistrovaniNaOperatora = new List<Racun>();
+            List<User> korisniciRacuna = new List<User>();
+
+            List<Racun> sviRacuni = BankDB.BazaRacuna.Values.ToList();
+            List<User> sviKorisnici = BankDB.BazaKorisnika.Values.ToList();
+
+            racuniRegistrovaniNaOperatora = sviRacuni.Where(r => r.Operater == desifrovanOperatorUsername).ToList();
+            // prodji kroz sve racune i vidi da li su vlasnici tih racuna trenutno online
+            foreach (var racun in racuniRegistrovaniNaOperatora)
+            {
+                // Ako je vlasnik tog racuna trenutno aktivan
+                if (BankDB.BazaAktivnihKorisnika.ContainsKey(racun.Username))
+                {
+                    // dodaj ga u listu operatorskihKlijenata koje trebas da vratis
+                    User korisnik = BankDB.BazaAktivnihKorisnika[racun.Username];
+                    operatorskiKlijenti.Add(new UserIRacun(korisnik, racun));
+                }
+            }
+            string serialized = ListSerializer.SerializeList(operatorskiKlijenti);
+            return serialized;
+        }
+
         public Racun KreirajRacun(Racun r)
         {
 
@@ -159,15 +186,15 @@ namespace Bank
             upisiRacun(BankDB.BazaRacuna);
 
             // Obavesti odgovarajuceg operatera kako bi dodao novi klijentski racun
-            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000");
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000", "GatewayConnection");
             IGatewayConnection factory = cli.GetProxy();
             if (desifrovan.TipRacuna == "fizicki" && desifrovan.Operater != "null")
             {
 
-                string sifrovanaIp = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].IpAddress, "kljuc"));
-                string sifrovanPort = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].Port, "kljuc"));
+                //string sifrovanaIp = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].IpAddress, "kljuc"));
+                //string sifrovanPort = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].Port, "kljuc"));
 
-                factory.BankToOperatorNotifyRacunAdded(r,sifrovanaIp ,sifrovanPort);
+                factory.BankToOperatorNotifyRacunAdded(r, BankDB.BazaKorisnika[desifrovan.Operater].IpAddress, BankDB.BazaKorisnika[desifrovan.Operater].Port);
             }
             
             return desifrovan;
@@ -295,7 +322,7 @@ namespace Bank
             string operatorKomeJeUplaceno = BankDB.BazaRacuna[desifrovanBrojOperatorskogRacuna].Username;
             string sifrovanOperatorKomeJeUplaceno = BitConverter.ToString(Sifrovanje.sifrujCBC(operatorKomeJeUplaceno, "kljuc"));
 
-            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000");
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000", "GatewayConnection");
             IGatewayConnection factory = cli.GetProxy();
             // opet se prosledjuje ovaj koji je bio sifrovan
             factory.BankToOperatorUpdateStatus(korisnikKojiVrsiTransfer,sifrovanOperatorKomeJeUplaceno,value, BankDB.BazaKorisnika[operatorKomeJeUplaceno].IpAddress, BankDB.BazaKorisnika[operatorKomeJeUplaceno].Port);

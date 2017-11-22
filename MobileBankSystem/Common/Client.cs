@@ -22,7 +22,7 @@ namespace Common
             CN - naziv sertifikata gde se nalazi javni kljuc servica
             ip, port na koje se nalazi servis
         */
-        public Client(string CN, string ip, string port)
+        public Client(string CN, string ip, string port, string serviceName)
         {
             string srvCertCN = CN;  //ime servsa - ujedno i naziv njegovog cert.
 
@@ -33,7 +33,7 @@ namespace Common
             X509Certificate2 srvCert = Manager.GetCertificateFormStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
             //endpoing koji client treba da pogodi. sastoji se od uri-ja kao prvog param. i drugog param. - javnog kljuca iz cert koji smo gore uzeli. taj ljkuc nam kaze
             //da na serveru treba da nas ocekuje cert koji pored tog javnog kljuca ima i neki svoj privatni
-            EndpointAddress address = new EndpointAddress(new Uri(String.Format("net.tcp://{0}:{1}/Service", ip, port)), new X509CertificateEndpointIdentity(srvCert));
+            EndpointAddress address = new EndpointAddress(new Uri(String.Format("net.tcp://{0}:{1}/{2}", ip, port, serviceName)), new X509CertificateEndpointIdentity(srvCert));
             //kreiramo kanal
             factory = new ChannelFactory<INTERFACE>(binding, address);
             //izvlacimo nase klijentsko ime i nas sertifikat

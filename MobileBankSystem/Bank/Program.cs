@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
+using Common.Interfaces;
 
 namespace Bank
 {
@@ -27,8 +28,9 @@ namespace Bank
             }
 
 
-            BankServer server = new BankServer();
-            server.Start();
+            //BankServer server = new BankServer();
+            //server.Start();
+            Server2<IBankConnection> server = new Server2<IBankConnection>(IPFinder.GetIPAddress(), Konstante.BANK_PORT.ToString(), "BankConnection", typeof(BankConnetion));
 
             Console.ReadKey();
         }

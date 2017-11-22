@@ -83,6 +83,14 @@ namespace Common.Interfaces
         [OperationContract]
         bool ShutdownClient(string username);
 
+        /// <summary>
+        /// Uzima sve Usere i Racune koji pripadaju odredjenom operatoru i vraca kao serijalizovanu listu u string
+        /// </summary>
+        /// <param name="operatorUsername"></param>
+        /// <returns></returns>
+        [OperationContract]
+        string GetOperatorsClients(string operatorUsername);
+
 
 
     }
