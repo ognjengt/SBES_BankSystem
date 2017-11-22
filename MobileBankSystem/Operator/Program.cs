@@ -22,11 +22,19 @@ namespace Operator
             {
                 Console.WriteLine("Username:");
                 string user = Console.ReadLine();
+                string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, "kljuc"));
+
+
+
 
                 Console.WriteLine("Password:");
                 string pass = Console.ReadLine();
+                string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, "kljuc"));
 
-                ulogovanUser = gatewayProxy.ClientToBankCheckLogin(user, pass, "operater");
+
+
+
+                ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "operater");
                 if (ulogovanUser != null)
                 {
                     Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);

@@ -181,7 +181,7 @@ namespace Bank
             // Postavlja IP i PORT OPERATORA!
             string desifrovanUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
             // Nadji korisnika sa ovim usernameom i postavi mu port
-            if (BankDB.BazaAktivnihOperatera[desifrovanUsername].IpAddress != null && BankDB.BazaAktivnihOperatera[desifrovanUsername].Port != null)
+            if (BankDB.BazaAktivnihOperatera.ContainsKey(desifrovanUsername))
             {
                 return false;
             }
@@ -195,7 +195,7 @@ namespace Bank
         {
             // Postavlja IP i PORT CLIENTA!
             string desifrovanUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(username), "kljuc");
-            if (BankDB.BazaAktivnihKorisnika[desifrovanUsername].IpAddress != null && BankDB.BazaAktivnihKorisnika[desifrovanUsername].Port != null)
+            if (BankDB.BazaAktivnihKorisnika.ContainsKey(desifrovanUsername))
             {
                 return false;
             }
@@ -241,7 +241,7 @@ namespace Bank
                 return false;
             }
 
-            if (BankDB.BazaRacuna.ContainsKey(desifrovanBrojOperatorskogRacuna))
+            if (!BankDB.BazaRacuna.ContainsKey(desifrovanBrojOperatorskogRacuna))
             {
                 Console.WriteLine("Nepostojeci racun!");
                 return false;

@@ -193,7 +193,7 @@ namespace Gateway
             GatewayLogger.BazaStatistikeMetoda["SetIpAndPortClient"].BrojPoziva++;
             GatewayLogger.SacuvajStatistikuMetoda();
 
-            return bankProxy.SetIpAndPort(username, ip, port);
+            return bankProxy.SetIpAndPortClient(username, ip, port);
         }
 
         public bool OperatorToBankShutdownOperator(string username)

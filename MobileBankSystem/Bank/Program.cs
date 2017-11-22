@@ -16,10 +16,16 @@ namespace Bank
         {
             //ovde ucitati informacije o korisnicima i racunima
 
-            BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000","20000"));
+          //  BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000","20000"));
 
             ucitajKorisnike(BankDB.BazaKorisnika);
             ucitajRacune(BankDB.BazaRacuna);
+            Console.WriteLine("Dostupni korisnici: ");
+            foreach(User u in BankDB.BazaKorisnika.Values)
+            {
+                Console.WriteLine(u.Username);
+            }
+
 
             BankServer server = new BankServer();
             server.Start();

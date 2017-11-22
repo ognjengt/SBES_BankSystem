@@ -169,15 +169,15 @@ namespace Common
         public static User desifrujUsera(User u)
         {
             User desifrovanKorisnik = new User();
-            if (String.IsNullOrEmpty(u.Username))
+            if (!String.IsNullOrEmpty(u.Username))
             {
                 desifrovanKorisnik.Username = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Username), "kljuc");
             }
-            if (String.IsNullOrEmpty(u.Password))
+            if (!String.IsNullOrEmpty(u.Password))
             {
                 desifrovanKorisnik.Password = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Password), "kljuc");
             }
-            if (String.IsNullOrEmpty(u.Uloga))
+            if (!String.IsNullOrEmpty(u.Uloga))
             {
                 desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Uloga), "kljuc");
             }
@@ -187,23 +187,23 @@ namespace Common
         public static Racun desifrujRacun(Racun r)
         {
             Racun desifrovanRacun = new Racun();
-            if (String.IsNullOrEmpty(r.BrojRacuna))
+            if (!String.IsNullOrEmpty(r.BrojRacuna))
             {
                 desifrovanRacun.BrojRacuna = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.BrojRacuna), "kljuc");
             }
-            if (String.IsNullOrEmpty(r.Username))
+            if (!String.IsNullOrEmpty(r.Username))
             {
                 desifrovanRacun.Username = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Username), "kljuc");
             }
-            if (String.IsNullOrEmpty(r.StanjeRacuna))
+            if (!String.IsNullOrEmpty(r.StanjeRacuna))
             {
                 desifrovanRacun.StanjeRacuna = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.StanjeRacuna), "kljuc");
             }
-            if (String.IsNullOrEmpty(r.TipRacuna))
+            if (!String.IsNullOrEmpty(r.TipRacuna))
             {
                 desifrovanRacun.TipRacuna = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.TipRacuna), "kljuc");
             }
-            if (String.IsNullOrEmpty(r.Operater))
+            if (!String.IsNullOrEmpty(r.Operater))
             {
                 desifrovanRacun.Operater = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Operater), "kljuc");
             }

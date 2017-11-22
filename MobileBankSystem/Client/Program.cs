@@ -47,10 +47,10 @@ namespace Client
                 }
 
                 // podici server za klijenta i javiti banci sa metodomSetIpAndPort na kom portu i ip adresi slusa
-                ClientServer server = new ClientServer();
-                server.Start();
-                string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
-                gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.port.ToString());
+                //ClientServer server = new ClientServer();
+                //server.Start();
+                //string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
+                //gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.port.ToString());
 
                 if (ulogovanUser.Uloga == "admin")
                 {
@@ -220,9 +220,8 @@ namespace Client
                 {
                     Console.WriteLine("Korisnicko ime naloga operatera: ");
                     operater = Console.ReadLine();
-                    operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, "kljuc"));
-
                 }
+                operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, "kljuc"));
 
                 Console.WriteLine("Inicijalno stanje ");
                 string stanje = Console.ReadLine();
