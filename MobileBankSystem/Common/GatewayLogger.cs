@@ -115,23 +115,61 @@ namespace Common
         }
         public static void NajcesceKoriscenaUslugaOperatera()
         {
-            // TODO Ognjen i Sofija
             // Nadji svakog ko nije "Bank" i dodaj ga u neku listu ( uzmem sve postojece operatere tj usernameove)
             // Za svakog postojeceg operatera, prodjem kroz xml i pokupim njegove metode
             // Na kraju ispisem najjacu metodu od svakog
+
+            List<Metoda> sveOperatorskeMetode = BazaStatistikeMetoda.Values.ToList();
+            sveOperatorskeMetode = sveOperatorskeMetode.Where(m => m.NazivServisa != "Bank").ToList();
+            Dictionary<string, List<Metoda> > operatori = new Dictionary<string, List<Metoda> >();
+
+            foreach (var metoda in sveOperatorskeMetode)
+            {
+                // ako dictionary ne sadrzi ni jednu metodu za tog operatera
+                if (!operatori.ContainsKey(metoda.NazivServisa))
+                {
+                    // napravi listu za tog operatera
+                    operatori.Add(metoda.NazivServisa, new List<Metoda>());
+                }
+                // dodaj u listu
+                operatori[metoda.NazivServisa].Add(metoda);
+            }
+
+            // nakon ovog foreacha u dictionary operatori cu imati sve postojece operatere i sve metode od tih operatera
+
+            // sad prolazim kroz svaki element liste i trazim maksimum od svakog
+            foreach (var operater in operatori)
+            {
+                Metoda max = new Metoda();
+                max.BrojPoziva = -1;
+                Console.WriteLine("Najcesce koriscena metoda operatera " + operater.Key+" :");
+                foreach (var metoda in operater.Value)
+                {
+                    if (metoda.BrojPoziva > max.BrojPoziva)
+                    {
+                        max = metoda;
+                    }
+                }
+                Console.WriteLine(max.NazivMetode + " " + max.BrojPoziva);
+            }
         }
         public static void NajcesciInicijator()
         {
-            // TODO Ognjen i Sofija
+            // TODO
         }
         public static void NajcesceAdrese()
         {
-            // TODO Ognjen i Sofija
+            // TODO
         }
         public static void GenerisiIzvestaj()
         {
+            UcitajStatistikuMetoda();
+            UcitajStatistikuInicijatora();
+
             Console.WriteLine("===STATISTIKA===");
             NajcesceKoriscenaUslugaBanke();
+            Console.WriteLine("----------------------------");
+            NajcesceKoriscenaUslugaOperatera();
             Console.WriteLine("----------------------------");
         }
     }
