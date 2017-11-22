@@ -116,7 +116,8 @@ namespace Common
             tDES.Padding = PaddingMode.Zeros; //ovo nznm sta je
             ICryptoTransform trans = tDES.CreateDecryptor();
             string desifrovano = utf8.GetString(trans.TransformFinalBlock(sifrovana, 0, sifrovana.Length));
-            return desifrovano;
+            string sredjeno = desifrovano.Replace("\0", "");
+            return sredjeno;
         }
 
 
