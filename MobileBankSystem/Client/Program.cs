@@ -47,6 +47,10 @@ namespace Client
                 }
 
                 // podici server za klijenta i javiti banci sa metodomSetIpAndPort na kom portu i ip adresi slusa
+                ClientServer server = new ClientServer();
+                server.Start();
+                string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
+                gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.port.ToString());
 
                 if (ulogovanUser.Uloga == "admin")
                 {
