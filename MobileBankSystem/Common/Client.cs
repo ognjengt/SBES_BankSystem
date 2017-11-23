@@ -2,6 +2,7 @@
 using Common.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace Common
 {
     //temlate klasa klijenta gde ce klijent koristiti interfejs INTERFACE koji je prosledjen prilikom poziva konsturktora
-    public class Client<INTERFACE>
+    public class Client<INTERFACE> : IDisposable
     {
         INTERFACE proxy;                    //vracam u funkciji getProxy kako bi klijent mogao da pristupi serverskim metodama
         ChannelFactory<INTERFACE> factory;  //kanal koji ce da kreira proxy
@@ -25,10 +26,31 @@ namespace Common
         public Client(string CN, string ip, string port, string serviceName)
         {
             string srvCertCN = CN;  //ime servsa - ujedno i naziv njegovog cert.
+            string temp = null;
+
+            var stackFrame = new StackFrame(1);
+            var callingMethod = stackFrame.GetMethod();
+            var callingClass = callingMethod.DeclaringType;
+            string[] splited = callingClass.FullName.ToString().Split('.');
+            if (splited[0] == "Client")
+            {
+                temp = "mbclient_1";
+            }else if(splited[0] == "Operator") {
+                temp = "mboperator_1";
+            }else if(splited[0] == "Gateway")
+            {
+                temp = "mbgateway";
+            }else
+            {
+                temp = "mbbank";
+            }
 
             NetTcpBinding binding = new NetTcpBinding();
             binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate; //auth se vrsi pomocu cert.
-
+            binding.OpenTimeout = new TimeSpan(0, 10, 0);
+            binding.CloseTimeout = new TimeSpan(0, 10, 0);
+            binding.SendTimeout = new TimeSpan(0, 10, 0);
+            binding.ReceiveTimeout = new TimeSpan(0, 10, 0);
             //iz foldera trusted people uzima javni kljuc serverskog cert.
             X509Certificate2 srvCert = Manager.GetCertificateFormStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
             //endpoing koji client treba da pogodi. sastoji se od uri-ja kao prvog param. i drugog param. - javnog kljuca iz cert koji smo gore uzeli. taj ljkuc nam kaze
@@ -43,7 +65,7 @@ namespace Common
             //poojma nemam
             factory.Credentials.ServiceCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
             //iz personal foldera uzimamo nas sertifikat sa privatnim i javnim kljucem
-            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, cliCertCN);
+            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, temp);//cliCertCN
             //kreiramo proxy
             proxy = factory.CreateChannel();
         }

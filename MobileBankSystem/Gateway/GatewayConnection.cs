@@ -85,7 +85,7 @@ namespace Gateway
 
         public void OperatorToClientSendBill(string suma,string klijentIP,string klijentPort)
         {
-            Client<IClientConnection> cli = new Client<IClientConnection>("mbclient", klijentIP, klijentPort, "ClientConnection");
+            Client<IClientConnection> cli = new Client<IClientConnection>("mbclient_1", klijentIP, klijentPort, "ClientConnection");
             IClientConnection klijentProxy = cli.GetProxy();//ova metoda treba da prima klijentIP i klijentPort
             klijentProxy.SendBill(suma);
         }
@@ -147,7 +147,7 @@ namespace Gateway
         public bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort)
         {
             // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator", operatorIp, operatorPort, "OperatorConnection");
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
             
             IOperatorConnection operatorProxy = cli.GetProxy();
             operatorProxy.NotifyRacunAdded(r);
@@ -174,7 +174,7 @@ namespace Gateway
 
         public bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma, string operatorIp, string operatorPort)
         {
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator", operatorIp, operatorPort, "OperatorConnection");
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
             operatorProxy.UpdateStatus(korisnikKojiJeUplatio, operaterKomeJeUplaceno, suma);
             return true;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Common.Interfaces
 {
     [ServiceContract]
-    public interface IOperatorConnection : IDisposable
+    public interface IOperatorConnection
     {
 
         /// <summary>

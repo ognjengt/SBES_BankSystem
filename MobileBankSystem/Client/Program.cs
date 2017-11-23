@@ -52,9 +52,15 @@ namespace Client
                 //string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
                 //gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.port.ToString());
 
-                //Server2<IClientConnection> server = new Server2<IClientConnection>(IPFinder.GetIPAddress(), Konstante.INITIAL_CLIENT_PORT.ToString(), "ClientConnection", typeof(ClientConnection));
-                //string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
-                //gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.connectedPort.ToString());
+                Server2<IClientConnection> server = new Server2<IClientConnection>(IPFinder.GetIPAddress(), Konstante.INITIAL_CLIENT_PORT.ToString(), "ClientConnection", typeof(ClientConnection));
+                string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
+                gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.connectedPort.ToString());
+
+                Client<IGatewayConnection> client = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
+                IGatewayConnection proxy = client.GetProxy();
+                proxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.connectedPort.ToString());
+
+                
 
                 if (ulogovanUser.Uloga == "admin")
                 {

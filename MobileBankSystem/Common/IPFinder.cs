@@ -22,7 +22,7 @@ namespace Common
                     localIP = ip.ToString();
                 }
             }
-            return localIP;
+            return "localhost";
         }
     }
 }

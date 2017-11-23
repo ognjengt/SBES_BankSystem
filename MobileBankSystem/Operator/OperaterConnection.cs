@@ -21,7 +21,7 @@ namespace Operator
             string brojRacunaDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.BrojRacuna), "kljuc");
             string operatorDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Operater), "kljuc");
             string tipRacunaDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.TipRacuna), "kljuc");
-
+        
             Racun desifrovan = new Racun();
             desifrovan.BrojRacuna = brojRacunaDesifrovan;
             desifrovan.Operater = operatorDesifrovan;

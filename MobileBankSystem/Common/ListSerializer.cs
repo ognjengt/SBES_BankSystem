@@ -23,6 +23,10 @@ namespace Common
             string[] celeKlase = serialized.Split('}');
             foreach (string item in celeKlase)
             {
+                if (item == "")
+                {
+                    continue;
+                }
                 string[] korisnikIRacun = item.Split('/');
                 string korisnikSerialized = korisnikIRacun[0];
                 string racunSerialized = korisnikIRacun[1];

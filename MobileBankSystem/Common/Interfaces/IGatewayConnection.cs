@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Common.Interfaces
 {
     [ServiceContract]
-    public interface IGatewayConnection : IDisposable
+    public interface IGatewayConnection
     {
         /// <summary>
         /// Poziva metodu AddAccount na banci

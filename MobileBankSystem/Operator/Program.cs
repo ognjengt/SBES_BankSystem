@@ -56,12 +56,17 @@ namespace Operator
             }
 
             // Ako je sve proslo ok, uzmi bazu svih racuna i klijenata ciji je operater npr telenor
-            //string serializedList = gatewayProxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
-            //List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
+            string serializedList = gatewayProxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
+            List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
+
+            foreach (var item in aktivniKorisnici)
+            {
+                OperatorDB.BazaRacuna.Add(item.Racun.BrojRacuna,item.Racun);
+            }
 
             // U novom threadu prodji kroz sve aktivne korisnike i pozovi im sendBill
-            Thread sendBillThread = new Thread(() => SendBill(gatewayProxy, sifrovanUsername));
-            sendBillThread.Start();
+            //Thread sendBillThread = new Thread(() => SendBill(gatewayProxy, sifrovanUsername));
+            //sendBillThread.Start();
 
             Console.ReadKey();
             gatewayProxy.OperatorToBankShutdownOperator(ulogovanUser.Username);
