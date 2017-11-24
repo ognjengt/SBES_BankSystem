@@ -19,5 +19,7 @@ namespace Common
 
         public const string DEFAULT_CLIENT_IP = "localhost";
         public const string INITIAL_CLIENT_PORT = "62000";
+
+        public const string ENCRYPTION_KEY = "kljuc";
     }
 }

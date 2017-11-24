@@ -16,7 +16,7 @@ namespace Client
             // Prvo konekcija na server radi pristupanja bazi podataka ( gde admin postoji?)
             // Prvo autentifikacija, u zavisnosti od toga gleda se da li je admin ili ne (iz nekog txt-a)
             // ???
-            string kljuc = "kljuc";
+            string kljuc = Konstante.ENCRYPTION_KEY;
             Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = cli.GetProxy();
             Console.WriteLine("Username:");
@@ -49,11 +49,11 @@ namespace Client
                 // podici server za klijenta i javiti banci sa metodomSetIpAndPort na kom portu i ip adresi slusa
                 //ClientServer server = new ClientServer();
                 //server.Start();
-                //string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
+                //string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, Konstante.ENCRYPTION_KEY));
                 //gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.port.ToString());
 
                 Server2<IClientConnection> server = new Server2<IClientConnection>(IPFinder.GetIPAddress(), Konstante.INITIAL_CLIENT_PORT.ToString(), "ClientConnection", typeof(ClientConnection));
-                string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
+                string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, Konstante.ENCRYPTION_KEY));
                 gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.connectedPort.ToString());
 
                 Client<IGatewayConnection> client = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
@@ -174,9 +174,9 @@ namespace Client
 
                 //pravljenje korisnika
                 User noviUser = new User();
-                noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(username, "kljuc"));
-                noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(lozinka, "kljuc"));
-                noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(uloga, "kljuc"));
+                noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(username, Konstante.ENCRYPTION_KEY));
+                noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(lozinka, Konstante.ENCRYPTION_KEY));
+                noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(uloga, Konstante.ENCRYPTION_KEY));
 
                 gatewayProxy.ClientToBankAddAccount(noviUser,mode);
             }
@@ -194,9 +194,9 @@ namespace Client
 
                 //pravljenje korisnika
                 User noviUser = new User();
-                noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujECB(username, "kljuc"));
-                noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujECB(lozinka, "kljuc"));
-                noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujECB(uloga, "kljuc"));
+                noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujECB(username, Konstante.ENCRYPTION_KEY));
+                noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujECB(lozinka, Konstante.ENCRYPTION_KEY));
+                noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujECB(uloga, Konstante.ENCRYPTION_KEY));
 
                 gatewayProxy.ClientToBankAddAccount(noviUser,mode);
             }
@@ -208,19 +208,19 @@ namespace Client
           
                 Console.WriteLine("Korisnicko ime vlasnika racuna (fizicko ili pravno lice): ");
                 string username = Console.ReadLine();
-                string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(username, "kljuc"));
+                string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(username, Konstante.ENCRYPTION_KEY));
 
 
 
                 Console.WriteLine("Broj racuna: ");
                 string brojRacuna = Console.ReadLine();
-                string brojRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, "kljuc"));
+                string brojRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, Konstante.ENCRYPTION_KEY));
 
 
 
                 Console.WriteLine("Tip racuna (fizicki ili pravni): ");
                 string tipRacuna = Console.ReadLine();
-                string tipRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(tipRacuna, "kljuc"));
+                string tipRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(tipRacuna, Konstante.ENCRYPTION_KEY));
 
 
 
@@ -231,11 +231,11 @@ namespace Client
                     Console.WriteLine("Korisnicko ime naloga operatera: ");
                     operater = Console.ReadLine();
                 }
-                operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, "kljuc"));
+                operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, Konstante.ENCRYPTION_KEY));
 
                 Console.WriteLine("Inicijalno stanje ");
                 string stanje = Console.ReadLine();
-                string stanjeSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(stanje, "kljuc"));
+                string stanjeSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(stanje, Konstante.ENCRYPTION_KEY));
 
 
 
@@ -276,7 +276,7 @@ namespace Client
             Console.WriteLine("Broj racuna koji zelite da obrisete: ");
             string brRacuna = Console.ReadLine();
 
-            string sifrovanRacun = BitConverter.ToString(Sifrovanje.sifrujCBC(brRacuna, "kljuc"));
+            string sifrovanRacun = BitConverter.ToString(Sifrovanje.sifrujCBC(brRacuna, Konstante.ENCRYPTION_KEY));
 
             if (gatewayProxy.ClientToBankObrisiRacun(sifrovanRacun))
             {
@@ -297,15 +297,15 @@ namespace Client
         {
             Console.WriteLine("Unesite broj operatorskog racuna na koji zelite da uplatite: ");
             string brojRacuna = Console.ReadLine();
-            string sifrovanBrojOperatorskogRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, "kljuc"));
+            string sifrovanBrojOperatorskogRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, Konstante.ENCRYPTION_KEY));
 
             Console.WriteLine("Unesite sumu: ");
             string suma = Console.ReadLine();
-            string sifrovanaSuma = BitConverter.ToString(Sifrovanje.sifrujCBC(suma, "kljuc"));
+            string sifrovanaSuma = BitConverter.ToString(Sifrovanje.sifrujCBC(suma, Konstante.ENCRYPTION_KEY));
 
 
-            string brojKlijentskogRacunaSifrovan = BitConverter.ToString(Sifrovanje.sifrujCBC(KlientskiRacun.racun.BrojRacuna, "kljuc"));
-            string JASIFROVAN = BitConverter.ToString(Sifrovanje.sifrujCBC(KlientskiRacun.racun.Username, "kljuc"));
+            string brojKlijentskogRacunaSifrovan = BitConverter.ToString(Sifrovanje.sifrujCBC(KlientskiRacun.racun.BrojRacuna, Konstante.ENCRYPTION_KEY));
+            string JASIFROVAN = BitConverter.ToString(Sifrovanje.sifrujCBC(KlientskiRacun.racun.Username, Konstante.ENCRYPTION_KEY));
 
             gatewayProxy.ClientToBankTransfer(brojKlijentskogRacunaSifrovan, sifrovanBrojOperatorskogRacuna, JASIFROVAN, sifrovanaSuma);
 

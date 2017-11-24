@@ -17,15 +17,15 @@ namespace Operator
 
         public bool NotifyRacunAdded(Racun r)
         {
-            string usernameDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Username), "kljuc");
-            string brojRacunaDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.BrojRacuna), "kljuc");
-            string operatorDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Operater), "kljuc");
-            string tipRacunaDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.TipRacuna), "kljuc");
+            string usernameDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Username), Konstante.ENCRYPTION_KEY);
+            string brojRacunaDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.BrojRacuna), Konstante.ENCRYPTION_KEY);
+            string operatorDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.Operater), Konstante.ENCRYPTION_KEY);
+            string tipRacunaDesifrovan = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.TipRacuna), Konstante.ENCRYPTION_KEY);
         
             Racun desifrovan = new Racun();
             desifrovan.BrojRacuna = brojRacunaDesifrovan;
             desifrovan.Operater = operatorDesifrovan;
-            desifrovan.StanjeRacuna = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.StanjeRacuna), "kljuc");
+            desifrovan.StanjeRacuna = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(r.StanjeRacuna), Konstante.ENCRYPTION_KEY);
             desifrovan.TipRacuna = tipRacunaDesifrovan;
             desifrovan.Username = usernameDesifrovan;
 
@@ -36,9 +36,9 @@ namespace Operator
 
         public bool UpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma)
         {
-            string desifrovanKorisnikKojiJeUplatio = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(korisnikKojiJeUplatio), "kljuc");
-            string desifrovanOperatorKomeJeUplaceno = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(operaterKomeJeUplaceno), "kljuc");
-            string desifrovanaSuma = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(suma), "kljuc");
+            string desifrovanKorisnikKojiJeUplatio = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(korisnikKojiJeUplatio), Konstante.ENCRYPTION_KEY);
+            string desifrovanOperatorKomeJeUplaceno = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(operaterKomeJeUplaceno), Konstante.ENCRYPTION_KEY);
+            string desifrovanaSuma = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(suma), Konstante.ENCRYPTION_KEY);
 
             foreach (var racun in OperatorDB.BazaRacuna)
             {

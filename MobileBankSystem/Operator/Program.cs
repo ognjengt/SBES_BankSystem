@@ -22,11 +22,11 @@ namespace Operator
             {
                 Console.WriteLine("Username:");
                 string user = Console.ReadLine();
-                string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, "kljuc"));
+                string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, Konstante.ENCRYPTION_KEY));
 
                 Console.WriteLine("Password:");
                 string pass = Console.ReadLine();
-                string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, "kljuc"));
+                string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, Konstante.ENCRYPTION_KEY));
 
                 ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "operater");
                 if (ulogovanUser != null)
@@ -48,7 +48,7 @@ namespace Operator
 
 
             // Javi banci na kom ip-u i portu slusas
-            string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, "kljuc"));
+            string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, Konstante.ENCRYPTION_KEY));
             if (!gatewayProxy.ClientAndOperatorToBankSetIpAndPort(sifrovanUsername, server.ipAddress, server.connectedPort.ToString()))
             {
                 // Ukoliko vec postoji instanca tipa telenora, ugasi aplikaciju ili ponovo loguj itd...

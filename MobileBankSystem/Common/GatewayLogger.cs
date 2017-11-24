@@ -153,13 +153,45 @@ namespace Common
                 Console.WriteLine(max.NazivMetode + " " + max.BrojPoziva);
             }
         }
+        public static void AddMethod(string methodName, string serviceName)
+        {
+            if (!BazaStatistikeMetoda.ContainsKey(methodName))
+            {
+                Metoda m = new Metoda(methodName, 0, serviceName);
+                BazaStatistikeMetoda.Add(m.NazivMetode, m);
+            }
+            BazaStatistikeMetoda[methodName].BrojPoziva++;
+            SacuvajStatistikuMetoda();
+        }
+
+        public static void AddInicijator(string inicijatorUsername, string inicijatorIp, int inicijatorPort)
+        {
+            if (!BazaStatistikeInicijatora.ContainsKey(inicijatorUsername))
+            {
+                Inicijator i = new Inicijator(inicijatorUsername, 0, inicijatorIp, inicijatorPort);
+                BazaStatistikeInicijatora.Add(i.Username, i);
+            }
+            BazaStatistikeInicijatora[inicijatorUsername].BrojPoziva++;
+            SacuvajStatistikuInicijatora();
+        }
+
         public static void NajcesciInicijator()
         {
-            // TODO
+            Inicijator max = new Inicijator();
+            max.BrojPoziva = -1;
+            foreach (var inicijator in BazaStatistikeInicijatora.Values)
+            {
+                if (inicijator.BrojPoziva > max.BrojPoziva) max = inicijator;
+            }
+            Console.WriteLine("Inicijator sa najvise poziva u sistemu: " + max.Username + " , Broj poziva: " + max.BrojPoziva);
         }
         public static void NajcesceAdrese()
         {
-            // TODO
+            Console.WriteLine("--Top 2 najcesce adrese sa kojih su inicirane akcije--");
+            List<Inicijator> listaInicijatora = BazaStatistikeInicijatora.Values.ToList();
+            listaInicijatora = listaInicijatora.OrderByDescending(o => o.BrojPoziva).ToList();
+            Console.WriteLine("Adresa 1: " + listaInicijatora[0].IpAddress + " : " + listaInicijatora[0].Port);
+            Console.WriteLine("Adresa 2: " + listaInicijatora[1].IpAddress + " : " + listaInicijatora[1].Port);
         }
         public static void GenerisiIzvestaj()
         {
@@ -171,6 +203,11 @@ namespace Common
             Console.WriteLine("----------------------------");
             NajcesceKoriscenaUslugaOperatera();
             Console.WriteLine("----------------------------");
+            NajcesciInicijator();
+            Console.WriteLine("----------------------------");
+            NajcesceAdrese();
+            Console.WriteLine("----------------------------");
+
         }
     }
 }

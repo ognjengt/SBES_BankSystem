@@ -2,7 +2,9 @@
 using Common.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,15 +29,13 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("AddAccount"))
-            {
-                Metoda m = new Metoda("AddAccount", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["AddAccount"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("AddAccount", "Bank");
 
             // Isto i za Inicijatore, ali to kasnije kad dodju sertifikati
+            var stackFrame = new StackFrame(1);
+            var callingMethod = stackFrame.GetMethod();
+            var callingClass = callingMethod.DeclaringType;
+            // uzeti username od usera koji poziva i pozvati GatewayLogger.AddInicijator(username);
 
             bankProxy.AddAccount(u,mode);
         }
@@ -50,13 +50,7 @@ namespace Gateway
                 bankProxy = cli.GetProxy();
             }
 
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("Transfer"))
-            {
-                Metoda m = new Metoda("Transfer", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["Transfer"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("Transfer", "Bank");
 
             retVal = bankProxy.Transfer(brojKlijentskogRacuna, brojOperatorskogRacuna, korisnikKojiVrsiTransfer, value);
             return retVal;
@@ -70,13 +64,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("CheckLogin"))
-            {
-                Metoda m = new Metoda("CheckLogin", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["CheckLogin"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("CheckLogin", "Bank");
 
             User u =bankProxy.CheckLogin(username, password, nacinLogovanja);
             return u;
@@ -97,13 +85,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("KreirajRacun"))
-            {
-                Metoda m = new Metoda("KreirajRacun", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["KreirajRacun"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("KreirajRacun", "Bank");
 
             return bankProxy.KreirajRacun(r);
         }
@@ -115,13 +97,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ObrisiRacun"))
-            {
-                Metoda m = new Metoda("ObrisiRacun", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["ObrisiRacun"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("ObrisiRacun", "Bank");
 
             return bankProxy.ObrisiRacun(brojRacuna);
         }
@@ -133,13 +109,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("SetIpAndPort"))
-            {
-                Metoda m = new Metoda("SetIpAndPort", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["SetIpAndPort"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("SetIpAndPort", "Bank");
 
             return bankProxy.SetIpAndPort(username, ip, port);
         }
@@ -161,13 +131,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("UzmiKlijentskiRacun"))
-            {
-                Metoda m = new Metoda("UzmiKlijentskiRacun", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["UzmiKlijentskiRacun"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("UzmiKlijentskiRacun", "Bank");
 
             return bankProxy.UzmiKlijentskiRacun(username);
         }
@@ -187,13 +151,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("SetIpAndPortClient"))
-            {
-                Metoda m = new Metoda("SetIpAndPortClient", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["SetIpAndPortClient"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("SetIpAndPortClient", "Bank");
 
             return bankProxy.SetIpAndPortClient(username, ip, port);
         }
@@ -205,13 +163,8 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ShutdownOperator"))
-            {
-                Metoda m = new Metoda("ShutdownOperator", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["ShutdownOperator"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("ShutdownOperator", "Bank");
+
             return bankProxy.ShutdownOperator(username);
         }
 
@@ -222,13 +175,8 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ShutdownClient"))
-            {
-                Metoda m = new Metoda("ShutdownClient", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["ShutdownClient"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("ShutdownClient", "Bank");
+
             return bankProxy.ShutdownClient(username);
         }
 
@@ -244,13 +192,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            if (!GatewayLogger.BazaStatistikeMetoda.ContainsKey("ObrisiRacun"))
-            {
-                Metoda m = new Metoda("ObrisiRacun", 0, "Bank");
-                GatewayLogger.BazaStatistikeMetoda.Add(m.NazivMetode, m);
-            }
-            GatewayLogger.BazaStatistikeMetoda["ObrisiRacun"].BrojPoziva++;
-            GatewayLogger.SacuvajStatistikuMetoda();
+            GatewayLogger.AddMethod("ObrisiRacun", "Bank");
 
             return bankProxy.GetOperatorsClients(operatorUsername);
         }
