@@ -13,7 +13,9 @@ namespace Operator
     {
         static void Main(string[] args)
         {
-
+            Console.WriteLine("+-+-+-+-+-+-+-+-+");
+            Console.WriteLine("|O|P|E|R|A|T|E|R|");
+            Console.WriteLine("+-+-+-+-+-+-+-+-+");
             Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = cli.GetProxy();
             bool uspesnoUlogovan = false;
@@ -25,7 +27,27 @@ namespace Operator
                 string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, Konstante.ENCRYPTION_KEY));
 
                 Console.WriteLine("Password:");
-                string pass = Console.ReadLine();
+                string pass = "";
+                ConsoleKeyInfo key;
+
+                do
+                {
+                    key = Console.ReadKey(true);
+
+                    // Backspace Should Not Work
+                    if (key.Key != ConsoleKey.Backspace)
+                    {
+                        pass += key.KeyChar;
+                        Console.Write("*");
+                    }
+                    else
+                    {
+                        Console.Write("\b");
+                    }
+                }
+                // Stops Receving Keys Once Enter is Pressed
+                while (key.Key != ConsoleKey.Enter);
+                pass = pass.Replace("\r", "");
                 string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, Konstante.ENCRYPTION_KEY));
 
                 ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "operater");

@@ -13,22 +13,46 @@ namespace Client
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("+-+-+-+-+-+-+");
+            Console.WriteLine("|C|L|I|E|N|T|");
+            Console.WriteLine("+-+-+-+-+-+-+");
+            Console.WriteLine();
             // Prvo konekcija na server radi pristupanja bazi podataka ( gde admin postoji?)
             // Prvo autentifikacija, u zavisnosti od toga gleda se da li je admin ili ne (iz nekog txt-a)
             // ???
             string kljuc = Konstante.ENCRYPTION_KEY;
             Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = cli.GetProxy();
+            Console.WriteLine(">Login");
             Console.WriteLine("Username:");
             string user = Console.ReadLine();
             string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, kljuc));
             
 
             Console.WriteLine("Password:");
-            string pass = Console.ReadLine();
+            string pass = "";
+            ConsoleKeyInfo key;
+
+            do
+            {
+                key = Console.ReadKey(true);
+
+                // Backspace Should Not Work
+                if (key.Key != ConsoleKey.Backspace)
+                {
+                    pass += key.KeyChar;
+                    Console.Write("*");
+                }
+                else
+                {
+                    Console.Write("\b");
+                }
+            }
+            // Stops Receving Keys Once Enter is Pressed
+            while (key.Key != ConsoleKey.Enter);
+            pass = pass.Replace("\r", "");
             string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, kljuc));
-
-
+            
             User ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "client");
             if (ulogovanUser != null)
             {
@@ -85,7 +109,10 @@ namespace Client
 
             int izbor;
             do {
-
+                Console.WriteLine();
+                Console.WriteLine("+-+-+-+-+-+-+");
+                Console.WriteLine("|O|P|C|I|J|E|");
+                Console.WriteLine("+-+-+-+-+-+-+");
                 Console.WriteLine("1. Dodavanje korisnika/operatera");
                 Console.WriteLine("2. Kreiranje novog racuna");
                 Console.WriteLine("3. Brisanje racuna");
@@ -136,7 +163,10 @@ namespace Client
             int izbor;
             do
             {
-
+                Console.WriteLine();
+                Console.WriteLine("+-+-+-+-+-+-+");
+                Console.WriteLine("|O|P|C|I|J|E|");
+                Console.WriteLine("+-+-+-+-+-+-+");
                 Console.WriteLine("1.Uplata ");
                 Console.WriteLine("0.Izlaz");
                 Console.WriteLine("Izaberi jedan od ponudjenih");
@@ -161,6 +191,8 @@ namespace Client
 
         private static void DodajKorisnika(IGatewayConnection gatewayProxy,int mode)
         {
+            Console.WriteLine();
+            Console.WriteLine(">Dodavanje korisnika:");
             if (mode == 1)
             {
                 Console.WriteLine("Korisnicko ime:");
@@ -170,7 +202,14 @@ namespace Client
                 string lozinka = Console.ReadLine();
 
                 Console.WriteLine("Uloga:");
-                string uloga = Console.ReadLine();
+
+                string uloga;
+                do
+                {
+                    Console.WriteLine("Unesi ulogu(korisnik,admin ili operater):");
+                    uloga = Console.ReadLine();
+                }
+                while (uloga != "korisnik" && uloga != "admin" && uloga != "operater");
 
                 //pravljenje korisnika
                 User noviUser = new User();
@@ -190,7 +229,13 @@ namespace Client
                 string lozinka = Console.ReadLine();
 
                 Console.WriteLine("Uloga:");
-                string uloga = Console.ReadLine();
+                string uloga;
+                do
+                {
+                    Console.WriteLine("Unesi ulogu(korisnik,admin ili operater):");
+                    uloga = Console.ReadLine();
+                }
+                while (uloga != "korisnik" && uloga != "admin" && uloga != "operater");
 
                 //pravljenje korisnika
                 User noviUser = new User();
@@ -205,8 +250,9 @@ namespace Client
 
         private static void KreirajRacun(IGatewayConnection gatewayProxy)
         {
-          
-                Console.WriteLine("Korisnicko ime vlasnika racuna (fizicko ili pravno lice): ");
+                Console.WriteLine();
+                Console.WriteLine(">Dodaj racun:");
+                Console.WriteLine("Korisnicko ime vlasnika racuna: ");
                 string username = Console.ReadLine();
                 string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(username, Konstante.ENCRYPTION_KEY));
 
@@ -216,11 +262,15 @@ namespace Client
                 string brojRacuna = Console.ReadLine();
                 string brojRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, Konstante.ENCRYPTION_KEY));
 
+            string tipRacuna;
+            do
+            {
+                Console.WriteLine("Tip racuna (fizicki ili pravni):");
+                tipRacuna = Console.ReadLine();
+            }
+            while (tipRacuna != "fizicki" && tipRacuna!="pravni");
 
-
-                Console.WriteLine("Tip racuna (fizicki ili pravni): ");
-                string tipRacuna = Console.ReadLine();
-                string tipRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(tipRacuna, Konstante.ENCRYPTION_KEY));
+            string tipRacunaSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(tipRacuna, Konstante.ENCRYPTION_KEY));
 
 
 
@@ -233,7 +283,7 @@ namespace Client
                 }
                 operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, Konstante.ENCRYPTION_KEY));
 
-                Console.WriteLine("Inicijalno stanje ");
+                Console.WriteLine("Inicijalno stanje(broj):");
                 string stanje = Console.ReadLine();
                 string stanjeSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(stanje, Konstante.ENCRYPTION_KEY));
 
@@ -255,7 +305,8 @@ namespace Client
 
         private static void DodajKorisnikaTest(IGatewayConnection gatewayProxy)
         {
-            Console.WriteLine("Performance testing...");
+            Console.WriteLine();
+            Console.WriteLine(">Performance testing:");
             Console.WriteLine("3DES CBC: ");
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -273,6 +324,8 @@ namespace Client
 
         private static void ObrisiRacun(IGatewayConnection gatewayProxy)
         {
+            Console.WriteLine();
+            Console.WriteLine(">Brisanje racuna:");
             Console.WriteLine("Broj racuna koji zelite da obrisete: ");
             string brRacuna = Console.ReadLine();
 
@@ -295,6 +348,8 @@ namespace Client
 
         private static void Transferuj(IGatewayConnection gatewayProxy)
         {
+            Console.WriteLine();
+            Console.WriteLine(">Transfer:");
             Console.WriteLine("Unesite broj operatorskog racuna na koji zelite da uplatite: ");
             string brojRacuna = Console.ReadLine();
             string sifrovanBrojOperatorskogRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(brojRacuna, Konstante.ENCRYPTION_KEY));
