@@ -19,7 +19,7 @@ namespace Gateway
             throw new NotImplementedException();
         }
 
-        public void ClientToBankAddAccount(User u,int mode)
+        public bool ClientToBankAddAccount(User u,int mode)
         {
             //pozovem metodu iz banke
             //kacimo se na banku, uplacujemo novac
@@ -37,7 +37,15 @@ namespace Gateway
             var callingClass = callingMethod.DeclaringType;
             // uzeti username od usera koji poziva i pozvati GatewayLogger.AddInicijator(username);
 
-            bankProxy.AddAccount(u,mode);
+            bool a=bankProxy.AddAccount(u,mode);
+            if (a)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool ClientToBankTransfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value)

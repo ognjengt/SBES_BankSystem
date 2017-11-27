@@ -14,7 +14,7 @@ namespace Common.Interfaces
         /// Metoda koju poziva admin prilikom dodavanja novog racuna u banci
         /// </summary>
         [OperationContract]
-        void AddAccount(User u,int mode);
+        bool AddAccount(User u,int mode);
 
         /// <summary>
         /// Kreira racun za fizicka ili pravna lica
