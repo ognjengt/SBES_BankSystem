@@ -217,7 +217,15 @@ namespace Client
                 noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(lozinka, Konstante.ENCRYPTION_KEY));
                 noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(uloga, Konstante.ENCRYPTION_KEY));
 
-                gatewayProxy.ClientToBankAddAccount(noviUser,mode);
+               bool dodao= gatewayProxy.ClientToBankAddAccount(noviUser,mode);
+                if (dodao)
+                {
+                    Console.WriteLine("Uspesno dodat korisnik!");
+                }
+                else
+                {
+                    Console.WriteLine("Neuspesno dodavanje korisnika!");
+                }
             }
 
             else
@@ -242,8 +250,16 @@ namespace Client
                 noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujECB(username, Konstante.ENCRYPTION_KEY));
                 noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujECB(lozinka, Konstante.ENCRYPTION_KEY));
                 noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujECB(uloga, Konstante.ENCRYPTION_KEY));
+                bool dodao = gatewayProxy.ClientToBankAddAccount(noviUser, mode);
+                if (dodao)
+                {
+                    Console.WriteLine("Uspesno dodat korisnik!");
+                }
+                else
+                {
+                    Console.WriteLine("Neuspesno dodavanje korisnika!");
+                }
 
-                gatewayProxy.ClientToBankAddAccount(noviUser,mode);
             }
 
         }

@@ -24,7 +24,7 @@ namespace Common
         public Server2(string ip, string port, string serviceName, Type typeOfSrcClass)
         {
             string temp = null;
-
+            //na osnovu vrste servisa,uzimamo serverski personalni sertifikat.
             if (typeof(INTERFACE) == typeof(IBankConnection))
             {
                 temp = "mbbank";

@@ -17,10 +17,11 @@ namespace Bank
         {
             //ovde ucitati informacije o korisnicima i racunima
 
-            //BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000","20000"));
+            BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000","20000"));
             Console.WriteLine("+-+-+-+-+");
             Console.WriteLine("|B|A|N|K|");
             Console.WriteLine("+-+-+-+-+");
+            Console.WriteLine();
             ucitajKorisnike(BankDB.BazaKorisnika);
             ucitajRacune(BankDB.BazaRacuna);
             Console.WriteLine("Dostupni korisnici: ");

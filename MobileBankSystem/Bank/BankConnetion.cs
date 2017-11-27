@@ -19,7 +19,7 @@ namespace Bank
 
              */
         object locker = new object();
-        public void AddAccount(User u,int mode)
+        public bool AddAccount(User u,int mode)
         {
             // TODO izmeniti da vraca poruku o postojanju na klijenta a ne na serveru da ispisuje
 
@@ -38,12 +38,13 @@ namespace Bank
                 {
 
                     Console.WriteLine("Ovaj korisnik vec postoji");
-                    return;
+                    return false;
 
                 }
                 BankDB.BazaKorisnika.Add(desifrovanKorisnik.Username, desifrovanKorisnik);
-
                 upisiKorisnika(BankDB.BazaKorisnika,mode);
+                return true;
+
             }
             else
             {
@@ -58,12 +59,14 @@ namespace Bank
                 {
 
                     Console.WriteLine("Ovaj korisnik vec postoji");
-                    return;
+                    return false;
 
                 }
                 BankDB.BazaKorisnika.Add(desifrovanKorisnik.Username, desifrovanKorisnik);
-
+               
                 upisiKorisnika(BankDB.BazaKorisnika,mode);
+                return true;
+
             }
 
         }

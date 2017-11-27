@@ -16,6 +16,7 @@ namespace Operator
             Console.WriteLine("+-+-+-+-+-+-+-+-+");
             Console.WriteLine("|O|P|E|R|A|T|E|R|");
             Console.WriteLine("+-+-+-+-+-+-+-+-+");
+            Console.WriteLine();
             Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = cli.GetProxy();
             bool uspesnoUlogovan = false;

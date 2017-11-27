@@ -25,6 +25,7 @@ namespace Common
         */
         public Client(string CN, string ip, string port, string serviceName)
         {
+            //ovo radimo zato sto smo mi admini i admin nema svoj sertifikat vec ga ima client,i onda se predstavimo kao client da bi uzeli taj sert.
             string srvCertCN = CN;  //ime servsa - ujedno i naziv njegovog cert.
             string temp = null;
 
@@ -65,7 +66,7 @@ namespace Common
             //poojma nemam
             factory.Credentials.ServiceCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
             //iz personal foldera uzimamo nas sertifikat sa privatnim i javnim kljucem
-            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, temp);//cliCertCN
+            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, temp);//cliCertCN,sada je temp zato sto se lazno predstavljamo kao client
             //kreiramo proxy
             proxy = factory.CreateChannel();
         }
