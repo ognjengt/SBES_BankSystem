@@ -33,15 +33,8 @@ namespace Gateway
             }
             GatewayLogger.AddMethod("AddAccount", "Bank");
 
-            bool a=bankProxy.AddAccount(u,mode);
-            if (a)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return bankProxy.AddAccount(u,mode);
+            
         }
 
         public bool ClientToBankTransfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value)

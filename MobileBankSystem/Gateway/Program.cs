@@ -45,8 +45,8 @@ namespace Gateway
 
             Server2<IGatewayConnection> server = new Server2<IGatewayConnection>(IPFinder.GetIPAddress(),Konstante.GATEWAY_PORT.ToString(),"GatewayConnection",typeof(GatewayConnection));
 
-            //GatewayLogger.UcitajStatistikuMetoda();
-            //GatewayLogger.UcitajStatistikuInicijatora();
+            GatewayLogger.UcitajStatistikuMetoda();
+            GatewayLogger.UcitajStatistikuInicijatora();
 
 
             Console.ReadKey();
