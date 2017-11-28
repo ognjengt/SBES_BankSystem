@@ -16,7 +16,7 @@ namespace Common
         public string IpAddress { get; set; }
         public string Port { get; set; }
 
-        //public string CN { get; set;}
+        //public string CN { get; set;}//cert name
 
         public User(string username, string password,string uloga, string ipAddress, string port) {
 

@@ -127,6 +127,9 @@ namespace Common.Interfaces
         [OperationContract]
         User ClientToBankGetOperator(string operatorName);
 
+        [OperationContract]
+        bool CheckIntoGateway(string ip, string port, string role);
+
         /// <summary>
         /// Poziva NotifyRacunAdded na operateru
         /// </summary>

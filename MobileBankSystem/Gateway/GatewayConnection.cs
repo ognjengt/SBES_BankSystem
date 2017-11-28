@@ -13,6 +13,8 @@ namespace Gateway
     public class GatewayConnection : IGatewayConnection
     {
         private IBankConnection bankProxy;
+        private Dictionary<string, Instance> CertDBClients = new Dictionary<string, Instance>();
+        private Dictionary<string, Instance> CertDBOperaters = new Dictionary<string, Instance>();
 
         public void BankToOperator()
         {
@@ -81,7 +83,8 @@ namespace Gateway
 
         public void OperatorToClientSendBill(string suma,string klijentIP,string klijentPort)
         {
-            Client<IClientConnection> cli = new Client<IClientConnection>("mbclient_1", klijentIP, klijentPort, "ClientConnection");
+            Instance i = CertDBClients[klijentIP];
+            Client<IClientConnection> cli = new Client<IClientConnection>(i.CN, i.IpAddress, i.Port, "ClientConnection");
             IClientConnection klijentProxy = cli.GetProxy();//ova metoda treba da prima klijentIP i klijentPort
             klijentProxy.SendBill(suma);
         }
@@ -146,7 +149,8 @@ namespace Gateway
 
         public bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma, string operatorIp, string operatorPort)
         {
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperaterConnection");
+            Instance i = CertDBOperaters[operatorIp];
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>(i.CN, i.IpAddress, i.Port, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
             operatorProxy.UpdateStatus(korisnikKojiJeUplatio, operaterKomeJeUplaceno, suma);
             return true;
@@ -219,7 +223,8 @@ namespace Gateway
 
         public bool ClientToOperatorAddRacun(Racun racun,string ip, string port)
         {
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", ip, port, "OperaterConnection");
+            Instance i = CertDBOperaters[ip];
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>(i.CN, i.IpAddress, i.Port, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
             return operatorProxy.AddRacun(racun);
         }
@@ -246,6 +251,27 @@ namespace Gateway
             GatewayLogger.AddMethod("GetClient", "Bank");
             return bankProxy.GetClient(clientUsername);
 
+        }
+
+        public bool CheckIntoGateway(string ip, string port, string role) // role = WindowIdentity.getCurrent().Name  --> mbclient_1
+        {
+            if (role.Contains("operator"))
+            {
+                if (CertDBOperaters.ContainsKey(ip))
+                {
+                    return false;
+                }
+                CertDBOperaters.Add(ip, new Instance(ip,port,role));
+            }
+            else if (role.Contains("client"))
+            {
+                if (CertDBClients.ContainsKey(ip))
+                {
+                    return false;
+                }
+                CertDBClients.Add(ip, new Instance(ip,port,role));
+            }
+            return true;
         }
         //public bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort)
         //{

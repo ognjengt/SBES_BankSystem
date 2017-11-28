@@ -46,6 +46,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="GatewayLogger.cs" />
     <Compile Include="Inicijator.cs" />
+    <Compile Include="Instance.cs" />
     <Compile Include="Interfaces\IBankConnection.cs" />
     <Compile Include="Interfaces\IClientConnection.cs" />
     <Compile Include="Interfaces\IGatewayConnection.cs" />

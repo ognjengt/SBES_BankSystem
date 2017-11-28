@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 using Common;
 using Common.Interfaces;
 using System.Diagnostics;
+using System.Security.Principal;
 
 namespace Client
 {
     class Program
     {
+        /*
+         
+             */
         static void Main(string[] args)
         {
             Console.WriteLine("+-+-+-+-+-+-+");
@@ -95,11 +99,8 @@ namespace Client
                 string sifrovanUsername = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, Konstante.ENCRYPTION_KEY));
                 gatewayProxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.connectedPort.ToString());
 
-                Client<IGatewayConnection> client = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
-                IGatewayConnection proxy = client.GetProxy();
-                proxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.connectedPort.ToString());
-                
-                
+                // Javi gatewayu da te doda u listu instanci
+                gatewayProxy.CheckIntoGateway(server.ipAddress, server.connectedPort.ToString(), CertManager.Formatter.ParseName(WindowsIdentity.GetCurrent().Name));
 
                 if (ulogovanUser.Uloga == "admin")
                 {

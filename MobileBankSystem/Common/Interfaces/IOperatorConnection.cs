@@ -25,6 +25,7 @@ namespace Common.Interfaces
         //[OperationContract]
         //bool NotifyRacunAdded(Racun r);
 
+
         ///// <summary>
         ///// Metoda koju banka poziva kako bi javila odgovarajucem operateru da je obrisan odredjeni racun
         ///// </summary>
