@@ -60,7 +60,7 @@ namespace Common
                 host.Credentials.ClientCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
                 //uzimamo nas cert
                 host.Credentials.ServiceCertificate.Certificate =
-                    Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, temp);//srvcertname
+                    Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, CertManager.Formatter.ParseName(WindowsIdentity.GetCurrent().Name));
                 try
                 {
                     host.Open();

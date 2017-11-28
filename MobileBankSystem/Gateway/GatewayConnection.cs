@@ -271,6 +271,17 @@ namespace Gateway
                 }
                 CertDBClients.Add(ip, new Instance(ip,port,role));
             }
+
+            foreach(KeyValuePair<string, Instance> x in CertDBClients)
+            {
+                Console.WriteLine("{0} {1} {2}", x.Value.IpAddress, x.Value.Port, x.Value.CN);
+            }
+
+            foreach (KeyValuePair<string, Instance> x in CertDBOperaters)
+            {
+                Console.WriteLine("{0} {1} {2}", x.Value.IpAddress, x.Value.Port, x.Value.CN);
+            }
+
             return true;
         }
         //public bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort)

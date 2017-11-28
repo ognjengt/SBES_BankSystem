@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -90,6 +91,8 @@ namespace Operator
                 // Ukoliko vec postoji instanca tipa telenora, ugasi aplikaciju ili ponovo loguj itd...
                 Environment.Exit(0);
             }
+
+            gatewayProxy.CheckIntoGateway(server.ipAddress, server.connectedPort.ToString(), CertManager.Formatter.ParseName(WindowsIdentity.GetCurrent().Name));
 
             // Iscitaj iz xml-a
            

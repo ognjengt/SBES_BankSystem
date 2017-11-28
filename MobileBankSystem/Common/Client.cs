@@ -52,6 +52,7 @@ namespace Common
             binding.CloseTimeout = new TimeSpan(0, 10, 0);
             binding.SendTimeout = new TimeSpan(0, 10, 0);
             binding.ReceiveTimeout = new TimeSpan(0, 10, 0);
+            
             //iz foldera trusted people uzima javni kljuc serverskog cert.
             X509Certificate2 srvCert = Manager.GetCertificateFormStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
             //endpoing koji client treba da pogodi. sastoji se od uri-ja kao prvog param. i drugog param. - javnog kljuca iz cert koji smo gore uzeli. taj ljkuc nam kaze
@@ -66,7 +67,7 @@ namespace Common
             //poojma nemam
             factory.Credentials.ServiceCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
             //iz personal foldera uzimamo nas sertifikat sa privatnim i javnim kljucem
-            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, temp);//cliCertCN,sada je temp zato sto se lazno predstavljamo kao client
+            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, srvCertCN);//cliCertCN,sada je temp zato sto se lazno predstavljamo kao client
             //kreiramo proxy
             proxy = factory.CreateChannel();
         }
