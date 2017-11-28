@@ -34,6 +34,22 @@ namespace Operator
             return true;
         }
 
+        public bool NotifyRacunChanged(Racun r)
+        {
+            Racun desifrovan = Sifrovanje.desifrujRacun(r);
+
+            OperatorDB.BazaRacuna[desifrovan.BrojRacuna] = desifrovan;
+            return true;
+        }
+
+        public bool NotifyRacunDeleted(Racun r)
+        {
+            Racun desifrovan = Sifrovanje.desifrujRacun(r);
+
+            OperatorDB.BazaRacuna.Remove(desifrovan.BrojRacuna);
+            return true;
+        }
+
         public bool UpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma)
         {
             string desifrovanKorisnikKojiJeUplatio = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(korisnikKojiJeUplatio), Konstante.ENCRYPTION_KEY);

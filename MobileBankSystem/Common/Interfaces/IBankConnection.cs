@@ -32,6 +32,14 @@ namespace Common.Interfaces
         bool ObrisiRacun(string brRacuna);
 
         /// <summary>
+        /// Menja racun
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool IzmeniRacun(Racun r);
+
+        /// <summary>
         /// Metoda kojom se sa jednog racuna prebacuje novac na drugi
         /// </summary>
         [OperationContract]

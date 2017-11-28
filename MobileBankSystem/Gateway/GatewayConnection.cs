@@ -204,5 +204,37 @@ namespace Gateway
 
             return bankProxy.GetOperatorsClients(operatorUsername);
         }
+
+        public bool ClientToBankIzmeniRacun(Racun r)
+        {
+            if (bankProxy == null)
+            {
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
+                bankProxy = cli.GetProxy();
+            }
+            GatewayLogger.AddMethod("IzmeniRacun", "Bank");
+
+            return bankProxy.IzmeniRacun(r);
+        }
+
+        public bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort)
+        {
+            // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
+
+            IOperatorConnection operatorProxy = cli.GetProxy();
+            operatorProxy.NotifyRacunDeleted(r);
+            return true;
+        }
+
+        public bool BankToOperatorNotifyRacunChanged(Racun r, string operatorIp, string operatorPort)
+        {
+            // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
+
+            IOperatorConnection operatorProxy = cli.GetProxy();
+            operatorProxy.NotifyRacunChanged(r);
+            return true;
+        }
     }
 }

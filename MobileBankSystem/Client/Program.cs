@@ -359,7 +359,27 @@ namespace Client
 
         private static void IzmeniRacun(IGatewayConnection gatewayProxy)
         {
-            Console.WriteLine("Izmena .... todo");
+            Console.WriteLine("> Izmena racuna: ");
+            Console.WriteLine("> Broj racuna koji zelite da izmenite: ");
+            string brojRacuna = Console.ReadLine();
+            Console.WriteLine("> Novo stanje racuna: ");
+            string stanje = Console.ReadLine();
+
+            Racun r = new Racun();
+            r.BrojRacuna = brojRacuna;
+            r.StanjeRacuna = stanje;
+
+            Racun sifrovan = Sifrovanje.sifrujRacun(r);
+
+            if (gatewayProxy.ClientToBankIzmeniRacun(sifrovan))
+            {
+                Console.WriteLine("Racun uspesno izmenjen");
+            }
+            else
+            {
+                Console.WriteLine("Racun neuspesno izmenjen, proverite da li postoji taj broj racuna");
+            }
+
         }
 
         private static void Transferuj(IGatewayConnection gatewayProxy)

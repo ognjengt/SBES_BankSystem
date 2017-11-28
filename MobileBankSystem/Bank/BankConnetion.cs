@@ -145,6 +145,30 @@ namespace Bank
             return serialized;
         }
 
+        public bool IzmeniRacun(Racun r)
+        {
+            Racun desifrovanRacun = Sifrovanje.desifrujRacun(r);
+            if (!BankDB.BazaRacuna.ContainsKey(desifrovanRacun.BrojRacuna))
+            {
+                return false;
+            }
+            BankDB.BazaRacuna[desifrovanRacun.BrojRacuna].StanjeRacuna = desifrovanRacun.StanjeRacuna;
+            upisiRacun(BankDB.BazaRacuna);
+
+            Racun racunZaIzmenu = BankDB.BazaRacuna[desifrovanRacun.BrojRacuna];
+
+            // Obavesti odgovarajuceg operatera kako bi dodao novi klijentski racun
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000", "GatewayConnection");
+            IGatewayConnection factory = cli.GetProxy();
+            if (racunZaIzmenu.TipRacuna == "fizicki" && racunZaIzmenu.Operater != "null")
+            {
+
+                factory.BankToOperatorNotifyRacunChanged(racunZaIzmenu, BankDB.BazaKorisnika[racunZaIzmenu.Operater].IpAddress, BankDB.BazaKorisnika[racunZaIzmenu.Operater].Port);
+            }
+
+            return true;
+        }
+
         public Racun KreirajRacun(Racun r)
         {
 
@@ -211,7 +235,23 @@ namespace Bank
             {
                 return false;
             }
+            Racun fullRacun = BankDB.BazaRacuna[desifrovanRacun];
+
+            // Obavesti odgovarajuceg operatera kako bi obrisao klijentski racun
+            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000", "GatewayConnection");
+            IGatewayConnection factory = cli.GetProxy();
+            if (fullRacun.TipRacuna == "fizicki" && fullRacun.Operater != "null")
+            {
+
+                //string sifrovanaIp = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].IpAddress, Konstante.ENCRYPTION_KEY));
+                //string sifrovanPort = BitConverter.ToString(Sifrovanje.sifrujCBC(BankDB.BazaKorisnika[desifrovan.Operater].Port, Konstante.ENCRYPTION_KEY));
+
+                factory.BankToOperatorNotifyRacunDeleted(fullRacun, BankDB.BazaKorisnika[fullRacun.Operater].IpAddress, BankDB.BazaKorisnika[fullRacun.Operater].Port);
+            }
+
             BankDB.BazaRacuna.Remove(desifrovanRacun);
+            upisiRacun(BankDB.BazaRacuna);
+
             return true;
         }
 

@@ -33,6 +33,14 @@ namespace Common.Interfaces
         bool ClientToBankObrisiRacun(string brojRacuna);
 
         /// <summary>
+        /// Poziva metodu IzmeniRacun na banci
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool ClientToBankIzmeniRacun(Racun r);
+
+        /// <summary>
         /// Poziva metodu za transfer novca na banci
         /// </summary>
         /// <param name="myUsername"></param>
@@ -119,6 +127,26 @@ namespace Common.Interfaces
         /// <param name="r"></param>
         [OperationContract]
         bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort);
+
+        /// <summary>
+        ///  Poziva metodu NotifyRacunDeleted na operateru
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="operatorIp"></param>
+        /// <param name="operatorPort"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort);
+
+        /// <summary>
+        ///  Poziva metodu NotifyRacunChanged na operateru
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="operatorIp"></param>
+        /// <param name="operatorPort"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool BankToOperatorNotifyRacunChanged(Racun r, string operatorIp, string operatorPort);
 
         /// <summary>
         /// Poziva metodu GetOperatorsClients na banci
