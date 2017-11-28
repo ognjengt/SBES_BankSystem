@@ -33,12 +33,6 @@ namespace Gateway
             }
             GatewayLogger.AddMethod("AddAccount", "Bank");
 
-            // Isto i za Inicijatore, ali to kasnije kad dodju sertifikati
-            var stackFrame = new StackFrame(1);
-            var callingMethod = stackFrame.GetMethod();
-            var callingClass = callingMethod.DeclaringType;
-            // uzeti username od usera koji poziva i pozvati GatewayLogger.AddInicijator(username);
-
             bool a=bankProxy.AddAccount(u,mode);
             if (a)
             {
@@ -86,6 +80,9 @@ namespace Gateway
             Instance i = CertDBClients[klijentIP];
             Client<IClientConnection> cli = new Client<IClientConnection>(i.CN, i.IpAddress, i.Port, "ClientConnection");
             IClientConnection klijentProxy = cli.GetProxy();//ova metoda treba da prima klijentIP i klijentPort
+
+            // Treba GatewayLogger
+
             klijentProxy.SendBill(suma);
         }
 
@@ -142,7 +139,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            GatewayLogger.AddMethod("UzmiKlijentskiRacun", "Bank");
+            // Ne treba GatewayLogger
 
             return bankProxy.UzmiKlijentskiRacun(username);
         }
@@ -175,7 +172,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            GatewayLogger.AddMethod("ShutdownOperator", "Bank");
+            // Ne treba GatewayLogger
 
             return bankProxy.ShutdownOperator(username);
         }
@@ -187,7 +184,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            GatewayLogger.AddMethod("ShutdownClient", "Bank");
+            // Ne treba GatewayLogger
 
             return bankProxy.ShutdownClient(username);
         }
@@ -204,7 +201,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            GatewayLogger.AddMethod("ObrisiRacun", "Bank");
+            // Ne treba GatewayLogger
 
             return bankProxy.GetOperatorsClients(operatorUsername);
         }
@@ -226,6 +223,9 @@ namespace Gateway
             Instance i = CertDBOperaters[ip];
             Client<IOperatorConnection> cli = new Client<IOperatorConnection>(i.CN, i.IpAddress, i.Port, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
+
+            // Treba GatewayLogger
+
             return operatorProxy.AddRacun(racun);
         }
 
@@ -236,7 +236,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            GatewayLogger.AddMethod("GetOperator", "Bank");
+            // Ne treba GatewayLogger
 
             return bankProxy.GetOperator(operatorName);
         }
@@ -248,7 +248,7 @@ namespace Gateway
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            GatewayLogger.AddMethod("GetClient", "Bank");
+            // Ne treba GatewayLogger
             return bankProxy.GetClient(clientUsername);
 
         }

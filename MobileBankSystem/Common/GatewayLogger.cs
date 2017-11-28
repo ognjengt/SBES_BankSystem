@@ -138,6 +138,11 @@ namespace Common
             // nakon ovog foreacha u dictionary operatori cu imati sve postojece operatere i sve metode od tih operatera
 
             // sad prolazim kroz svaki element liste i trazim maksimum od svakog
+            if (operatori.Count == 0)
+            {
+                Console.WriteLine("Ne postoji najcesce koriscena usluga.");
+                return;
+            }
             foreach (var operater in operatori)
             {
                 Metoda max = new Metoda();
@@ -183,30 +188,56 @@ namespace Common
             {
                 if (inicijator.BrojPoziva > max.BrojPoziva) max = inicijator;
             }
-            Console.WriteLine("Inicijator sa najvise poziva u sistemu: " + max.Username + " , Broj poziva: " + max.BrojPoziva);
+            if (max.Username == null && max.BrojPoziva == -1)
+            {
+                Console.WriteLine("Jos uvek niko nije inicirao ni jednu akciju");
+            }
+            else Console.WriteLine("Inicijator sa najvise poziva u sistemu: " + max.Username + " , Broj poziva: " + max.BrojPoziva);
         }
         public static void NajcesceAdrese()
         {
             Console.WriteLine("--Top 2 najcesce adrese sa kojih su inicirane akcije--");
             List<Inicijator> listaInicijatora = BazaStatistikeInicijatora.Values.ToList();
             listaInicijatora = listaInicijatora.OrderByDescending(o => o.BrojPoziva).ToList();
-            Console.WriteLine("Adresa 1: " + listaInicijatora[0].IpAddress + " : " + listaInicijatora[0].Port);
-            Console.WriteLine("Adresa 2: " + listaInicijatora[1].IpAddress + " : " + listaInicijatora[1].Port);
+            if (listaInicijatora.Count == 0)
+            {
+                Console.WriteLine("Jos uvek niko nije inicirao ni jednu akciju");
+            }
+            else if(listaInicijatora.Count == 1)
+            {
+                Console.WriteLine("Najcesca iniciranja poticu sa adrese: " + listaInicijatora[0].IpAddress + " : " + listaInicijatora[0].Port);
+            }
+            else
+            {
+                Console.WriteLine("Najcesca iniciranja poticu sa adresa: ");
+                Console.WriteLine("Adresa 1: " + listaInicijatora[0].IpAddress + " : " + listaInicijatora[0].Port);
+                Console.WriteLine("Adresa 2: " + listaInicijatora[1].IpAddress + " : " + listaInicijatora[1].Port);
+            }
+            
         }
         public static void GenerisiIzvestaj()
         {
-            UcitajStatistikuMetoda();
-            UcitajStatistikuInicijatora();
+            try
+            {
+                UcitajStatistikuMetoda();
+                UcitajStatistikuInicijatora();
 
-            Console.WriteLine("===STATISTIKA===");
-            NajcesceKoriscenaUslugaBanke();
-            Console.WriteLine("----------------------------");
-            NajcesceKoriscenaUslugaOperatera();
-            Console.WriteLine("----------------------------");
-            NajcesciInicijator();
-            Console.WriteLine("----------------------------");
-            NajcesceAdrese();
-            Console.WriteLine("----------------------------");
+                Console.WriteLine("===STATISTIKA===");
+                NajcesceKoriscenaUslugaBanke();
+                Console.WriteLine("----------------------------");
+                NajcesceKoriscenaUslugaOperatera();
+                Console.WriteLine("----------------------------");
+                NajcesciInicijator();
+                Console.WriteLine("----------------------------");
+                NajcesceAdrese();
+                Console.WriteLine("----------------------------");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
 
         }
     }

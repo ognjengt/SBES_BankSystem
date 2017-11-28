@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Action.cs" />
     <Compile Include="GatewayConnection.cs" />
-    <Compile Include="GatewayServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

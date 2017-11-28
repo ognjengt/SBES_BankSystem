@@ -58,7 +58,6 @@
     <Compile Include="OperatorskiRacun.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Racun.cs" />
-    <Compile Include="Server.cs" />
     <Compile Include="Server2.cs" />
     <Compile Include="Sifrovanje.cs" />
     <Compile Include="User.cs" />

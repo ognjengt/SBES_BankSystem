@@ -47,7 +47,6 @@
     <Compile Include="CertManager\Formmater.cs" />
     <Compile Include="OperaterConnection.cs" />
     <Compile Include="OperatorDB.cs" />
-    <Compile Include="OperatorServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

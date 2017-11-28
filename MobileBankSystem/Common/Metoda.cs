@@ -15,9 +15,9 @@ namespace Common
 
         public Metoda(string naziv, int brPoziva, string nazivServisa)
         {
-            NazivMetode = naziv;
-            BrojPoziva = brPoziva;
-            NazivServisa = NazivServisa;
+           this.NazivMetode = naziv;
+           this.BrojPoziva = brPoziva;
+           this.NazivServisa = nazivServisa;
         }
         public Metoda() { }
     }
