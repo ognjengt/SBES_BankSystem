@@ -328,15 +328,18 @@ namespace Client
                 }
 
 
-            User operaterZaProsledjivanje = gatewayProxy.ClientToBankGetOperator(operaterSifrovano);
-            User desifrovanOperaterZaProsledjivanje = Sifrovanje.desifrujUsera(operaterZaProsledjivanje);
-            if(gatewayProxy.ClientToOperatorAddRacun(noviRacun, desifrovanOperaterZaProsledjivanje.IpAddress, desifrovanOperaterZaProsledjivanje.Port))
+            if (tipRacuna == "fizicki")
             {
-                Console.WriteLine("Uspesno kreiran racun na operateru");
-            }
-            else
-            {
-                Console.WriteLine("Neuspesno kreiran racun na operateru");
+                User operaterZaProsledjivanje = gatewayProxy.ClientToBankGetOperator(operaterSifrovano);
+                User desifrovanOperaterZaProsledjivanje = Sifrovanje.desifrujUsera(operaterZaProsledjivanje);
+                if (gatewayProxy.ClientToOperatorAddRacun(noviRacun, desifrovanOperaterZaProsledjivanje.IpAddress, desifrovanOperaterZaProsledjivanje.Port))
+                {
+                    Console.WriteLine("Uspesno kreiran racun na operateru");
+                }
+                else
+                {
+                    Console.WriteLine("Neuspesno kreiran racun na operateru");
+                }
             }
 
         }

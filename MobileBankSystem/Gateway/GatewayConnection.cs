@@ -235,6 +235,18 @@ namespace Gateway
 
             return bankProxy.GetOperator(operatorName);
         }
+
+        public User OperatorToBankGetClient(string clientUsername)
+        {
+            if (bankProxy == null)
+            {
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
+                bankProxy = cli.GetProxy();
+            }
+            GatewayLogger.AddMethod("GetClient", "Bank");
+            return bankProxy.GetClient(clientUsername);
+
+        }
         //public bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort)
         //{
         //    // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama

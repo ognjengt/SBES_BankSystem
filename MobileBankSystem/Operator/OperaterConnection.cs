@@ -23,7 +23,11 @@ namespace Operator
             }
             OperatorskiRacun or = new OperatorskiRacun(desifrovanRacun.Username, OperatorDB.brRacuna++.ToString(), "0");
             OperatorDB.BazaRacuna.Add(or.BrojRacuna,or);
-
+            Client<IGatewayConnection> client = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
+            IGatewayConnection gatewayProxy = client.GetProxy();
+            User korisnik = gatewayProxy.OperatorToBankGetClient(BitConverter.ToString(Sifrovanje.sifrujCBC(desifrovanRacun.Username,Konstante.ENCRYPTION_KEY)));
+            OperatorDB.BazaKorisnika.Add(korisnik.Username, korisnik);
+            upisiKorisnike(OperatorDB.operatorName);
             upisiRacune(OperatorDB.operatorName);
             return true;
         }
@@ -127,7 +131,7 @@ namespace Operator
                     listaRacuna.Add(sifrovan);
                 }
 
-                XmlSerializer ser = new XmlSerializer(typeof(List<User>));
+                XmlSerializer ser = new XmlSerializer(typeof(List<OperatorskiRacun>));
 
                 StreamWriter sw = new StreamWriter(putanja);
                 ser.Serialize(sw, listaRacuna);

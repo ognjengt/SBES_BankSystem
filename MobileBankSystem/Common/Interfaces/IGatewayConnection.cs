@@ -161,5 +161,9 @@ namespace Common.Interfaces
         ///// <returns></returns>
         [OperationContract]
         string OperatorToBankGetOperatorsClients(string operatorUsername);
+
+
+        [OperationContract]
+        User OperatorToBankGetClient(string clientUsername);
     }
 }

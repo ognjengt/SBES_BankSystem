@@ -125,41 +125,43 @@ namespace Common
         public static User sifrujUsera(User u)
         {
             User sifrovan = new User();
-            if (String.IsNullOrEmpty(u.Username))
+            if (!String.IsNullOrEmpty(u.Username))
             {
                 sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Username, Konstante.ENCRYPTION_KEY));
             }
-            if (String.IsNullOrEmpty(u.Password))
+            if (!String.IsNullOrEmpty(u.Password))
             {
                 sifrovan.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Password, Konstante.ENCRYPTION_KEY));
             }
-            if (String.IsNullOrEmpty(u.Uloga))
+            if (!String.IsNullOrEmpty(u.Uloga))
             {
                 sifrovan.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(u.Uloga, Konstante.ENCRYPTION_KEY));
             }
+            sifrovan.IpAddress = u.IpAddress;
+            sifrovan.Port = u.Port;
             return sifrovan;
         }
 
         public static Racun sifrujRacun(Racun r)
         {
             Racun sifrovan = new Racun();
-            if (String.IsNullOrEmpty(r.BrojRacuna))
+            if (!String.IsNullOrEmpty(r.BrojRacuna))
             {
                 sifrovan.BrojRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(r.BrojRacuna, Konstante.ENCRYPTION_KEY));
             }
-            if (String.IsNullOrEmpty(r.Username))
+            if (!String.IsNullOrEmpty(r.Username))
             {
                 sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(r.Username, Konstante.ENCRYPTION_KEY));
             }
-            if (String.IsNullOrEmpty(r.StanjeRacuna))
+            if (!String.IsNullOrEmpty(r.StanjeRacuna))
             {
                 sifrovan.StanjeRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(r.StanjeRacuna, Konstante.ENCRYPTION_KEY));
             }
-            if (String.IsNullOrEmpty(r.Operater))
+            if (!String.IsNullOrEmpty(r.Operater))
             {
                 sifrovan.Operater = BitConverter.ToString(Sifrovanje.sifrujCBC(r.Operater, Konstante.ENCRYPTION_KEY));
             }
-            if (String.IsNullOrEmpty(r.TipRacuna))
+            if (!String.IsNullOrEmpty(r.TipRacuna))
             {
                 sifrovan.TipRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(r.TipRacuna, Konstante.ENCRYPTION_KEY));
             }
@@ -181,21 +183,23 @@ namespace Common
             {
                 desifrovanKorisnik.Uloga = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(u.Uloga), Konstante.ENCRYPTION_KEY);
             }
+            desifrovanKorisnik.IpAddress = u.IpAddress;
+            desifrovanKorisnik.Port = u.Port;
             return desifrovanKorisnik;
         }
 
         public static OperatorskiRacun sifrujOperatorskiRacun(OperatorskiRacun or)
         {
             OperatorskiRacun sifrovan = new OperatorskiRacun();
-            if (String.IsNullOrEmpty(or.Username))
+            if (!String.IsNullOrEmpty(or.Username))
             {
                 sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(or.Username, Konstante.ENCRYPTION_KEY));
             }
-            if (String.IsNullOrEmpty(or.Dug))
+            if (!String.IsNullOrEmpty(or.Dug))
             {
                 sifrovan.Dug = BitConverter.ToString(Sifrovanje.sifrujCBC(or.Dug, Konstante.ENCRYPTION_KEY));
             }
-            if (String.IsNullOrEmpty(or.BrojRacuna))
+            if (!String.IsNullOrEmpty(or.BrojRacuna))
             {
                 sifrovan.BrojRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(or.BrojRacuna, Konstante.ENCRYPTION_KEY));
             }

@@ -57,14 +57,24 @@ namespace Operator
                 ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "operater");
                 if (ulogovanUser != null)
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Uspesno logovanje " + ulogovanUser.Username);
                     uspesnoUlogovan = true;
                 }
                 else
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Neuspesno logovanje");
                     uspesnoUlogovan = false;
                 }
+            }
+            Console.WriteLine("Korisnici koji su na ovom operateru:");
+            OperatorDB.operatorName = ulogovanUser.Username;
+            ucitajRacune(OperatorDB.operatorName);
+            ucitajKorisnike(OperatorDB.operatorName);
+            foreach (var item in OperatorDB.BazaKorisnika.Values)
+            {
+                Console.WriteLine(item.Username);
             }
 
             //OperatorServer server = new OperatorServer();
@@ -82,13 +92,13 @@ namespace Operator
             }
 
             // Iscitaj iz xml-a
-            OperatorDB.operatorName = ulogovanUser.Username;
+           
 
 
             // Ako je sve proslo ok, uzmi bazu svih racuna i klijenata ciji je operater npr telenor
             //string serializedList = gatewayProxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
             //List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
-            
+
             //foreach (var item in aktivniKorisnici)
             //{
             //    OperatorDB.BazaRacuna.Add(item.Racun.BrojRacuna,item.Racun);

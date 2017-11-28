@@ -313,6 +313,14 @@ namespace Bank
             return true;
         }
 
+
+        public User GetClient(string name)
+        {
+            string desifrovanUsername = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(name), Konstante.ENCRYPTION_KEY);
+
+            return BankDB.BazaKorisnika[desifrovanUsername];
+        }
+
         //public bool Transfer(string mojRacun, string racunOperatera, string pozivNaBroj, int value)
         public bool Transfer(string brojKlijentskogRacuna, string brojOperatorskogRacuna, string korisnikKojiVrsiTransfer, string value)
         {
