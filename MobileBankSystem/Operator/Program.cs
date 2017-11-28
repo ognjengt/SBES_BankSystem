@@ -2,10 +2,12 @@
 using Common.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Operator
 {
@@ -21,6 +23,7 @@ namespace Operator
             IGatewayConnection gatewayProxy = cli.GetProxy();
             bool uspesnoUlogovan = false;
             User ulogovanUser = new User();
+
             while (!uspesnoUlogovan)
             {
                 Console.WriteLine("Username:");
@@ -78,14 +81,18 @@ namespace Operator
                 Environment.Exit(0);
             }
 
-            // Ako je sve proslo ok, uzmi bazu svih racuna i klijenata ciji je operater npr telenor
-            string serializedList = gatewayProxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
-            List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
+            // Iscitaj iz xml-a
+            OperatorDB.operatorName = ulogovanUser.Username;
 
-            foreach (var item in aktivniKorisnici)
-            {
-                OperatorDB.BazaRacuna.Add(item.Racun.BrojRacuna,item.Racun);
-            }
+
+            // Ako je sve proslo ok, uzmi bazu svih racuna i klijenata ciji je operater npr telenor
+            //string serializedList = gatewayProxy.OperatorToBankGetOperatorsClients(sifrovanUsername);
+            //List<UserIRacun> aktivniKorisnici = ListSerializer.DeserializeString(serializedList);
+            
+            //foreach (var item in aktivniKorisnici)
+            //{
+            //    OperatorDB.BazaRacuna.Add(item.Racun.BrojRacuna,item.Racun);
+            //}
 
             // U novom threadu prodji kroz sve aktivne korisnike i pozovi im sendBill
             //Thread sendBillThread = new Thread(() => SendBill(gatewayProxy, sifrovanUsername));
@@ -113,5 +120,51 @@ namespace Operator
                 Thread.Sleep(20000);// 2 minuta ustvari
             }
         }
+        private static void ucitajRacune(string operatorName)
+        {
+            try
+            {
+                string putanja = Environment.CurrentDirectory + "\\"+operatorName+"Racuni.xml";
+
+                List<OperatorskiRacun> listaRacuna = new List<OperatorskiRacun>();
+                XmlSerializer xs = new XmlSerializer(typeof(List<OperatorskiRacun>));
+                StreamReader sr = new StreamReader(putanja);
+                listaRacuna = (List<OperatorskiRacun>)xs.Deserialize(sr);
+                sr.Close();
+                foreach (OperatorskiRacun r in listaRacuna)
+                {
+                    OperatorskiRacun clean = Sifrovanje.desifrujOperatorskiRacun(r);
+                    OperatorDB.BazaRacuna.Add(clean.BrojRacuna, clean);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private static void ucitajKorisnike(string operatorName)
+        {
+            try
+            {
+                string putanja = Environment.CurrentDirectory + "\\" + operatorName + "Korisnici.xml";
+
+                List<User> listaUsera = new List<User>();
+                XmlSerializer xs = new XmlSerializer(typeof(List<User>));
+                StreamReader sr = new StreamReader(putanja);
+                listaUsera = (List<User>)xs.Deserialize(sr);
+                sr.Close();
+                foreach (User u in listaUsera)
+                {
+                    User clean = Sifrovanje.desifrujUsera(u);
+                    OperatorDB.BazaKorisnika.Add(clean.Username, clean);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
     }
 }

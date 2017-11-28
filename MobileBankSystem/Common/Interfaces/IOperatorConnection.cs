@@ -22,23 +22,27 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        [OperationContract]
-        bool NotifyRacunAdded(Racun r);
+        //[OperationContract]
+        //bool NotifyRacunAdded(Racun r);
 
-        /// <summary>
-        /// Metoda koju banka poziva kako bi javila odgovarajucem operateru da je obrisan odredjeni racun
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        [OperationContract]
-        bool NotifyRacunDeleted(Racun r);
+        ///// <summary>
+        ///// Metoda koju banka poziva kako bi javila odgovarajucem operateru da je obrisan odredjeni racun
+        ///// </summary>
+        ///// <param name="r"></param>
+        ///// <returns></returns>
+        //[OperationContract]
+        //bool NotifyRacunDeleted(Racun r);
 
-        /// <summary>
-        /// Metoda koju banka poziva kako bi javila odgovarajucem operateru da je izmenjen odredjeni racun
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
+        ///// <summary>
+        ///// Metoda koju banka poziva kako bi javila odgovarajucem operateru da je izmenjen odredjeni racun
+        ///// </summary>
+        ///// <param name="r"></param>
+        ///// <returns></returns>
+        //[OperationContract]
+        //bool NotifyRacunChanged(Racun r);
+
         [OperationContract]
-        bool NotifyRacunChanged(Racun r);
+        bool AddRacun(Racun r);
+
     }
 }

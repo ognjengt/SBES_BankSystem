@@ -99,6 +99,9 @@ namespace Common.Interfaces
         [OperationContract]
         string GetOperatorsClients(string operatorUsername);
 
+        [OperationContract]
+        User GetOperator(string operatorName);
+
 
 
     }

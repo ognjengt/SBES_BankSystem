@@ -9,7 +9,9 @@ namespace Operator
 {
     public static class OperatorDB
     {
-        public static Dictionary<string, Racun> BazaRacuna = new Dictionary<string, Racun>();
+        public static int brRacuna = 555;
+        public static string operatorName;
+        public static Dictionary<string, OperatorskiRacun> BazaRacuna = new Dictionary<string, OperatorskiRacun>();
         public static Dictionary<string, User> BazaKorisnika = new Dictionary<string, User>();
     }
 }

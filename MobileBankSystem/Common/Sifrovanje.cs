@@ -184,6 +184,42 @@ namespace Common
             return desifrovanKorisnik;
         }
 
+        public static OperatorskiRacun sifrujOperatorskiRacun(OperatorskiRacun or)
+        {
+            OperatorskiRacun sifrovan = new OperatorskiRacun();
+            if (String.IsNullOrEmpty(or.Username))
+            {
+                sifrovan.Username = BitConverter.ToString(Sifrovanje.sifrujCBC(or.Username, Konstante.ENCRYPTION_KEY));
+            }
+            if (String.IsNullOrEmpty(or.Dug))
+            {
+                sifrovan.Dug = BitConverter.ToString(Sifrovanje.sifrujCBC(or.Dug, Konstante.ENCRYPTION_KEY));
+            }
+            if (String.IsNullOrEmpty(or.BrojRacuna))
+            {
+                sifrovan.BrojRacuna = BitConverter.ToString(Sifrovanje.sifrujCBC(or.BrojRacuna, Konstante.ENCRYPTION_KEY));
+            }
+            return sifrovan;
+        }
+
+        public static OperatorskiRacun desifrujOperatorskiRacun(OperatorskiRacun or)
+        {
+            OperatorskiRacun desifrovanRacun = new OperatorskiRacun();
+            if (!String.IsNullOrEmpty(or.Username))
+            {
+                desifrovanRacun.Username = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(or.Username), Konstante.ENCRYPTION_KEY);
+            }
+            if (!String.IsNullOrEmpty(or.Dug))
+            {
+                desifrovanRacun.Dug = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(or.Dug), Konstante.ENCRYPTION_KEY);
+            }
+            if (!String.IsNullOrEmpty(or.BrojRacuna))
+            {
+                desifrovanRacun.BrojRacuna = Sifrovanje.desifrujCBC(Sifrovanje.spremiZaDesifrovanje(or.BrojRacuna), Konstante.ENCRYPTION_KEY);
+            }
+            return desifrovanRacun;
+        }
+
         public static Racun desifrujRacun(Racun r)
         {
             Racun desifrovanRacun = new Racun();

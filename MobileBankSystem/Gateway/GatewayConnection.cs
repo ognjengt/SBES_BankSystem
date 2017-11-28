@@ -122,15 +122,15 @@ namespace Gateway
             return bankProxy.SetIpAndPort(username, ip, port);
         }
 
-        public bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort)
-        {
-            // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
+        //public bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort)
+        //{
+        //    // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
+        //    Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
             
-            IOperatorConnection operatorProxy = cli.GetProxy();
-            operatorProxy.NotifyRacunAdded(r);
-            return true;
-        }
+        //    IOperatorConnection operatorProxy = cli.GetProxy();
+        //    operatorProxy.NotifyRacunAdded(r);
+        //    return true;
+        //}
 
         public Racun ClientToBankUzmiKlijentskiRacun(string username)
         {
@@ -217,24 +217,42 @@ namespace Gateway
             return bankProxy.IzmeniRacun(r);
         }
 
-        public bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort)
+        public bool ClientToOperatorAddRacun(Racun racun,string ip, string port)
         {
-            // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
-
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", ip, port, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
-            operatorProxy.NotifyRacunDeleted(r);
-            return true;
+            return operatorProxy.AddRacun(racun);
         }
 
-        public bool BankToOperatorNotifyRacunChanged(Racun r, string operatorIp, string operatorPort)
+        public User ClientToBankGetOperator(string operatorName)
         {
-            // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
+            if (bankProxy == null)
+            {
+                Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
+                bankProxy = cli.GetProxy();
+            }
+            GatewayLogger.AddMethod("GetOperator", "Bank");
 
-            IOperatorConnection operatorProxy = cli.GetProxy();
-            operatorProxy.NotifyRacunChanged(r);
-            return true;
+            return bankProxy.GetOperator(operatorName);
         }
+        //public bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort)
+        //{
+        //    // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
+        //    Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
+
+        //    IOperatorConnection operatorProxy = cli.GetProxy();
+        //    operatorProxy.NotifyRacunDeleted(r);
+        //    return true;
+        //}
+
+        //public bool BankToOperatorNotifyRacunChanged(Racun r, string operatorIp, string operatorPort)
+        //{
+        //    // trenutno salje ne sifrovane podatke, videti da li treba sifrovati IP i PORT na svim ovakvim metodama
+        //    Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperatorConnection");
+
+        //    IOperatorConnection operatorProxy = cli.GetProxy();
+        //    operatorProxy.NotifyRacunChanged(r);
+        //    return true;
+        //}
     }
 }

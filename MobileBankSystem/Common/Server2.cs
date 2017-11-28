@@ -67,7 +67,7 @@ namespace Common
                     uspesnoStartovanje = true;
                     Console.WriteLine(serviceName + " startovan na "+this.ipAddress+":"+this.connectedPort);
                 }
-                catch (Exception)
+                catch (Exception )
                 {
                     uspesnoStartovanje = false;
                     this.connectedPort++;

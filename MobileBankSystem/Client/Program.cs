@@ -24,36 +24,51 @@ namespace Client
             Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = cli.GetProxy();
             Console.WriteLine(">Login");
-            Console.WriteLine("Username:");
-            string user = Console.ReadLine();
-            string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, kljuc));
-            
+            User ulogovanUser = new User();
+            bool uspesnoLogovanje = false;
 
-            Console.WriteLine("Password:");
-            string pass = "";
-            ConsoleKeyInfo key;
-
-            do
+            while (!uspesnoLogovanje)
             {
-                key = Console.ReadKey(true);
+                Console.WriteLine("Username:");
+                string user = Console.ReadLine();
+                string userSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(user, kljuc));
 
-                // Backspace Should Not Work
-                if (key.Key != ConsoleKey.Backspace)
+
+                Console.WriteLine("Password:");
+                string pass = "";
+                ConsoleKeyInfo key;
+
+                do
                 {
-                    pass += key.KeyChar;
-                    Console.Write("*");
+                    key = Console.ReadKey(true);
+
+                    // Backspace Should Not Work
+                    if (key.Key != ConsoleKey.Backspace)
+                    {
+                        pass += key.KeyChar;
+                        Console.Write("*");
+                    }
+                    else
+                    {
+                        Console.Write("\b");
+                    }
+                }
+                // Stops Receving Keys Once Enter is Pressed
+                while (key.Key != ConsoleKey.Enter);
+                pass = pass.Replace("\r", "");
+                string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, kljuc));
+
+                ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "client");
+                if (ulogovanUser != null)
+                {
+                    uspesnoLogovanje = true;
                 }
                 else
                 {
-                    Console.Write("\b");
+                    Console.WriteLine("\nNeuspesno logovanje");
                 }
             }
-            // Stops Receving Keys Once Enter is Pressed
-            while (key.Key != ConsoleKey.Enter);
-            pass = pass.Replace("\r", "");
-            string passSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(pass, kljuc));
             
-            User ulogovanUser = gatewayProxy.ClientToBankCheckLogin(userSifrovano, passSifrovano, "client");
             if (ulogovanUser != null)
             {
                 string userSifrovanoZaRacun = BitConverter.ToString(Sifrovanje.sifrujCBC(ulogovanUser.Username, kljuc));
@@ -83,22 +98,16 @@ namespace Client
                 Client<IGatewayConnection> client = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
                 IGatewayConnection proxy = client.GetProxy();
                 proxy.ClientToBankSetIpAndPortClient(sifrovanUsername, server.ipAddress, server.connectedPort.ToString());
-
+                
                 
 
                 if (ulogovanUser.Uloga == "admin")
                 {
                     MeniAdmin(gatewayProxy);
-
-
                 }
                 else if (ulogovanUser.Uloga == "korisnik") {
                     MeniKorisnik(gatewayProxy);
                 }
-            }
-            else
-            {
-                Console.WriteLine("Neuspesno logovanje");
             }
 
             Console.ReadKey();
@@ -250,8 +259,8 @@ namespace Client
                 noviUser.Username = BitConverter.ToString(Sifrovanje.sifrujECB(username, Konstante.ENCRYPTION_KEY));
                 noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujECB(lozinka, Konstante.ENCRYPTION_KEY));
                 noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujECB(uloga, Konstante.ENCRYPTION_KEY));
-                bool dodao = gatewayProxy.ClientToBankAddAccount(noviUser, mode);
-                if (dodao)
+                bool addedOnBank = gatewayProxy.ClientToBankAddAccount(noviUser, mode);
+                if (addedOnBank)
                 {
                     Console.WriteLine("Uspesno dodat korisnik!");
                 }
@@ -308,14 +317,28 @@ namespace Client
                 Racun noviRacun = new Racun(userSifrovano, brojRacunaSifrovano, stanjeSifrovano, tipRacunaSifrovano, operaterSifrovano);
 
                 var uspesnoKreiran = gatewayProxy.ClientToBankKreirajRacun(noviRacun);
+
                 if (uspesnoKreiran == null)
                 {
                     Console.WriteLine("Neuspesno kreiran racun, proverite da li ovaj broj racuna vec postoji, ili da korisnik na koga se dodaje ne postoji");
                 }
                 else
                 {
-                    Console.WriteLine("Uspesno kreiran racun!");
+                    Console.WriteLine("Uspesno kreiran racun na banci!");
                 }
+
+
+            User operaterZaProsledjivanje = gatewayProxy.ClientToBankGetOperator(operaterSifrovano);
+            User desifrovanOperaterZaProsledjivanje = Sifrovanje.desifrujUsera(operaterZaProsledjivanje);
+            if(gatewayProxy.ClientToOperatorAddRacun(noviRacun, desifrovanOperaterZaProsledjivanje.IpAddress, desifrovanOperaterZaProsledjivanje.Port))
+            {
+                Console.WriteLine("Uspesno kreiran racun na operateru");
+            }
+            else
+            {
+                Console.WriteLine("Neuspesno kreiran racun na operateru");
+            }
+
         }
 
 

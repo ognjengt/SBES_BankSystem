@@ -121,38 +121,44 @@ namespace Common.Interfaces
         [OperationContract]
         bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma, string operatorIp, string operatorPort);
 
+        [OperationContract]
+        bool ClientToOperatorAddRacun(Racun racun, string ip, string port);
+
+        [OperationContract]
+        User ClientToBankGetOperator(string operatorName);
+
         /// <summary>
         /// Poziva NotifyRacunAdded na operateru
         /// </summary>
         /// <param name="r"></param>
-        [OperationContract]
-        bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort);
+        //[OperationContract]
+        //bool BankToOperatorNotifyRacunAdded(Racun r, string operatorIp, string operatorPort);
 
-        /// <summary>
-        ///  Poziva metodu NotifyRacunDeleted na operateru
-        /// </summary>
-        /// <param name="r"></param>
-        /// <param name="operatorIp"></param>
-        /// <param name="operatorPort"></param>
-        /// <returns></returns>
-        [OperationContract]
-        bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort);
+        ///// <summary>
+        /////  Poziva metodu NotifyRacunDeleted na operateru
+        ///// </summary>
+        ///// <param name="r"></param>
+        ///// <param name="operatorIp"></param>
+        ///// <param name="operatorPort"></param>
+        ///// <returns></returns>
+        //[OperationContract]
+        //bool BankToOperatorNotifyRacunDeleted(Racun r, string operatorIp, string operatorPort);
 
-        /// <summary>
-        ///  Poziva metodu NotifyRacunChanged na operateru
-        /// </summary>
-        /// <param name="r"></param>
-        /// <param name="operatorIp"></param>
-        /// <param name="operatorPort"></param>
-        /// <returns></returns>
-        [OperationContract]
-        bool BankToOperatorNotifyRacunChanged(Racun r, string operatorIp, string operatorPort);
+        ///// <summary>
+        /////  Poziva metodu NotifyRacunChanged na operateru
+        ///// </summary>
+        ///// <param name="r"></param>
+        ///// <param name="operatorIp"></param>
+        ///// <param name="operatorPort"></param>
+        ///// <returns></returns>
+        //[OperationContract]
+        //bool BankToOperatorNotifyRacunChanged(Racun r, string operatorIp, string operatorPort);
 
-        /// <summary>
-        /// Poziva metodu GetOperatorsClients na banci
-        /// </summary>
-        /// <param name="operatorUsername"></param>
-        /// <returns></returns>
+        ///// <summary>
+        ///// Poziva metodu GetOperatorsClients na banci
+        ///// </summary>
+        ///// <param name="operatorUsername"></param>
+        ///// <returns></returns>
         [OperationContract]
         string OperatorToBankGetOperatorsClients(string operatorUsername);
     }
