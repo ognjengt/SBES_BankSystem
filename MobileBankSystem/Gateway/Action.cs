@@ -9,48 +9,49 @@ using System.Xml.Serialization;
 
 namespace Gateway
 {
-    public class Action
+    public static class Action
     {
         //                        user /  his action
         private static Dictionary<string, ActionSet> actions = new Dictionary<string, ActionSet>();
         public static int attemptsLimit;
-        public static DateTime time;
-        public bool actionOccuered(string user, string action, DateTime time)
+        public static TimeSpan time;
+
+        static Action()
+        {
+            ReadXml("Config.xml");
+        }
+
+        public static bool actionOccuered(string user, string action, DateTime dt)
         {
             if (!actions.ContainsKey(user))
             {
-                ActionInfo a = new ActionInfo(time);
+                ActionInfo a = new ActionInfo(dt);
                 ActionSet set = new ActionSet(action, a);
                 actions.Add(user, set);
                 return false;
             }
             else
             {
-                return actions[user].newAction(action, time);
+                return actions[user].newAction(action, dt);
             }
         }
 
-        public static void ReadXml()
+        private static void ReadXml(string filename)
         {
-            XmlTextReader reader = new XmlTextReader(Environment.CurrentDirectory + "\\korisnici.xml");
-            while (reader.Read())
+            bool e = File.Exists(Environment.CurrentDirectory + "\\" + filename);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(Environment.CurrentDirectory + "\\" + filename);
+
+            XmlNode root = doc.FirstChild;
+            //Display the contents of the child nodes.
+            if (root.HasChildNodes)
             {
-                if (reader.NodeType == XmlNodeType.Element)
-                {
-                    if(reader.Name == "pokusaji")
-                    {
-                        attemptsLimit = Int32.Parse(reader.Value);
-                    }else if(reader.Name == "vreme")
-                    {
-                        time = new DateTime();
-                        string t = reader.Value;
-                        string[] temp = t.Split(':');
-                        time.AddHours(Double.Parse(temp[0]));
-                        time.AddMinutes(Double.Parse(temp[1]));
-                        time.AddSeconds(Double.Parse(temp[2]));
-                    }
-                }
-            }
+                attemptsLimit = Int32.Parse(root.ChildNodes[0].InnerText);
+                string t = root.ChildNodes[1].InnerText;
+                string[] x = t.Split(':');
+                time = new TimeSpan(Int32.Parse(x[0]), Int32.Parse(x[1]), Int32.Parse(x[2]));
+                
+            } 
         }
     }
 
@@ -107,7 +108,7 @@ namespace Gateway
         {
             if (numAction > 0)
             {
-                if (Action.time.Ticks < time.Subtract(actionTime.First()).Ticks)
+                if (Action.time.TotalSeconds < time.Subtract(actionTime.First()).TotalSeconds)
                 {
                     Pop();
                     Refresh(time);
