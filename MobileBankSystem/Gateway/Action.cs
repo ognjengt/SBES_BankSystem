@@ -9,20 +9,31 @@ using System.Xml.Serialization;
 
 namespace Gateway
 {
+    //klasa koja vodi evidenciju svih klijenata i svih njegovih akcija
     public static class Action
     {
-        //                        user /  his action
-        private static Dictionary<string, ActionSet> actions = new Dictionary<string, ActionSet>();
-        public static int attemptsLimit;
-        public static TimeSpan time;
+        //                         user /  his action
+        private static Dictionary<string, ActionSet> actions = new Dictionary<string, ActionSet>(); //key: user  value: skup akcija i njihovih info
+        public static int attemptsLimit;    //maximalan broj pokusaja
+        public static TimeSpan time;        //vremensko ogranicenje 
 
         static Action()
         {
             ReadXml("Config.xml");
         }
 
-        public static bool actionOccuered(string user, string action, DateTime dt)
+        //ukoliko se pojavi neka akcija treba pobrisati evidenciju svih ostalih
+        //akcija jer se u zadatku trazi da akcije budu uzastopne.
+        // tj. cim se pojavila nova akcija znaci da ta uzastopnost prestaje i treba
+        //resetovati evidenciju za ostale akcije.
+        private static void Reset(string user, string action) {
+            actions[user].Reset(action);
+        }
+
+        //doslo je do odredjene akcije treba je evidentirati
+        public static bool ActionOccuered(string user, string action, DateTime dt)
         {
+            Reset(user, action);
             if (!actions.ContainsKey(user))
             {
                 ActionInfo a = new ActionInfo(dt);
@@ -32,10 +43,12 @@ namespace Gateway
             }
             else
             {
-                return actions[user].newAction(action, dt);
+                return actions[user].Update(action, dt);
             }
         }
 
+        //citam Config.xml da bi dobavio podatke od maksimalnom broju pokusaja 
+        //i vremenskom ogranicenju
         private static void ReadXml(string filename)
         {
             bool e = File.Exists(Environment.CurrentDirectory + "\\" + filename);
@@ -55,16 +68,20 @@ namespace Gateway
         }
     }
 
+    //klasa koja vodi evidenciju svih pozvanih akcija
+    //odredjenog klijenta
     class ActionSet
     {
         //              ime akcije    info
-        private Dictionary<string, ActionInfo> set = new Dictionary<string, ActionInfo>();
+        private Dictionary<string, ActionInfo> set = new Dictionary<string, ActionInfo>();  // key: ime akcije    value: info o akciji
 
         public ActionSet(string actionName, ActionInfo ac)
         {
             set.Add(actionName, ac);
         }
-        public bool newAction(string action, DateTime time)
+
+        //azuriram stanje za odredjenu akciju
+        public bool Update(string action, DateTime time)
         {
             if (!set.ContainsKey(action))
             {
@@ -76,12 +93,29 @@ namespace Gateway
                 return set[action].UpdateActionInfo(time);
             }
         }
+
+        //brisem stanja svih akcija osim ove prosledjene
+        //jer se ona poslednja inicirala i treba paziti o 
+        //njenom uzastopnom pozivanju
+        public void Reset(string action)
+        {
+            foreach(KeyValuePair<string, ActionInfo> kvp in set)
+            {
+                if(kvp.Key != action)
+                {
+                    kvp.Value.Reset();
+                }
+            }
+        }
     }
 
+
+    //klasa koja odrzava informacije o vremenu iniciranja odredjene akcije
+    //kao i o broju uzastopnih iniciranja
     class ActionInfo
     {
-        int numAction;
-        Queue<DateTime> actionTime = new Queue<DateTime>(Action.attemptsLimit);
+        int numAction;  //br uzastopnih pokusaja
+        Queue<DateTime> actionTime = new Queue<DateTime>(Action.attemptsLimit); //queue sa vremenima iniciranja akcija
 
         //public ActionContext(string user, string action, DateTime time)
         public ActionInfo(DateTime time)
@@ -92,6 +126,7 @@ namespace Gateway
             Push(time);
         }
 
+        //azuriram vreme iniciranja akcije
         public bool UpdateActionInfo(DateTime time)
         {
             Refresh(time);
@@ -104,6 +139,14 @@ namespace Gateway
 
         }
 
+        //cistim queue zabelezenih vremena
+        public void Reset()
+        {
+            numAction = 0;
+            actionTime = new Queue<DateTime>(Action.attemptsLimit);
+        }
+
+        //izbacujem iz queue zastarela vremena koja nisu od interesa
         void Refresh(DateTime time)
         {
             if (numAction > 0)
@@ -116,19 +159,14 @@ namespace Gateway
             }
         }
 
-        void Reset(DateTime time)
-        {
-            numAction = 0;
-            actionTime = new Queue<DateTime>(Action.attemptsLimit);
-            Push(time);
-        }
-
+        //ubacujem vreme u queue i povecavam uzastopni poziv
         void Push(DateTime time)
         {
             numAction++;
             actionTime.Enqueue(time);
         }
 
+        //izbacujem vreme i smanjujem uzastopni poziv
         void Pop()
         {
             numAction--;

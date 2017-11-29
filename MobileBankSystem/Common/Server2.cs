@@ -3,6 +3,8 @@ using Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.ServiceModel;
@@ -40,18 +42,26 @@ namespace Common
             }
 
             bool uspesnoStartovanje = false;
-            this.ipAddress = ip;
-            
+            //this.ipAddress = ip
+
+
+
+            IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");
+            IPAddress ipAddress = ipHostInfo.AddressList
+                .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
+            this.ipAddress = ipAddress.ToString();
+
+
             //ime naseg window usera, ujedno i naseg cert.
-            //string srvCertName = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
-            
+            string srvCertName = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
+
             this.connectedPort = Int32.Parse(port);
             do
             {
                 NetTcpBinding binding = new NetTcpBinding();
                 //tip auth
                 binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
-                string address = String.Format("net.tcp://{0}:{1}/{2}", ip, port, serviceName);
+                string address = String.Format("net.tcp://{0}:{1}/{2}", ip, connectedPort.ToString(), serviceName);
             
                 host = new ServiceHost(typeOfSrcClass);
                 host.AddServiceEndpoint(typeof(INTERFACE), binding, address);
@@ -60,7 +70,7 @@ namespace Common
                 host.Credentials.ClientCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
                 //uzimamo nas cert
                 host.Credentials.ServiceCertificate.Certificate =
-                    Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, CertManager.Formatter.ParseName(WindowsIdentity.GetCurrent().Name));
+                    Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, srvCertName);
                 try
                 {
                     host.Open();

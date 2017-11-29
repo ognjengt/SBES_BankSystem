@@ -43,6 +43,7 @@ namespace Gateway
 
             //GatewayLogger.GenerisiIzvestaj();
 
+            Console.ReadKey();
             Server2<IGatewayConnection> server = new Server2<IGatewayConnection>(IPFinder.GetIPAddress(),Konstante.GATEWAY_PORT.ToString(),"GatewayConnection",typeof(GatewayConnection));
 
             GatewayLogger.UcitajStatistikuMetoda();
@@ -50,6 +51,7 @@ namespace Gateway
 
 
             Console.ReadKey();
+            server.Close();
         }
     }
 }

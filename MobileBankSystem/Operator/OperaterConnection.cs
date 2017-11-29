@@ -21,7 +21,7 @@ namespace Operator
             {
                 return false;
             }
-            OperatorskiRacun or = new OperatorskiRacun(desifrovanRacun.Username, OperatorDB.brRacuna++.ToString(), "0");
+            OperatorskiRacun or = new OperatorskiRacun(desifrovanRacun.Username, (++OperatorDB.brRacuna).ToString(), "0");
             OperatorDB.BazaRacuna.Add(or.BrojRacuna,or);
             Client<IGatewayConnection> client = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = client.GetProxy();

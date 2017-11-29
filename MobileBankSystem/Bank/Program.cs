@@ -17,7 +17,7 @@ namespace Bank
         {
             //ovde ucitati informacije o korisnicima i racunima
 
-           // BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000","20000"));
+            BankDB.BazaKorisnika.Add("admin", new User("admin","admin","admin","0000","20000"));
             Console.WriteLine("+-+-+-+-+");
             Console.WriteLine("|B|A|N|K|");
             Console.WriteLine("+-+-+-+-+");
@@ -34,7 +34,6 @@ namespace Bank
             //BankServer server = new BankServer();
             //server.Start();
             Server2<IBankConnection> server = new Server2<IBankConnection>(IPFinder.GetIPAddress(), Konstante.BANK_PORT.ToString(), "BankConnection", typeof(BankConnetion));
-            
             Console.ReadKey();
         }
 

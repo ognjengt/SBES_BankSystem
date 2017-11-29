@@ -54,7 +54,7 @@ namespace Common
             binding.ReceiveTimeout = new TimeSpan(0, 10, 0);
             
             //iz foldera trusted people uzima javni kljuc serverskog cert.
-            X509Certificate2 srvCert = Manager.GetCertificateFormStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
+            X509Certificate2 srvCert = Manager.GetCertificateFormStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN); //srvcertcn
             //endpoing koji client treba da pogodi. sastoji se od uri-ja kao prvog param. i drugog param. - javnog kljuca iz cert koji smo gore uzeli. taj ljkuc nam kaze
             //da na serveru treba da nas ocekuje cert koji pored tog javnog kljuca ima i neki svoj privatni
             EndpointAddress address = new EndpointAddress(new Uri(String.Format("net.tcp://{0}:{1}/{2}", ip, port, serviceName)), new X509CertificateEndpointIdentity(srvCert));
@@ -67,7 +67,7 @@ namespace Common
             //poojma nemam
             factory.Credentials.ServiceCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
             //iz personal foldera uzimamo nas sertifikat sa privatnim i javnim kljucem
-            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, srvCertCN);//cliCertCN,sada je temp zato sto se lazno predstavljamo kao client
+            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, cliCertCN);//cliCertCN,sada je temp zato sto se lazno predstavljamo kao client
             //kreiramo proxy
             proxy = factory.CreateChannel();
         }

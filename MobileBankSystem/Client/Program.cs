@@ -129,7 +129,7 @@ namespace Client
                 Console.WriteLine("4. Izmena racuna");
                 Console.WriteLine("5. Dodaj korisnika(performance test)");
                 Console.WriteLine("6. Ispis statistike sistema");
-                Console.WriteLine("0.Izlaz");
+                Console.WriteLine("0. Izlaz");
                 Console.WriteLine("Izaberi jedan od ponudjenih");
                 izbor = Int32.Parse(Console.ReadLine());
 
@@ -227,7 +227,7 @@ namespace Client
                 noviUser.Password = BitConverter.ToString(Sifrovanje.sifrujCBC(lozinka, Konstante.ENCRYPTION_KEY));
                 noviUser.Uloga = BitConverter.ToString(Sifrovanje.sifrujCBC(uloga, Konstante.ENCRYPTION_KEY));
 
-               bool dodao= gatewayProxy.ClientToBankAddAccount(noviUser,mode);
+                bool dodao = gatewayProxy.ClientToBankAddAccount(noviUser,mode);
                 if (dodao)
                 {
                     Console.WriteLine("Uspesno dodat korisnik!");
@@ -300,33 +300,33 @@ namespace Client
 
 
 
-                string operater = "null";
-                string operaterSifrovano = "null";
-                if (tipRacuna == "fizicki")
-                {
-                    Console.WriteLine("Korisnicko ime naloga operatera: ");
-                    operater = Console.ReadLine();
-                }
-                operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, Konstante.ENCRYPTION_KEY));
+            string operater = "null";
+            string operaterSifrovano = "null";
+            if (tipRacuna == "fizicki")
+            {
+                Console.WriteLine("Korisnicko ime naloga operatera: ");
+                operater = Console.ReadLine();
+            }
+            operaterSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(operater, Konstante.ENCRYPTION_KEY));
 
-                Console.WriteLine("Inicijalno stanje(broj):");
-                string stanje = Console.ReadLine();
-                string stanjeSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(stanje, Konstante.ENCRYPTION_KEY));
+            Console.WriteLine("Inicijalno stanje(broj):");
+            string stanje = Console.ReadLine();
+            string stanjeSifrovano = BitConverter.ToString(Sifrovanje.sifrujCBC(stanje, Konstante.ENCRYPTION_KEY));
 
 
 
-                Racun noviRacun = new Racun(userSifrovano, brojRacunaSifrovano, stanjeSifrovano, tipRacunaSifrovano, operaterSifrovano);
+            Racun noviRacun = new Racun(userSifrovano, brojRacunaSifrovano, stanjeSifrovano, tipRacunaSifrovano, operaterSifrovano);
 
-                var uspesnoKreiran = gatewayProxy.ClientToBankKreirajRacun(noviRacun);
+            var uspesnoKreiran = gatewayProxy.ClientToBankKreirajRacun(noviRacun);
 
-                if (uspesnoKreiran == null)
-                {
-                    Console.WriteLine("Neuspesno kreiran racun, proverite da li ovaj broj racuna vec postoji, ili da korisnik na koga se dodaje ne postoji");
-                }
-                else
-                {
-                    Console.WriteLine("Uspesno kreiran racun na banci!");
-                }
+            if (uspesnoKreiran == null)
+            {
+                Console.WriteLine("Neuspesno kreiran racun, proverite da li ovaj broj racuna vec postoji, ili da korisnik na koga se dodaje ne postoji");
+            }
+            else
+            {
+                Console.WriteLine("Uspesno kreiran racun na banci!");
+            }
 
 
             if (tipRacuna == "fizicki")

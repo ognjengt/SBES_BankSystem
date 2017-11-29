@@ -130,7 +130,7 @@ namespace Operator
                     proxy.OperatorToClientSendBill(randomSuma.ToString(), userIRacun.Korisnik.IpAddress, userIRacun.Korisnik.Port);
                 }
 
-                Thread.Sleep(20000);// 2 minuta ustvari
+                Thread.Sleep(1000*60*2);// 2 minuta ustvari
             }
         }
         private static void ucitajRacune(string operatorName)

@@ -88,8 +88,7 @@ namespace Bank
                         {
                             User u = BankDB.BazaKorisnika[usernameDesifrovan];
                             return u;
-                        }
-                        
+                        }        
                     }
                 }
             }
@@ -489,6 +488,7 @@ namespace Bank
                 }
             }
             return null;
+            //ili return BankDB.BazaRacuna[usernameDesifrovan];
         }
     }
 }

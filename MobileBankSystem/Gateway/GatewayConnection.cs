@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Gateway
@@ -13,8 +14,6 @@ namespace Gateway
     public class GatewayConnection : IGatewayConnection
     {
         private IBankConnection bankProxy;
-        private Dictionary<string, Instance> CertDBClients = new Dictionary<string, Instance>();
-        private Dictionary<string, Instance> CertDBOperaters = new Dictionary<string, Instance>();
 
         public void BankToOperator()
         {
@@ -25,15 +24,19 @@ namespace Gateway
         {
             //pozovem metodu iz banke
             //kacimo se na banku, uplacujemo novac
+            Console.WriteLine("cli to bank");
             if (bankProxy == null)
             {
+                Console.WriteLine("cli to bank add acc if");
                 // Kod svih konekcija na banku mora se uzeti iz baze na kojem ip-u je banka, tako sto ce i banka i gateway i svaki operater da se upise u globalnu bazu da se zna na cemu slusaju i gde ce se ostali konektovati
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
             GatewayLogger.AddMethod("AddAccount", "Bank");
-
-            return bankProxy.AddAccount(u,mode);
+            Console.WriteLine("Client to bank pozvao loger");
+            bool ret = bankProxy.AddAccount(u,mode);
+            Console.WriteLine("cli to bank pozvao poxy add acc");
+            return ret;
             
         }
 
@@ -55,22 +58,32 @@ namespace Gateway
 
         public User ClientToBankCheckLogin(string username, string password, string nacinLogovanja)
         {
-            
+            Console.WriteLine("usao u cli to bank checklogin");
             if (bankProxy == null)
             {
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
+            Console.WriteLine("cli to bank check login pozvao loger");
             GatewayLogger.AddMethod("CheckLogin", "Bank");
 
             User u =bankProxy.CheckLogin(username, password, nacinLogovanja);
+            Console.WriteLine("cli to bank pozvao proxy check login");
+            if (u == null)
+            {
+                /*if(Action.ActionOccuered(CertManager.Formatter.ParseName(Thread.CurrentPrincipal.Identity.Name), "CheckLogin", DateTime.Now))
+                {
+                    //prekini konekciju sa ovim klijentom
+                    Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                }*/
+            }
             return u;
 
         }
 
         public void OperatorToClientSendBill(string suma,string klijentIP,string klijentPort)
         {
-            Instance i = CertDBClients[klijentIP];
+            Instance i = GatewayDB.CertDBClients[klijentIP];
             Client<IClientConnection> cli = new Client<IClientConnection>(i.CN, i.IpAddress, i.Port, "ClientConnection");
             IClientConnection klijentProxy = cli.GetProxy();//ova metoda treba da prima klijentIP i klijentPort
 
@@ -139,7 +152,7 @@ namespace Gateway
 
         public bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma, string operatorIp, string operatorPort)
         {
-            Instance i = CertDBOperaters[operatorIp];
+            Instance i = GatewayDB.CertDBOperaters[operatorIp];
             Client<IOperatorConnection> cli = new Client<IOperatorConnection>(i.CN, i.IpAddress, i.Port, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
             operatorProxy.UpdateStatus(korisnikKojiJeUplatio, operaterKomeJeUplaceno, suma);
@@ -213,13 +226,15 @@ namespace Gateway
 
         public bool ClientToOperatorAddRacun(Racun racun,string ip, string port)
         {
-            Instance i = CertDBOperaters[ip];
+            Console.WriteLine("cli to op add rac");
+            Instance i = GatewayDB.CertDBOperaters[ip];
+            Console.WriteLine("cli to op add rac uzeo inst");
             Client<IOperatorConnection> cli = new Client<IOperatorConnection>(i.CN, i.IpAddress, i.Port, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
-
+            Console.WriteLine("cli to op add rac kreirao kli");
             // Treba GatewayLogger
-
-            return operatorProxy.AddRacun(racun);
+            bool ret = operatorProxy.AddRacun(racun);
+            return ret;
         }
 
         public User ClientToBankGetOperator(string operatorName)
@@ -250,27 +265,32 @@ namespace Gateway
         {
             if (role.Contains("operator"))
             {
-                if (CertDBOperaters.ContainsKey(ip))
+                if (GatewayDB.CertDBOperaters.ContainsKey(ip))
                 {
+
+                    Console.WriteLine(" nije dodao {0} {1} {2} operatora");
                     return false;
                 }
-                CertDBOperaters.Add(ip, new Instance(ip,port,role));
+                GatewayDB.CertDBOperaters.Add(ip, new Instance(ip,port,role));
+                Console.WriteLine("dodao {0} {1} {2} operatora", ip, port, role);
             }
             else if (role.Contains("client"))
             {
-                if (CertDBClients.ContainsKey(ip))
+                if (GatewayDB.CertDBClients.ContainsKey(ip))
                 {
+                    Console.WriteLine("nije dodao {0} {1} {2} u klijenta", ip, port, role);
                     return false;
                 }
-                CertDBClients.Add(ip, new Instance(ip,port,role));
+                GatewayDB.CertDBClients.Add(ip, new Instance(ip,port,role));
+                Console.WriteLine("dodao {0} {1} {2} klijenta", ip, port, role);
             }
 
-            foreach(KeyValuePair<string, Instance> x in CertDBClients)
+            foreach(KeyValuePair<string, Instance> x in GatewayDB.CertDBClients)
             {
                 Console.WriteLine("{0} {1} {2}", x.Value.IpAddress, x.Value.Port, x.Value.CN);
             }
 
-            foreach (KeyValuePair<string, Instance> x in CertDBOperaters)
+            foreach (KeyValuePair<string, Instance> x in GatewayDB.CertDBOperaters)
             {
                 Console.WriteLine("{0} {1} {2}", x.Value.IpAddress, x.Value.Port, x.Value.CN);
             }
