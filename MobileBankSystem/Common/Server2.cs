@@ -42,14 +42,8 @@ namespace Common
             }
 
             bool uspesnoStartovanje = false;
-            //this.ipAddress = ip
 
-
-
-            IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");
-            IPAddress ipAddress = ipHostInfo.AddressList
-                .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
-            this.ipAddress = ipAddress.ToString();
+            this.ipAddress = IPFinder.GetIPAddress();
 
 
             //ime naseg window usera, ujedno i naseg cert.
@@ -60,17 +54,16 @@ namespace Common
             {
                 NetTcpBinding binding = new NetTcpBinding();
                 //tip auth
-                binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
+               // binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
                 string address = String.Format("net.tcp://{0}:{1}/{2}", ip, connectedPort.ToString(), serviceName);
             
                 host = new ServiceHost(typeOfSrcClass);
                 host.AddServiceEndpoint(typeof(INTERFACE), binding, address);
                 //nacin auth
-                host.Credentials.ClientCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.ChainTrust;
-                host.Credentials.ClientCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
+                //host.Credentials.ClientCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.ChainTrust;
+                //host.Credentials.ClientCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
                 //uzimamo nas cert
-                host.Credentials.ServiceCertificate.Certificate =
-                    Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, srvCertName);
+                //host.Credentials.ServiceCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, srvCertName);
                 try
                 {
                     host.Open();

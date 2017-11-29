@@ -58,24 +58,24 @@ namespace Gateway
 
         public User ClientToBankCheckLogin(string username, string password, string nacinLogovanja)
         {
-            Console.WriteLine("usao u cli to bank checklogin");
+            //Console.WriteLine("usao u cli to bank checklogin");
             if (bankProxy == null)
             {
                 Client<IBankConnection> cli = new Client<IBankConnection>("mbbank", Konstante.BANK_IP, Konstante.BANK_PORT.ToString(), "BankConnection");
                 bankProxy = cli.GetProxy();
             }
-            Console.WriteLine("cli to bank check login pozvao loger");
+            //Console.WriteLine("cli to bank check login pozvao loger");
             GatewayLogger.AddMethod("CheckLogin", "Bank");
 
             User u =bankProxy.CheckLogin(username, password, nacinLogovanja);
-            Console.WriteLine("cli to bank pozvao proxy check login");
+            //Console.WriteLine("cli to bank pozvao proxy check login");
             if (u == null)
             {
-                /*if(Action.ActionOccuered(CertManager.Formatter.ParseName(Thread.CurrentPrincipal.Identity.Name), "CheckLogin", DateTime.Now))
+                if(Action.ActionOccuered(CertManager.Formatter.ParseName(Thread.CurrentPrincipal.Identity.Name), "CheckLogin", DateTime.Now))
                 {
                     //prekini konekciju sa ovim klijentom
                     Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                }*/
+                }
             }
             return u;
 
@@ -83,8 +83,8 @@ namespace Gateway
 
         public void OperatorToClientSendBill(string suma,string klijentIP,string klijentPort)
         {
-            Instance i = GatewayDB.CertDBClients[klijentIP];
-            Client<IClientConnection> cli = new Client<IClientConnection>(i.CN, i.IpAddress, i.Port, "ClientConnection");
+            //Instance i = GatewayDB.CertDBClients[klijentIP];
+            Client<IClientConnection> cli = new Client<IClientConnection>("mbclient_1", klijentIP, klijentPort, "ClientConnection");
             IClientConnection klijentProxy = cli.GetProxy();//ova metoda treba da prima klijentIP i klijentPort
 
             // Treba GatewayLogger
@@ -152,8 +152,8 @@ namespace Gateway
 
         public bool BankToOperatorUpdateStatus(string korisnikKojiJeUplatio, string operaterKomeJeUplaceno, string suma, string operatorIp, string operatorPort)
         {
-            Instance i = GatewayDB.CertDBOperaters[operatorIp];
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>(i.CN, i.IpAddress, i.Port, "OperaterConnection");
+            //Instance i = GatewayDB.CertDBOperaters[operatorIp];
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", operatorIp, operatorPort, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
             operatorProxy.UpdateStatus(korisnikKojiJeUplatio, operaterKomeJeUplaceno, suma);
             return true;
@@ -227,9 +227,9 @@ namespace Gateway
         public bool ClientToOperatorAddRacun(Racun racun,string ip, string port)
         {
             Console.WriteLine("cli to op add rac");
-            Instance i = GatewayDB.CertDBOperaters[ip];
+            //Instance i = GatewayDB.CertDBOperaters[ip];
             Console.WriteLine("cli to op add rac uzeo inst");
-            Client<IOperatorConnection> cli = new Client<IOperatorConnection>(i.CN, i.IpAddress, i.Port, "OperaterConnection");
+            Client<IOperatorConnection> cli = new Client<IOperatorConnection>("mboperator_1", ip, port, "OperaterConnection");
             IOperatorConnection operatorProxy = cli.GetProxy();
             Console.WriteLine("cli to op add rac kreirao kli");
             // Treba GatewayLogger

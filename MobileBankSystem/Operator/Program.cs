@@ -81,7 +81,7 @@ namespace Operator
             //OperatorServer server = new OperatorServer();
             //server.Start();
 
-            Server2<IOperatorConnection> server = new Server2<IOperatorConnection>(IPFinder.GetIPAddress(), Konstante.INITIAL_OPERATER_PORT.ToString(), "OperaterConnection", typeof(OperaterConnection));
+            Server2<IOperatorConnection> server = new Server2<IOperatorConnection>("localhost", Konstante.INITIAL_OPERATER_PORT.ToString(), "OperaterConnection", typeof(OperaterConnection));
 
 
             // Javi banci na kom ip-u i portu slusas

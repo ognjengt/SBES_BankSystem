@@ -21,7 +21,8 @@ namespace Operator
             {
                 return false;
             }
-            OperatorskiRacun or = new OperatorskiRacun(desifrovanRacun.Username, (++OperatorDB.brRacuna).ToString(), "0");
+            string randomRacun = Guid.NewGuid().ToString();
+            OperatorskiRacun or = new OperatorskiRacun(desifrovanRacun.Username, randomRacun, "0");
             OperatorDB.BazaRacuna.Add(or.BrojRacuna,or);
             Client<IGatewayConnection> client = new Client<IGatewayConnection>("mbgateway", Konstante.GATEWAY_IP, Konstante.GATEWAY_PORT.ToString(), "GatewayConnection");
             IGatewayConnection gatewayProxy = client.GetProxy();
@@ -29,6 +30,7 @@ namespace Operator
             OperatorDB.BazaKorisnika.Add(korisnik.Username, korisnik);
             upisiKorisnike(OperatorDB.operatorName);
             upisiRacune(OperatorDB.operatorName);
+            Console.WriteLine("Uspesno kreiran racun {0} za klijenta {1}",randomRacun,desifrovanRacun.Username);
             return true;
         }
 

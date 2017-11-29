@@ -33,7 +33,7 @@ namespace Bank
 
             //BankServer server = new BankServer();
             //server.Start();
-            Server2<IBankConnection> server = new Server2<IBankConnection>(IPFinder.GetIPAddress(), Konstante.BANK_PORT.ToString(), "BankConnection", typeof(BankConnetion));
+            Server2<IBankConnection> server = new Server2<IBankConnection>("localhost", Konstante.BANK_PORT.ToString(), "BankConnection", typeof(BankConnetion));
             Console.ReadKey();
         }
 

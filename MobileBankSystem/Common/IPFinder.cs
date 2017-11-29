@@ -12,7 +12,12 @@ namespace Common
     {
         public static string GetIPAddress()
         {
-            /*IPHostEntry host;
+            //IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");
+            //IPAddress ipAddress = ipHostInfo.AddressList
+            //    .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
+            //return ipAddress.ToString();
+
+            IPHostEntry host;
             string localIP = "?";
             host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (IPAddress ip in host.AddressList)
@@ -21,8 +26,8 @@ namespace Common
                 {
                     localIP = ip.ToString();
                 }
-            }*/
-            return "localhost";
+            }
+            return localIP;
         }
     }
 }

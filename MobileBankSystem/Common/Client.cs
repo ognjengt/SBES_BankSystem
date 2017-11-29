@@ -47,27 +47,27 @@ namespace Common
             }
 
             NetTcpBinding binding = new NetTcpBinding();
-            binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate; //auth se vrsi pomocu cert.
+            //binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate; //auth se vrsi pomocu cert.
             binding.OpenTimeout = new TimeSpan(0, 10, 0);
             binding.CloseTimeout = new TimeSpan(0, 10, 0);
             binding.SendTimeout = new TimeSpan(0, 10, 0);
             binding.ReceiveTimeout = new TimeSpan(0, 10, 0);
             
             //iz foldera trusted people uzima javni kljuc serverskog cert.
-            X509Certificate2 srvCert = Manager.GetCertificateFormStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN); //srvcertcn
+            //X509Certificate2 srvCert = Manager.GetCertificateFormStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN); //srvcertcn
             //endpoing koji client treba da pogodi. sastoji se od uri-ja kao prvog param. i drugog param. - javnog kljuca iz cert koji smo gore uzeli. taj ljkuc nam kaze
             //da na serveru treba da nas ocekuje cert koji pored tog javnog kljuca ima i neki svoj privatni
-            EndpointAddress address = new EndpointAddress(new Uri(String.Format("net.tcp://{0}:{1}/{2}", ip, port, serviceName)), new X509CertificateEndpointIdentity(srvCert));
+            EndpointAddress address = new EndpointAddress(new Uri(String.Format("net.tcp://{0}:{1}/{2}", ip, port, serviceName)));
             //kreiramo kanal
             factory = new ChannelFactory<INTERFACE>(binding, address);
             //izvlacimo nase klijentsko ime i nas sertifikat
             string cliCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
             //nacin auth.
-            factory.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.ChainTrust;
+            //factory.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.ChainTrust;
             //poojma nemam
-            factory.Credentials.ServiceCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
+            //factory.Credentials.ServiceCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
             //iz personal foldera uzimamo nas sertifikat sa privatnim i javnim kljucem
-            factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, cliCertCN);//cliCertCN,sada je temp zato sto se lazno predstavljamo kao client
+            //factory.Credentials.ClientCertificate.Certificate = Manager.GetCertificateFormStorage(StoreName.My, StoreLocation.LocalMachine, cliCertCN);//cliCertCN,sada je temp zato sto se lazno predstavljamo kao client
             //kreiramo proxy
             proxy = factory.CreateChannel();
         }
