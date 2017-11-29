@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Common.Interfaces;
 using System.Threading;
-
+using Common;
 
 namespace Client
 {
@@ -18,9 +18,9 @@ namespace Client
         public void SendBill(string suma)
         {
 
-            KlientskiRacun.racun.StanjeRacuna +=suma ;
+            KlientskiRacun.dugNaOperatoru += Int32.Parse(suma);
 
-            //ovde pozivamo transfer
+            Console.WriteLine("Vas operater je poslao mesecni izvestaj, dug za ovaj mesec iznosi: " + suma + ". Vas ukupan dug iznosi: " + KlientskiRacun.dugNaOperatoru);
         }
     }
 }

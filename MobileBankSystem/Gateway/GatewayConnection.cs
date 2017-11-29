@@ -53,6 +53,7 @@ namespace Gateway
             GatewayLogger.AddMethod("Transfer", "Bank");
 
             retVal = bankProxy.Transfer(brojKlijentskogRacuna, brojOperatorskogRacuna, korisnikKojiVrsiTransfer, value);
+            
             return retVal;
         }
 
@@ -71,17 +72,17 @@ namespace Gateway
             //Console.WriteLine("cli to bank pozvao proxy check login");
             if (u == null)
             {
-                if(Action.ActionOccuered(CertManager.Formatter.ParseName(Thread.CurrentPrincipal.Identity.Name), "CheckLogin", DateTime.Now))
+                /*if(Action.ActionOccuered(CertManager.Formatter.ParseName(Thread.CurrentPrincipal.Identity.Name), "CheckLogin", DateTime.Now))
                 {
                     //prekini konekciju sa ovim klijentom
                     Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                }
+                }*/
             }
             return u;
 
         }
 
-        public void OperatorToClientSendBill(string suma,string klijentIP,string klijentPort)
+        public void OperatorToClientSendBill(string suma ,string klijentIP,string klijentPort)
         {
             //Instance i = GatewayDB.CertDBClients[klijentIP];
             Client<IClientConnection> cli = new Client<IClientConnection>("mbclient_1", klijentIP, klijentPort, "ClientConnection");

@@ -379,10 +379,10 @@ namespace Bank
             string operatorKomeJeUplaceno = BankDB.BazaRacuna[desifrovanBrojOperatorskogRacuna].Username;
             string sifrovanOperatorKomeJeUplaceno = BitConverter.ToString(Sifrovanje.sifrujCBC(operatorKomeJeUplaceno, Konstante.ENCRYPTION_KEY));
 
-            Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000", "GatewayConnection");
-            IGatewayConnection factory = cli.GetProxy();
-            // opet se prosledjuje ovaj koji je bio sifrovan
-            factory.BankToOperatorUpdateStatus(korisnikKojiVrsiTransfer,sifrovanOperatorKomeJeUplaceno,value, BankDB.BazaKorisnika[operatorKomeJeUplaceno].IpAddress, BankDB.BazaKorisnika[operatorKomeJeUplaceno].Port);
+            //Client<IGatewayConnection> cli = new Client<IGatewayConnection>("mbgateway", "localhost", "63000", "GatewayConnection");
+            //IGatewayConnection factory = cli.GetProxy();
+            //// opet se prosledjuje ovaj koji je bio sifrovan
+            //factory.BankToOperatorUpdateStatus(korisnikKojiVrsiTransfer,sifrovanOperatorKomeJeUplaceno,value, BankDB.BazaKorisnika[operatorKomeJeUplaceno].IpAddress, BankDB.BazaKorisnika[operatorKomeJeUplaceno].Port);
 
             return true;
         }

@@ -10,5 +10,6 @@ namespace Client
     public static class KlientskiRacun
     {
         public static Racun racun = new Racun();
+        public static int dugNaOperatoru = 0;
     }
 }

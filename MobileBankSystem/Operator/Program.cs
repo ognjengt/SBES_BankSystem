@@ -108,8 +108,8 @@ namespace Operator
             //}
 
             // U novom threadu prodji kroz sve aktivne korisnike i pozovi im sendBill
-            //Thread sendBillThread = new Thread(() => SendBill(gatewayProxy, sifrovanUsername));
-            //sendBillThread.Start();
+            Thread sendBillThread = new Thread(() => SendBill(gatewayProxy, sifrovanUsername));
+            sendBillThread.Start();
 
             Console.ReadKey();
             gatewayProxy.OperatorToBankShutdownOperator(ulogovanUser.Username);
@@ -126,11 +126,11 @@ namespace Operator
                 foreach (var userIRacun in aktivniKorisnici)
                 {
                     Random r = new Random();
-                    int randomSuma = r.Next(100,1000);
+                    int randomSuma = r.Next(100,500);
                     proxy.OperatorToClientSendBill(randomSuma.ToString(), userIRacun.Korisnik.IpAddress, userIRacun.Korisnik.Port);
                 }
 
-                Thread.Sleep(1000*60*2);// 2 minuta ustvari
+                Thread.Sleep(1000*15);// 2 minuta ustvari
             }
         }
         private static void ucitajRacune(string operatorName)
